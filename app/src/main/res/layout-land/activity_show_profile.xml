@@ -9,23 +9,28 @@
     <ImageView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
+        android:layout_alignParentLeft="true"
 
+        android:layout_alignParentTop="true"
+
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:background="@color/teal_700"
 
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent=".33"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
 
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_alignParentTop="true"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".33" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout0"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
 
+        android:paddingTop="70dp"
         android:paddingLeft="30dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
@@ -35,13 +40,13 @@
 
         android:background="@color/purple_200"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
 
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent=".66"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".60"
+        app:layout_constraintHorizontal_bias="0.0">
 
         <TextView
             android:id="@+id/textView0"

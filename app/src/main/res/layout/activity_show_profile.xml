@@ -6,4 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".ShowProfileActivity">
 
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+
+        android:background="@color/black"
+
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent=".25"
+
+
+        android:layout_alignParentTop="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

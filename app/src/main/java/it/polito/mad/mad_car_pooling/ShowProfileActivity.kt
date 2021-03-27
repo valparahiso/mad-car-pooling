@@ -1,5 +1,6 @@
 package it.polito.mad.mad_car_pooling
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -20,7 +21,9 @@ class ShowProfileActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d("POLITOMAD","onOptionsItemSelected()")
+        //Log.d("POLITOMAD","onOptionsItemSelected()")
+        val intent = Intent(this, EditProfileActivity::class.java)
+        startActivity(intent)
         return super.onOptionsItemSelected(item)
     }
 }

@@ -2,7 +2,9 @@ package it.polito.mad.mad_car_pooling
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 
 class ShowProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,5 +17,10 @@ class ShowProfileActivity : AppCompatActivity() {
         //return super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.file_menu, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Log.d("POLITOMAD","onOptionsItemSelected()")
+        return super.onOptionsItemSelected(item)
     }
 }

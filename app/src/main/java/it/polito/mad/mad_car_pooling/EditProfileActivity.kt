@@ -88,12 +88,26 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     private fun saveContent() {
-        if(TextUtils.isEmpty(fullNameET.text.toString())) fullNameET.setError( "Full name is required!" )
-        else if (TextUtils.isEmpty(nicknameET.text.toString())) nicknameET.setError( "Nick name is required!" )
-        else if (TextUtils.isEmpty(emailET.text.toString())) emailET.setError( "Email is required!" )
-        else if (TextUtils.isEmpty(locationET.text.toString())) locationET.setError( "Location is required!" )
+        var flag = true
 
-        else {
+        if(TextUtils.isEmpty(fullNameET.text.toString())) {
+            fullNameET.setError( "Full name is required!" )
+            flag = false
+        }
+        if (TextUtils.isEmpty(nicknameET.text.toString())) {
+            nicknameET.setError( "Nick name is required!" )
+            flag = false
+        }
+        if (TextUtils.isEmpty(emailET.text.toString())) {
+            emailET.setError( "Email is required!" )
+            flag = false
+        }
+        if (TextUtils.isEmpty(locationET.text.toString())) {
+            locationET.setError( "Location is required!" )
+            flag = false
+        }
+
+        if(flag) {
             setResult(Activity.RESULT_OK, Intent().also {
                 it.putExtra("group02.lab1.FULL_NAME", fullNameET.text.toString())
                 it.putExtra("group02.lab1.NICK_NAME", nicknameET.text.toString())

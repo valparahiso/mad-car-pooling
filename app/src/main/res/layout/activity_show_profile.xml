@@ -41,7 +41,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView">
 
         <TextView
-            android:id="@+id/textView0"
+            android:id="@+id/fullName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -50,7 +50,7 @@
             android:textSize="36sp" />
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -59,7 +59,7 @@
             android:textStyle="italic" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -68,7 +68,7 @@
             android:textStyle="italic" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

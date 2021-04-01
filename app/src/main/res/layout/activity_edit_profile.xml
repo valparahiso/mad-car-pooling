@@ -58,7 +58,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <EditText
-            android:id="@+id/textView0"
+            android:id="@+id/edit_fullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -68,7 +68,7 @@
             android:textSize="36sp" />
 
         <EditText
-            android:id="@+id/textView1"
+            android:id="@+id/edit_nickName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -78,7 +78,7 @@
             android:textStyle="italic" />
 
         <EditText
-            android:id="@+id/textView2"
+            android:id="@+id/edit_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -88,7 +88,7 @@
             android:textStyle="italic" />
 
         <EditText
-            android:id="@+id/textView3"
+            android:id="@+id/edit_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

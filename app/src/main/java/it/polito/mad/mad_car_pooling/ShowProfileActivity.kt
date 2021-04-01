@@ -60,6 +60,9 @@ class ShowProfileActivity : AppCompatActivity() {
     }
 
     private fun showProfile(data: Intent?) {
-        fullName
+        fullName.text = data?.getStringExtra("group02.lab1.FULL_NAME")
+        nickName.text = data?.getStringExtra("group02.lab1.NICK_NAME")
+        emain.text = data?.getStringExtra("group02.lab1.EMAIL")
+        location.text = data?.getStringExtra("group02.lab1.LOCATION")
     }
 }

@@ -3,14 +3,17 @@ package it.polito.mad.mad_car_pooling
 import android.app.Activity
 import android.app.backup.FullBackupDataOutput
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextUtils
 import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Toast
 
 class EditProfileActivity : AppCompatActivity() {
 
@@ -85,12 +88,19 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     private fun saveContent() {
-        setResult(Activity.RESULT_OK, Intent().also{
-            it.putExtra("group02.lab1.FULL_NAME", fullNameET.text.toString())
-            it.putExtra("group02.lab1.NICK_NAME", nicknameET.text.toString())
-            it.putExtra("group02.lab1.EMAIL", emailET.text.toString())
-            it.putExtra("group02.lab1.LOCATION", locationET.text.toString())
-        })
-        finish()
+        if(TextUtils.isEmpty(fullNameET.text.toString())) fullNameET.setError( "Full name is required!" )
+        else if (TextUtils.isEmpty(nicknameET.text.toString())) nicknameET.setError( "Nick name is required!" )
+        else if (TextUtils.isEmpty(emailET.text.toString())) emailET.setError( "Email is required!" )
+        else if (TextUtils.isEmpty(locationET.text.toString())) locationET.setError( "Location is required!" )
+
+        else {
+            setResult(Activity.RESULT_OK, Intent().also {
+                it.putExtra("group02.lab1.FULL_NAME", fullNameET.text.toString())
+                it.putExtra("group02.lab1.NICK_NAME", nicknameET.text.toString())
+                it.putExtra("group02.lab1.EMAIL", emailET.text.toString())
+                it.putExtra("group02.lab1.LOCATION", locationET.text.toString())
+            })
+            finish()
+        }
     }
 }

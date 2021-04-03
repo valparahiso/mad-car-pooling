@@ -4,13 +4,21 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
+import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.view.*
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import java.nio.ByteBuffer.wrap
+
 
 class EditProfileActivity : AppCompatActivity() {
 
@@ -19,6 +27,7 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var emailET: EditText
     private lateinit var locationET: EditText
     private lateinit var photoIV: ImageView
+    private lateinit var imageBitmap: Bitmap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,9 +42,31 @@ class EditProfileActivity : AppCompatActivity() {
         emailET = findViewById<EditText>(R.id.edit_email)
         photoIV = findViewById(R.id.edit_photo)
 
+        if (savedInstanceState != null) {
+            try {
+                imageBitmap = savedInstanceState.getParcelable("BitmapImage")!!;
+            }
+           catch (e: KotlinNullPointerException){
+               Log.e("POLITOMAD", "bitmap null")
+           }
+        }
+
         setEditText()
 
     }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        //outState.putParcelable("BitmapImage", BitmapFactory.decodeResource(applicationContext.resources, photoIV.drawable));
+        outState.putParcelable("BitmapImage", imageBitmap)
+    }
+
+    /*override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        //val image = savedInstanceState.getParcelable<Bitmap?>("BitmapImage")
+        //val bitmapimage = intent.extras!!.getParcelable<Bitmap>("BitmapImage")
+        //photoIV.setImageBitmap(savedInstanceState.getParcelable("BitmapImage"))
+    }*/
 
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
@@ -47,7 +78,7 @@ class EditProfileActivity : AppCompatActivity() {
         //val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
         return when (item.itemId) {
             R.id.gallery -> {
-                Log.d("POLITOMAD","Gallery")
+                Log.d("POLITOMAD", "Gallery")
                 true
             }
             R.id.camera -> {
@@ -67,14 +98,14 @@ class EditProfileActivity : AppCompatActivity() {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
         } catch (e: ActivityNotFoundException) {
             // display error state to the user
-            Log.d("POLITOMAD","ActivityNotFoundException")
+            Log.d("POLITOMAD", "ActivityNotFoundException")
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val imageBitmap = data?.extras?.get("data") as Bitmap
+            imageBitmap = data?.extras?.get("data") as Bitmap
             photoIV.setImageBitmap(imageBitmap)
         }
     }
@@ -114,19 +145,19 @@ class EditProfileActivity : AppCompatActivity() {
         var flag = true
 
         if(TextUtils.isEmpty(fullNameET.text.toString())) {
-            fullNameET.setError( "Full name is required!" )
+            fullNameET.setError("Full name is required!")
             flag = false
         }
         if (TextUtils.isEmpty(nicknameET.text.toString())) {
-            nicknameET.setError( "Nick name is required!" )
+            nicknameET.setError("Nick name is required!")
             flag = false
         }
         if (TextUtils.isEmpty(emailET.text.toString())) {
-            emailET.setError( "Email is required!" )
+            emailET.setError("Email is required!")
             flag = false
         }
         if (TextUtils.isEmpty(locationET.text.toString())) {
-            locationET.setError( "Location is required!" )
+            locationET.setError("Location is required!")
             flag = false
         }
 

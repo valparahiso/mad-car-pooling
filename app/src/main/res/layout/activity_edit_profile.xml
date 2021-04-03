@@ -13,8 +13,6 @@
 
         android:layout_alignParentTop="true"
 
-        android:background="@color/white"
-
         android:padding="16dp"
         android:src="@drawable/user_image"
         app:layout_constraintDimensionRatio="1:1"

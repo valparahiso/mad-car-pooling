@@ -2,15 +2,12 @@ package it.polito.mad.mad_car_pooling
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import java.io.InputStream
 
 
 class ShowProfileActivity : AppCompatActivity() {
@@ -23,11 +20,11 @@ class ShowProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_profile)
-        fullName = findViewById<TextView>(R.id.fullName)
+        fullName = findViewById(R.id.fullName)
         nickName = findViewById(R.id.nickname)
         email = findViewById(R.id.email)
         location = findViewById(R.id.location)
-        photo = findViewById(R.id.photo)
+        photo = findViewById(R.id.edit_photo)
 
         fullName.text =  "Mario Rossi"
         nickName.text =  "mariored89"

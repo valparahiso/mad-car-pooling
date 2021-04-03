@@ -1,19 +1,16 @@
 package it.polito.mad.mad_car_pooling
 
 import android.app.Activity
-import android.app.backup.FullBackupDataOutput
+import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.graphics.Color
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.view.*
-import android.widget.AdapterView
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.Toast
+import android.widget.*
 
 class EditProfileActivity : AppCompatActivity() {
 
@@ -21,6 +18,7 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var nicknameET: EditText
     private lateinit var emailET: EditText
     private lateinit var locationET: EditText
+    private lateinit var photoIV: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +31,7 @@ class EditProfileActivity : AppCompatActivity() {
         nicknameET = findViewById<EditText>(R.id.edit_nickName)
         locationET = findViewById<EditText>(R.id.edit_location)
         emailET = findViewById<EditText>(R.id.edit_email)
+        photoIV = findViewById(R.id.edit_photo)
 
         setEditText()
 
@@ -52,19 +51,42 @@ class EditProfileActivity : AppCompatActivity() {
                 true
             }
             R.id.camera -> {
-                Log.d("POLITOMAD","Photo")
+                //Log.d("POLITOMAD","Photo")
+                dispatchTakePictureIntent()   //open camera
                 true
             }
             else -> super.onContextItemSelected(item)
         }
     }
 
+    //function to open the camera
+    val REQUEST_IMAGE_CAPTURE = 1
+    private fun dispatchTakePictureIntent() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+        } catch (e: ActivityNotFoundException) {
+            // display error state to the user
+            Log.d("POLITOMAD","ActivityNotFoundException")
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            val imageBitmap = data?.extras?.get("data") as Bitmap
+            photoIV.setImageBitmap(imageBitmap)
+        }
+    }
+
+    //option menu for saving
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_option_save, menu)
         return true
     }
 
+    //items of save option menu
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.save -> {
@@ -75,6 +97,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
+    //retriving data from intent of ShowActivityProfile
     private fun setEditText() {
         val fullName: String? = intent.getStringExtra("group02.lab1.FULL_NAME")
         val nickName: String? = intent.getStringExtra("group02.lab1.NICK_NAME")

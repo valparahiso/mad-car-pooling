@@ -2,20 +2,23 @@ package it.polito.mad.mad_car_pooling
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.TextView
-import org.w3c.dom.Text
+import androidx.appcompat.app.AppCompatActivity
+import java.io.InputStream
+
 
 class ShowProfileActivity : AppCompatActivity() {
     private lateinit var fullName: TextView
     private lateinit var nickName: TextView
     private lateinit var location: TextView
     private lateinit var email: TextView
+    private lateinit var photo: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,11 +27,16 @@ class ShowProfileActivity : AppCompatActivity() {
         nickName = findViewById(R.id.nickname)
         email = findViewById(R.id.email)
         location = findViewById(R.id.location)
+        photo = findViewById(R.id.photo)
 
         fullName.text =  "Mario Rossi"
         nickName.text =  "mariored89"
         email.text =  "mario.rossi@polito.it"
         location.text =  "Lombardia"
+        /*var uri: Uri = Uri.parse("android.resource://${getApplicationContext().getPackageName()}/drawable/download.png")
+        val stream: InputStream? = contentResolver.openInputStream(uri)
+        val myBitmap = BitmapFactory.decodeStream(stream)
+        photo.setImageBitmap(myBitmap)*/
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

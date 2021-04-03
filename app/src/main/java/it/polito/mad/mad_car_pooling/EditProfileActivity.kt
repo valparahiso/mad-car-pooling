@@ -42,12 +42,14 @@ class EditProfileActivity : AppCompatActivity() {
         setEditText()
     }
 
+    //save the state in order to restore it on recreation of the activity
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
         outState.putParcelable("BitmapImage", imageBitmap)
     }
 
+    //restore the photo after the destruction and the creation of the activity (change of orientation of the device)
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
 
@@ -55,12 +57,14 @@ class EditProfileActivity : AppCompatActivity() {
         imageBitmap = savedInstanceState.getParcelable("BitmapImage")!!
     }
 
+    //permits to create the floating context menu
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_context_photo, menu)
     }
 
+    //behaviour of item in the floating context menu
     override fun onContextItemSelected(item: MenuItem): Boolean {
         //val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
         return when (item.itemId) {
@@ -89,6 +93,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
+    //permits to recieve the photo from the camera
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -115,7 +120,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    //retriving data from intent of ShowActivityProfile
+    //retrive data from intent of ShowActivityProfile
     private fun setEditText() {
         val fullName: String? = intent.getStringExtra("group02.lab1.FULL_NAME")
         val nickName: String? = intent.getStringExtra("group02.lab1.NICK_NAME")
@@ -128,6 +133,7 @@ class EditProfileActivity : AppCompatActivity() {
         emailET.setText(email)
     }
 
+    //set result for ShowProfileAcitivty (check if all EditText contain some characters)
     private fun saveContent() {
         var flag = true
 

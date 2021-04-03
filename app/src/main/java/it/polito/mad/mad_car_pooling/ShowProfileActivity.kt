@@ -52,18 +52,21 @@ class ShowProfileActivity : AppCompatActivity() {
         location.text = savedInstanceState.getString("location")
     }
 
+    //create option menu for calling the EditProfileActivity
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         //return super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.file_menu, menu)
         return true
     }
 
+    //behaviour of click event on the option menu
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         //Log.d("POLITOMAD","onOptionsItemSelected()")
         editProfile()
         return super.onOptionsItemSelected(item)
     }
 
+    //creatio of the intent and start of EditProfileActivity
     private fun editProfile() {
         val intent = Intent(this, EditProfileActivity::class.java)
         intent.putExtra("group02.lab1.FULL_NAME", fullName.text)
@@ -73,6 +76,7 @@ class ShowProfileActivity : AppCompatActivity() {
         startActivityForResult(intent, 1)
     }
 
+    //recieve result from EditProfileActivity
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 1 && resultCode == Activity.RESULT_OK){
@@ -81,6 +85,7 @@ class ShowProfileActivity : AppCompatActivity() {
         }
     }
 
+    //put result from EditProfileActivity in TextViews
     private fun showProfile(data: Intent?) {
         fullName.text = data?.getStringExtra("group02.lab1.FULL_NAME")
         nickName.text = data?.getStringExtra("group02.lab1.NICK_NAME")

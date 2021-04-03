@@ -4,11 +4,7 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
-import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
@@ -17,7 +13,6 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import java.nio.ByteBuffer.wrap
 
 
 class EditProfileActivity : AppCompatActivity() {
@@ -42,31 +37,23 @@ class EditProfileActivity : AppCompatActivity() {
         emailET = findViewById<EditText>(R.id.edit_email)
         photoIV = findViewById(R.id.edit_photo)
 
-        if (savedInstanceState != null) {
-            try {
-                imageBitmap = savedInstanceState.getParcelable("BitmapImage")!!;
-            }
-           catch (e: KotlinNullPointerException){
-               Log.e("POLITOMAD", "bitmap null")
-           }
-        }
+        imageBitmap  = Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888) // temp initialization
 
         setEditText()
-
     }
 
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        //outState.putParcelable("BitmapImage", BitmapFactory.decodeResource(applicationContext.resources, photoIV.drawable));
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
         outState.putParcelable("BitmapImage", imageBitmap)
     }
 
-    /*override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        //val image = savedInstanceState.getParcelable<Bitmap?>("BitmapImage")
-        //val bitmapimage = intent.extras!!.getParcelable<Bitmap>("BitmapImage")
-        //photoIV.setImageBitmap(savedInstanceState.getParcelable("BitmapImage"))
-    }*/
+
+        photoIV.setImageBitmap(savedInstanceState.getParcelable("BitmapImage"))
+        imageBitmap = savedInstanceState.getParcelable("BitmapImage")!!
+    }
 
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)

@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
@@ -12,6 +14,7 @@ import android.view.*
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 
 
@@ -69,7 +72,8 @@ class EditProfileActivity : AppCompatActivity() {
         //val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
         return when (item.itemId) {
             R.id.gallery -> {
-                Log.d("POLITOMAD", "Gallery")
+                //Log.d("POLITOMAD", "Gallery")
+                openGallery()
                 true
             }
             R.id.camera -> {
@@ -83,6 +87,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     //function to open the camera
     val REQUEST_IMAGE_CAPTURE = 1
+    val PICK_IMAGE = 2
     private fun dispatchTakePictureIntent() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         try {
@@ -93,14 +98,37 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    
+    private fun openGallery() {
+        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        intent.type = "image/*"
+        startActivityForResult(gallery, PICK_IMAGE)
+    }
+
     //permits to recieve the photo from the camera
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            imageBitmap = data?.extras?.get("data") as Bitmap
-            photoIV.setImageBitmap(imageBitmap)
+        when (requestCode) {
+            REQUEST_IMAGE_CAPTURE -> {
+                if (resultCode == RESULT_OK) {
+                    imageBitmap = data?.extras?.get("data") as Bitmap
+                    photoIV.setImageBitmap(imageBitmap)
+                }
+            }
+            PICK_IMAGE -> {
+                if (resultCode == RESULT_OK) {
+                    try {
+                        val imageUri = data?.data
+                        val source: ImageDecoder.Source = ImageDecoder.createSource(this.contentResolver, imageUri!!)
+                        imageBitmap = ImageDecoder.decodeBitmap(source)
+                        photoIV.setImageBitmap(imageBitmap)
+                    } catch (e: kotlin.TypeCastException) {
+                        Log.d("POLITOMAD", "TypeCastException")
+                    }
+                }
+            }
         }
+
     }
 
     //option menu for saving

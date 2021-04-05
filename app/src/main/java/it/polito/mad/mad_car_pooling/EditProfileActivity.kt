@@ -93,6 +93,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
+    
     //permits to recieve the photo from the camera
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

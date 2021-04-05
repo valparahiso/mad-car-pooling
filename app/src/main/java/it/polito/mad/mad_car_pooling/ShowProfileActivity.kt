@@ -104,7 +104,9 @@ class ShowProfileActivity : AppCompatActivity() {
         location.text = data?.getStringExtra("group02.lab1.LOCATION")
         //val file = File(data?.extras?.get("group02.lab1.URI"))
         //if (file.exists())
-        photo.setImageURI(Uri.parse(""))
-        photo.setImageURI(data?.extras?.get("group02.lab1.URI") as Uri)
+        if(data?.extras?.get("group02.lab1.URI") as Uri != null) {
+            photo.setImageURI(null)   //DA CONTROLLARE
+            photo.setImageURI(data?.extras?.get("group02.lab1.URI") as Uri)
+        }
     }
 }

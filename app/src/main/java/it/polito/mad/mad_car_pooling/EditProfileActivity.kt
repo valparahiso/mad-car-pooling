@@ -239,6 +239,9 @@ class EditProfileActivity : AppCompatActivity() {
             locationET.setError("Location is required!")
             flag = false
         }
+        if(imageBitmap.equals(Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888))){
+            flag = false
+        }
 
         if(flag) {
             setResult(Activity.RESULT_OK, Intent().also {

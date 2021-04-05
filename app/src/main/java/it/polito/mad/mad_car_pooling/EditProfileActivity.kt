@@ -1,12 +1,15 @@
 package it.polito.mad.mad_car_pooling
 
+import android.R.attr.bitmap
 import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
@@ -16,6 +19,11 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.util.*
 
 
 class EditProfileActivity : AppCompatActivity() {
@@ -26,6 +34,7 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var locationET: EditText
     private lateinit var photoIV: ImageView
     private lateinit var imageBitmap: Bitmap
+    private lateinit var file: File
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +50,11 @@ class EditProfileActivity : AppCompatActivity() {
         photoIV = findViewById(R.id.edit_photo)
 
         imageBitmap  = Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888) // temp initialization
+
+        file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "profile.png")
+        if (file.exists())
+            photoIV.setImageURI(file.toUri())
+        //photoURI = Uri.parse("")
 
         setEditText()
     }
@@ -68,6 +82,7 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     //behaviour of item in the floating context menu
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onContextItemSelected(item: MenuItem): Boolean {
         //val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
         return when (item.itemId) {
@@ -88,6 +103,7 @@ class EditProfileActivity : AppCompatActivity() {
     //function to open the camera
     val REQUEST_IMAGE_CAPTURE = 1
     val PICK_IMAGE = 2
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun dispatchTakePictureIntent() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         try {
@@ -96,6 +112,44 @@ class EditProfileActivity : AppCompatActivity() {
             // display error state to the user
             Log.d("POLITOMAD", "ActivityNotFoundException")
         }
+
+        /*Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            // Ensure that there's a camera activity to handle the intent
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                // Create the File where the photo should go
+                val photoFile: File = createImageFile()
+                Log.d("POLITOMAD", photoFile.toString())
+                // Continue only if the File was successfully created
+                photoFile.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(this, "it.polito.mad.mad_car_pooling.fileprovider", it)
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                }
+            }
+        }*/
+
+        /*
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        // Ensure that there's a camera activity to handle the intent
+        //if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            var photoFile: File? = null
+            try {
+                photoFile = createImageFile()
+            } catch ( ex: IOException) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                photoURI = FileProvider.getUriForFile(this,
+                "it.polito.mad.mad_car_pooling.fileprovider",
+                photoFile)
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+            }
+        //}
+
+         */
     }
 
     private fun openGallery() {
@@ -113,6 +167,7 @@ class EditProfileActivity : AppCompatActivity() {
                 if (resultCode == RESULT_OK) {
                     imageBitmap = data?.extras?.get("data") as Bitmap
                     photoIV.setImageBitmap(imageBitmap)
+                    //photoIV.setImageURI(photoURI)
                 }
             }
             PICK_IMAGE -> {
@@ -139,6 +194,7 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     //items of save option menu
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.save -> {
@@ -163,6 +219,7 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     //set result for ShowProfileAcitivty (check if all EditText contain some characters)
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun saveContent() {
         var flag = true
 
@@ -189,8 +246,38 @@ class EditProfileActivity : AppCompatActivity() {
                 it.putExtra("group02.lab1.NICK_NAME", nicknameET.text.toString())
                 it.putExtra("group02.lab1.EMAIL", emailET.text.toString())
                 it.putExtra("group02.lab1.LOCATION", locationET.text.toString())
+                File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "profile.png").writeBitmap(imageBitmap, Bitmap.CompressFormat.PNG, 85)
+                it.putExtra("group02.lab1.URI", file.toUri())
             })
             finish()
         }
     }
+
+    private fun File.writeBitmap(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int) {
+        outputStream().use { out ->
+            bitmap.compress(format, quality, out)
+            out.flush()
+        }
+    }
+
+    /*
+    lateinit var currentPhotoPath: String
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val name = "profile"
+        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+                name, /* prefix */
+                ".png", /* suffix */
+                storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            currentPhotoPath = absolutePath
+        }
+    }
+
+     */
 }

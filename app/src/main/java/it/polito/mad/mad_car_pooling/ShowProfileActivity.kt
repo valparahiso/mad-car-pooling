@@ -2,12 +2,18 @@ package it.polito.mad.mad_car_pooling
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.system.Os.close
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
+import java.io.File
 
 
 class ShowProfileActivity : AppCompatActivity() {
@@ -30,6 +36,10 @@ class ShowProfileActivity : AppCompatActivity() {
         nickName.text =  "mariored89"
         email.text =  "mario.rossi@polito.it"
         location.text =  "Lombardia"
+
+        val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "profile.png")
+        if(file.exists())
+            photo.setImageURI(file.toUri())
         /*var uri: Uri = Uri.parse("android.resource://${getApplicationContext().getPackageName()}/drawable/download.png")
         val stream: InputStream? = contentResolver.openInputStream(uri)
         val myBitmap = BitmapFactory.decodeStream(stream)
@@ -73,6 +83,7 @@ class ShowProfileActivity : AppCompatActivity() {
         intent.putExtra("group02.lab1.NICK_NAME", nickName.text)
         intent.putExtra("group02.lab1.EMAIL", email.text)
         intent.putExtra("group02.lab1.LOCATION", location.text)
+
         startActivityForResult(intent, 1)
     }
 
@@ -85,11 +96,14 @@ class ShowProfileActivity : AppCompatActivity() {
         }
     }
 
-    //put result from EditProfileActivity in TextViews
+    //put result from EditProfileActivity in TextViews and ImageView
     private fun showProfile(data: Intent?) {
         fullName.text = data?.getStringExtra("group02.lab1.FULL_NAME")
         nickName.text = data?.getStringExtra("group02.lab1.NICK_NAME")
         email.text = data?.getStringExtra("group02.lab1.EMAIL")
         location.text = data?.getStringExtra("group02.lab1.LOCATION")
+        //val file = File(data?.extras?.get("group02.lab1.URI"))
+        //if (file.exists())
+            photo.setImageURI(data?.extras?.get("group02.lab1.URI") as Uri)
     }
 }

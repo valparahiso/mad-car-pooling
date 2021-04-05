@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.system.Os.close
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -23,6 +24,8 @@ class ShowProfileActivity : AppCompatActivity() {
     private lateinit var email: TextView
     private lateinit var photo: ImageView
 
+    private lateinit var image_path: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_profile)
@@ -32,14 +35,16 @@ class ShowProfileActivity : AppCompatActivity() {
         location = findViewById(R.id.location)
         photo = findViewById(R.id.edit_photo)
 
+        image_path = getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/profile.png"
+
         fullName.text =  "Mario Rossi"
         nickName.text =  "mariored89"
         email.text =  "mario.rossi@polito.it"
         location.text =  "Lombardia"
+        reloadImageView(photo, image_path)
 
-        var file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "profile.png")
-        if(file.exists())
-            photo.setImageURI(file.toUri())
+        //Log.d("polito_path", "${image_path}")
+
         /*var uri: Uri = Uri.parse("android.resource://${getApplicationContext().getPackageName()}/drawable/download.png")
         val stream: InputStream? = contentResolver.openInputStream(uri)
         val myBitmap = BitmapFactory.decodeStream(stream)
@@ -76,13 +81,14 @@ class ShowProfileActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    //creatio of the intent and start of EditProfileActivity
+    //creation of the intent and start of EditProfileActivity
     private fun editProfile() {
         val intent = Intent(this, EditProfileActivity::class.java)
         intent.putExtra("group02.lab1.FULL_NAME", fullName.text)
         intent.putExtra("group02.lab1.NICK_NAME", nickName.text)
         intent.putExtra("group02.lab1.EMAIL", email.text)
         intent.putExtra("group02.lab1.LOCATION", location.text)
+        intent.putExtra("group02.lab1.IMAGE_PATH", image_path)
 
         startActivityForResult(intent, 1)
     }
@@ -91,7 +97,6 @@ class ShowProfileActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 1 && resultCode == Activity.RESULT_OK){
-            //Log.d("POLITOMAD", data?.getStringExtra("group02.lab1.FULL_NAME").toString())
             showProfile(data)
         }
     }
@@ -102,11 +107,19 @@ class ShowProfileActivity : AppCompatActivity() {
         nickName.text = data?.getStringExtra("group02.lab1.NICK_NAME")
         email.text = data?.getStringExtra("group02.lab1.EMAIL")
         location.text = data?.getStringExtra("group02.lab1.LOCATION")
-        //val file = File(data?.extras?.get("group02.lab1.URI"))
-        //if (file.exists())
-        if(data?.extras?.get("group02.lab1.URI") as Uri != null) {
-            photo.setImageURI(null)   //DA CONTROLLARE
-            photo.setImageURI(data?.extras?.get("group02.lab1.URI") as Uri)
-        }
+        reloadImageView(photo, image_path)
     }
+
+
+    private fun reloadImageView(image: ImageView, path: String){
+        var file = File(path)
+        if(file.exists()){
+            image.setImageURI(Uri.parse("android.resource://id.polito.mad.mad_car_pooling/drawable/user_image"))
+            image.setImageURI(file.toUri())
+        }else{
+            image.setImageURI(Uri.parse("android.resource://it.polito.mad.mad_car_pooling/drawable/user_image"))
+        }
+
+    }
+
 }

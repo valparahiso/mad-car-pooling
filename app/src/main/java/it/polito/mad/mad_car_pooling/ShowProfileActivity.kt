@@ -37,7 +37,7 @@ class ShowProfileActivity : AppCompatActivity() {
         email.text =  "mario.rossi@polito.it"
         location.text =  "Lombardia"
 
-        val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "profile.png")
+        var file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "profile.png")
         if(file.exists())
             photo.setImageURI(file.toUri())
         /*var uri: Uri = Uri.parse("android.resource://${getApplicationContext().getPackageName()}/drawable/download.png")
@@ -104,6 +104,7 @@ class ShowProfileActivity : AppCompatActivity() {
         location.text = data?.getStringExtra("group02.lab1.LOCATION")
         //val file = File(data?.extras?.get("group02.lab1.URI"))
         //if (file.exists())
-            photo.setImageURI(data?.extras?.get("group02.lab1.URI") as Uri)
+        photo.setImageURI(Uri.parse(""))
+        photo.setImageURI(data?.extras?.get("group02.lab1.URI") as Uri)
     }
 }

@@ -1,7 +1,9 @@
 package it.polito.mad.mad_car_pooling
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -14,6 +16,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import org.json.JSONObject
 import java.io.File
 
 
@@ -25,6 +28,8 @@ class ShowProfileActivity : AppCompatActivity() {
     private lateinit var photo: ImageView
 
     private lateinit var image_path: String
+    private lateinit var sharedPref: SharedPreferences
+    private lateinit var jsonGlobal: JSONObject
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,12 +40,30 @@ class ShowProfileActivity : AppCompatActivity() {
         location = findViewById(R.id.location)
         photo = findViewById(R.id.edit_photo)
 
-        image_path = getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/profile.png"
+        sharedPref = this?.getPreferences(Context.MODE_PRIVATE)
+        var jsonObject: JSONObject = JSONObject()
+        jsonObject.put("fullName", "Mario Rossi")
+        jsonObject.put("nickName", "mario89")
+        jsonObject.put("email", "mario.rossi@polito.it")
+        jsonObject.put("location", "Lombardia")
+        jsonObject.put("photo", "android.resource://it.polito.mad.mad_car_pooling/drawable/user_image")
+        val str: String? = sharedPref.getString("profile", jsonObject.toString())
+        jsonGlobal = JSONObject(str!!)
+        fullName.text =  jsonGlobal.getString("fullName")
+        nickName.text =  jsonGlobal.getString("nickName")
+        email.text = jsonGlobal.getString("email")
+        location.text =  jsonGlobal.getString("location")
+        photo.setImageURI(Uri.parse(jsonGlobal.getString("photo")))
 
+
+        image_path = getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/profile.png"
+/*
         fullName.text =  "Mario Rossi"
         nickName.text =  "mariored89"
         email.text =  "mario.rossi@polito.it"
         location.text =  "Lombardia"
+
+ */
         reloadImageView(photo, image_path)
 
         //Log.d("polito_path", "${image_path}")
@@ -108,6 +131,15 @@ class ShowProfileActivity : AppCompatActivity() {
         email.text = data?.getStringExtra("group02.lab1.EMAIL")
         location.text = data?.getStringExtra("group02.lab1.LOCATION")
         reloadImageView(photo, image_path)
+        jsonGlobal.put("fullName", fullName.text.toString())
+        jsonGlobal.put("nickName", nickName.text.toString())
+        jsonGlobal.put("email", email.text.toString())
+        jsonGlobal.put("location", location.text.toString())
+        if(!jsonGlobal.getString("photo").equals(image_path)) {jsonGlobal.put("photo", image_path)}
+        with (sharedPref.edit()){
+            putString("profile", jsonGlobal.toString())
+            apply()
+        }
     }
 
 

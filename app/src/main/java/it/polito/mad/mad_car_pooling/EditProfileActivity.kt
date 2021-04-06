@@ -4,8 +4,8 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -20,6 +20,8 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.InputStream
 
 
 class EditProfileActivity : AppCompatActivity() {
@@ -52,17 +54,10 @@ class EditProfileActivity : AppCompatActivity() {
 
         imagePath = intent.getStringExtra("group02.lab1.IMAGE_PATH").toString()   //get path of profile picture
         setEditText()
+        statusBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         
         //set profile picture if exists
-        var file = File(imagePath)
-        if(file.exists()) {
-            photoIV.setImageURI(Uri.parse("android.resource://it.polito.mad.mad_car_pooling/drawable/user_image"))
-            photoIV.setImageURI(file.toUri())
-            statusBitmap = (photoIV.drawable as BitmapDrawable).bitmap
-        }else{
-            photoIV.setImageURI(Uri.parse("android.resource://it.polito.mad.mad_car_pooling/drawable/user_image"))
-            statusBitmap = (photoIV.drawable as BitmapDrawable).bitmap
-        }
+        loadImageProfile()
     }
 
     //save the state in order to restore it on recreation of the activity
@@ -74,8 +69,14 @@ class EditProfileActivity : AppCompatActivity() {
     //restore the photo after the destruction and the creation of the activity (change of orientation of the device)
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        photoIV.setImageBitmap(savedInstanceState.getParcelable("BitmapImage"))
-        statusBitmap = savedInstanceState.getParcelable("BitmapImage")!!
+        //check if received bitmap is empty
+        if(savedInstanceState.getParcelable<Bitmap>("BitmapImage")!!.sameAs(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888))){
+            loadImageProfile()
+        }
+        else {
+            photoIV.setImageBitmap(savedInstanceState.getParcelable("BitmapImage"))
+            statusBitmap = savedInstanceState.getParcelable("BitmapImage")!!
+        }
     }
 
     //permits to create the floating context menu
@@ -113,7 +114,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
     }
-    
+
     //create an intent for the gallery activity
     private fun openGallery() {
         val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
@@ -138,8 +139,7 @@ class EditProfileActivity : AppCompatActivity() {
                     try {
                         statusBitmap = data?.extras?.get("data") as Bitmap
                         photoIV.setImageBitmap(statusBitmap)
-                    }
-                    catch (e: kotlin.TypeCastException){
+                    } catch (e: kotlin.TypeCastException) {
                         Log.e("POLITOMAD", "TypeCastException - Camera")
                     }
                 }
@@ -222,7 +222,7 @@ class EditProfileActivity : AppCompatActivity() {
                 it.putExtra("group02.lab1.LOCATION", locationET.text.toString())
 
                 //check if photo is changed
-                if(flagPhotoModified)
+                if (flagPhotoModified)
                     File(imagePath).writeBitmap(statusBitmap, Bitmap.CompressFormat.PNG, 85)
             })
             finish()
@@ -234,6 +234,17 @@ class EditProfileActivity : AppCompatActivity() {
         outputStream().use { out ->
             bitmap.compress(format, quality, out)
             out.flush()
+        }
+    }
+
+    //load profile picture
+    private fun loadImageProfile(){
+        var file = File(imagePath)
+        if(file.exists()) {
+            photoIV.setImageURI(Uri.parse("android.resource://it.polito.mad.mad_car_pooling/drawable/user_image"))
+            photoIV.setImageURI(file.toUri())
+        }else{
+            photoIV.setImageURI(Uri.parse("android.resource://it.polito.mad.mad_car_pooling/drawable/user_image"))
         }
     }
 }

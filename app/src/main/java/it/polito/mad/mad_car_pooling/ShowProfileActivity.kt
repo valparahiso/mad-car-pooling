@@ -114,7 +114,7 @@ class ShowProfileActivity : AppCompatActivity() {
     private fun reloadImageView(image: ImageView, path: String){
         var file = File(path)
         if(file.exists()){
-            image.setImageURI(Uri.parse("android.resource://id.polito.mad.mad_car_pooling/drawable/user_image"))
+            image.setImageURI(Uri.parse("android.resource://it.polito.mad.mad_car_pooling/drawable/user_image"))
             image.setImageURI(file.toUri())
         }else{
             image.setImageURI(Uri.parse("android.resource://it.polito.mad.mad_car_pooling/drawable/user_image"))

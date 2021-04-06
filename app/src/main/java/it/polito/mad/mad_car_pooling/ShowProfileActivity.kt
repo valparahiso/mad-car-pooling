@@ -4,12 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.system.Os.close
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -40,13 +37,17 @@ class ShowProfileActivity : AppCompatActivity() {
         location = findViewById(R.id.location)
         photo = findViewById(R.id.edit_photo)
 
-        sharedPref = this?.getPreferences(Context.MODE_PRIVATE)
+        sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+
+        //jsonObject for default values
         var jsonObject: JSONObject = JSONObject()
         jsonObject.put("fullName", "Mario Rossi")
         jsonObject.put("nickName", "mario89")
         jsonObject.put("email", "mario.rossi@polito.it")
         jsonObject.put("location", "Lombardia")
         jsonObject.put("photo", "android.resource://it.polito.mad.mad_car_pooling/drawable/user_image")
+
+        //retriving data from the file (if present)
         val str: String? = sharedPref.getString("profile", jsonObject.toString())
         jsonGlobal = JSONObject(str!!)
         fullName.text =  jsonGlobal.getString("fullName")
@@ -55,25 +56,12 @@ class ShowProfileActivity : AppCompatActivity() {
         location.text =  jsonGlobal.getString("location")
         photo.setImageURI(Uri.parse(jsonGlobal.getString("photo")))
 
-
         image_path = getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/profile.png"
-/*
-        fullName.text =  "Mario Rossi"
-        nickName.text =  "mariored89"
-        email.text =  "mario.rossi@polito.it"
-        location.text =  "Lombardia"
 
- */
         reloadImageView(photo, image_path)
-
-        //Log.d("polito_path", "${image_path}")
-
-        /*var uri: Uri = Uri.parse("android.resource://${getApplicationContext().getPackageName()}/drawable/download.png")
-        val stream: InputStream? = contentResolver.openInputStream(uri)
-        val myBitmap = BitmapFactory.decodeStream(stream)
-        photo.setImageBitmap(myBitmap)*/
     }
 
+    //save state of the activity
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("fullname", fullName.text.toString())
@@ -82,6 +70,7 @@ class ShowProfileActivity : AppCompatActivity() {
         outState.putString("location", location.text.toString())
     }
 
+    //restore state of the activity
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         fullName.text = savedInstanceState.getString("fullname")
@@ -92,14 +81,12 @@ class ShowProfileActivity : AppCompatActivity() {
 
     //create option menu for calling the EditProfileActivity
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        //return super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.file_menu, menu)
         return true
     }
 
     //behaviour of click event on the option menu
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        //Log.d("POLITOMAD","onOptionsItemSelected()")
         editProfile()
         return super.onOptionsItemSelected(item)
     }
@@ -116,7 +103,7 @@ class ShowProfileActivity : AppCompatActivity() {
         startActivityForResult(intent, 1)
     }
 
-    //recieve result from EditProfileActivity
+    //receive result from EditProfileActivity
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 1 && resultCode == Activity.RESULT_OK){
@@ -142,7 +129,7 @@ class ShowProfileActivity : AppCompatActivity() {
         }
     }
 
-
+    //set image, if modified
     private fun reloadImageView(image: ImageView, path: String){
         var file = File(path)
         if(file.exists()){
@@ -151,7 +138,5 @@ class ShowProfileActivity : AppCompatActivity() {
         }else{
             image.setImageURI(Uri.parse("android.resource://it.polito.mad.mad_car_pooling/drawable/user_image"))
         }
-
     }
-
 }

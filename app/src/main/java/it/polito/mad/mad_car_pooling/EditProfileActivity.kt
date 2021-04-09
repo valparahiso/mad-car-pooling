@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -52,29 +53,35 @@ class EditProfileActivity : AppCompatActivity() {
 
         imagePath = intent.getStringExtra("group02.lab1.IMAGE_PATH").toString()   //get path of profile picture
         setEditText()
-        statusBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-        
-        //set profile picture if exists
-        loadImageProfile()
+
+        //load photo and save status bitmap
+        var file = File(imagePath)
+        if(file.exists()) {
+            statusBitmap = BitmapFactory.decodeFile(imagePath);
+            photoIV.setImageResource(R.drawable.user_image)
+            photoIV.setImageURI(file.toUri())
+        }else{
+            val options = BitmapFactory.Options()
+            options.inSampleSize = 3
+            statusBitmap = BitmapFactory.decodeResource(resources, R.drawable.user_image, options)
+            photoIV.setImageResource(R.drawable.user_image)
+        }
     }
 
     //save the state in order to restore it on recreation of the activity
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelable("BitmapImage", statusBitmap)
+        outState.putBoolean("BitmapModified", flagPhotoModified);
     }
 
     //restore the photo after the destruction and the creation of the activity (change of orientation of the device)
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        //check if received bitmap is empty
-        if(savedInstanceState.getParcelable<Bitmap>("BitmapImage")!!.sameAs(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888))){
-            loadImageProfile()
-        }
-        else {
-            photoIV.setImageBitmap(savedInstanceState.getParcelable("BitmapImage"))
-            statusBitmap = savedInstanceState.getParcelable("BitmapImage")!!
-        }
+        flagPhotoModified =savedInstanceState.getBoolean("BitmapModified")
+        photoIV.setImageBitmap(savedInstanceState.getParcelable("BitmapImage"))
+        statusBitmap = savedInstanceState.getParcelable("BitmapImage")!!
+
     }
 
     //permits to create the floating context menu
@@ -220,8 +227,10 @@ class EditProfileActivity : AppCompatActivity() {
                 it.putExtra("group02.lab1.LOCATION", locationET.text.toString())
 
                 //check if photo is changed
-                if (flagPhotoModified)
-                    File(imagePath).writeBitmap(statusBitmap, Bitmap.CompressFormat.PNG, 85)
+                if (flagPhotoModified){
+                    Log.d("POLIMAD", "New photo saved in: $imagePath")
+                    File(imagePath).writeBitmap(statusBitmap, Bitmap.CompressFormat.PNG, 100)
+                }
             })
             finish()
         }
@@ -235,14 +244,4 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    //load profile picture
-    private fun loadImageProfile(){
-        var file = File(imagePath)
-        if(file.exists()) {
-            photoIV.setImageURI(Uri.parse("android.resource://it.polito.mad.mad_car_pooling/drawable/user_image"))
-            photoIV.setImageURI(file.toUri())
-        }else{
-            photoIV.setImageURI(Uri.parse("android.resource://it.polito.mad.mad_car_pooling/drawable/user_image"))
-        }
-    }
 }

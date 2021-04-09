@@ -24,7 +24,7 @@ class ShowProfileActivity : AppCompatActivity() {
     private lateinit var email: TextView
     private lateinit var photo: ImageView
 
-    private lateinit var image_path: String
+    private lateinit var imagePath: String
     private lateinit var sharedPref: SharedPreferences
     private lateinit var jsonGlobal: JSONObject
 
@@ -45,7 +45,7 @@ class ShowProfileActivity : AppCompatActivity() {
         jsonObject.put("nickName", "mario89")
         jsonObject.put("email", "mario.rossi@polito.it")
         jsonObject.put("location", "Lombardia")
-        jsonObject.put("photo", "android.resource://it.polito.mad.mad_car_pooling/drawable/user_image")
+        jsonObject.put("photoPath", getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/profile.png")
 
         //retriving data from the file (if present)
         val str: String? = sharedPref.getString("profile", jsonObject.toString())
@@ -54,11 +54,9 @@ class ShowProfileActivity : AppCompatActivity() {
         nickName.text =  jsonGlobal.getString("nickName")
         email.text = jsonGlobal.getString("email")
         location.text =  jsonGlobal.getString("location")
-        photo.setImageURI(Uri.parse(jsonGlobal.getString("photo")))
 
-        image_path = getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/profile.png"
-
-        reloadImageView(photo, image_path)
+        imagePath = jsonGlobal.getString("photoPath")
+        reloadImageView(photo, imagePath)
     }
 
     //save state of the activity
@@ -98,7 +96,7 @@ class ShowProfileActivity : AppCompatActivity() {
         intent.putExtra("group02.lab1.NICK_NAME", nickName.text)
         intent.putExtra("group02.lab1.EMAIL", email.text)
         intent.putExtra("group02.lab1.LOCATION", location.text)
-        intent.putExtra("group02.lab1.IMAGE_PATH", image_path)
+        intent.putExtra("group02.lab1.IMAGE_PATH", imagePath)
 
         startActivityForResult(intent, 1)
     }
@@ -117,12 +115,12 @@ class ShowProfileActivity : AppCompatActivity() {
         nickName.text = data?.getStringExtra("group02.lab1.NICK_NAME")
         email.text = data?.getStringExtra("group02.lab1.EMAIL")
         location.text = data?.getStringExtra("group02.lab1.LOCATION")
-        reloadImageView(photo, image_path)
+        reloadImageView(photo, imagePath)
         jsonGlobal.put("fullName", fullName.text.toString())
         jsonGlobal.put("nickName", nickName.text.toString())
         jsonGlobal.put("email", email.text.toString())
         jsonGlobal.put("location", location.text.toString())
-        if(!jsonGlobal.getString("photo").equals(image_path)) {jsonGlobal.put("photo", image_path)}
+        if(!jsonGlobal.getString("photoPath").equals(imagePath)) {jsonGlobal.put("photoPath", imagePath)}
         with (sharedPref.edit()){
             putString("profile", jsonGlobal.toString())
             apply()
@@ -133,10 +131,10 @@ class ShowProfileActivity : AppCompatActivity() {
     private fun reloadImageView(image: ImageView, path: String){
         var file = File(path)
         if(file.exists()){
-            image.setImageURI(Uri.parse("android.resource://it.polito.mad.mad_car_pooling/drawable/user_image"))
+            image.setImageResource(R.drawable.user_image)
             image.setImageURI(file.toUri())
         }else{
-            image.setImageURI(Uri.parse("android.resource://it.polito.mad.mad_car_pooling/drawable/user_image"))
+            image.setImageResource(R.drawable.user_image)
         }
     }
 }

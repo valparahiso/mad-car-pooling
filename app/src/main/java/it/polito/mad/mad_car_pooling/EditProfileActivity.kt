@@ -21,10 +21,10 @@ import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import com.google.android.material.datepicker.MaterialDatePicker.Builder.datePicker
 import java.io.File
-import java.time.Month
-import java.time.Year
 import java.util.*
+import org.joda.time.DateTime
 
 
 class EditProfileActivity : AppCompatActivity() {
@@ -43,6 +43,7 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var imagePath: String
     private var flagPhotoModified: Boolean = false
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
@@ -59,9 +60,12 @@ class EditProfileActivity : AppCompatActivity() {
 
         val mcalendar: Calendar = Calendar.getInstance()
 
-        var day=mcalendar.get(Calendar.DAY_OF_MONTH);
-        var year=mcalendar.get(Calendar.YEAR);
-        var month=mcalendar.get(Calendar.MONTH);
+        var day = mcalendar.get(Calendar.DAY_OF_MONTH);
+        var year = mcalendar.get(Calendar.YEAR);
+        var month = mcalendar.get(Calendar.MONTH);
+        var minYear = year - 18
+        var minMonth = month
+        var minDay = day
 
         birthET.setOnFocusChangeListener { v, hasFocus -> run {
             if(hasFocus)
@@ -85,10 +89,13 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
+    //open Calendar Dialog for Birth Date and remove focus form the EditText
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun openCalendarDialog(year: Int, month: Int, day: Int){
         birthET.setInputType(InputType.TYPE_NULL);
         val listener = OnDateSetListener { view, year, monthOfYear, dayOfMonth -> birthET.setText("" + dayOfMonth + "/" + monthOfYear + "/" + year + "") }
         val dpDialog = DatePickerDialog(this, listener, year, month, day)
+        dpDialog.datePicker.maxDate = DateTime().minusYears(18).millis    //set the maximum date (at least 18 years old)
         dpDialog.show()
         birthET.clearFocus()
     }

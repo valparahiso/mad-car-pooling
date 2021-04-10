@@ -1,15 +1,17 @@
 package it.polito.mad.mad_car_pooling
 
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.app.DatePickerDialog.OnDateSetListener
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.InputType
 import android.text.TextUtils
 import android.util.Log
 import android.view.*
@@ -20,7 +22,9 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import java.io.File
-
+import java.time.Month
+import java.time.Year
+import java.util.*
 
 
 class EditProfileActivity : AppCompatActivity() {
@@ -33,6 +37,7 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var emailET: EditText
     private lateinit var locationET: EditText
     private lateinit var photoIV: ImageView
+    private lateinit var birthET: EditText
 
     private lateinit var statusBitmap: Bitmap
     private lateinit var imagePath: String
@@ -50,6 +55,18 @@ class EditProfileActivity : AppCompatActivity() {
         locationET = findViewById<EditText>(R.id.edit_location)
         emailET = findViewById<EditText>(R.id.edit_email)
         photoIV = findViewById(R.id.edit_photo)
+        birthET = findViewById(R.id.edit_birthDate)
+
+        val mcalendar: Calendar = Calendar.getInstance()
+
+        var day=mcalendar.get(Calendar.DAY_OF_MONTH);
+        var year=mcalendar.get(Calendar.YEAR);
+        var month=mcalendar.get(Calendar.MONTH);
+
+        birthET.setOnFocusChangeListener { v, hasFocus -> run {
+            if(hasFocus)
+                openCalendarDialog(year, month, day)
+        } }
 
         imagePath = intent.getStringExtra("group02.lab1.IMAGE_PATH").toString()   //get path of profile picture
         setEditText()
@@ -68,11 +85,19 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
+    private fun openCalendarDialog(year: Int, month: Int, day: Int){
+        birthET.setInputType(InputType.TYPE_NULL);
+        val listener = OnDateSetListener { view, year, monthOfYear, dayOfMonth -> birthET.setText("" + dayOfMonth + "/" + monthOfYear + "/" + year + "") }
+        val dpDialog = DatePickerDialog(this, listener, year, month, day)
+        dpDialog.show()
+        birthET.clearFocus()
+    }
+
     //save the state in order to restore it on recreation of the activity
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelable("BitmapImage", statusBitmap)
-        outState.putBoolean("BitmapModified", flagPhotoModified);
+        outState.putBoolean("BitmapModified", flagPhotoModified)
     }
 
     //restore the photo after the destruction and the creation of the activity (change of orientation of the device)
@@ -190,11 +215,13 @@ class EditProfileActivity : AppCompatActivity() {
         val nickName: String? = intent.getStringExtra("group02.lab1.NICK_NAME")
         val location: String? = intent.getStringExtra("group02.lab1.LOCATION")
         val email: String? = intent.getStringExtra("group02.lab1.EMAIL")
+        val birthDate: String? = intent.getStringExtra("group02.lab1.BIRTH")
 
         fullNameET.setText(fullName)
         nicknameET.setText(nickName)
         locationET.setText(location)
         emailET.setText(email)
+        birthET.setText(birthDate)
     }
 
     //set result for ShowProfileActivity (check if all EditText contain some characters)
@@ -219,15 +246,21 @@ class EditProfileActivity : AppCompatActivity() {
             flagPresentValue = false
         }
 
+        if (TextUtils.isEmpty(birthET.text.toString())) {
+            birthET.error = "Date of birth is required!"
+            flagPresentValue = false
+        }
+
         if(flagPresentValue) {
             setResult(Activity.RESULT_OK, Intent().also {
                 it.putExtra("group02.lab1.FULL_NAME", fullNameET.text.toString())
                 it.putExtra("group02.lab1.NICK_NAME", nicknameET.text.toString())
                 it.putExtra("group02.lab1.EMAIL", emailET.text.toString())
                 it.putExtra("group02.lab1.LOCATION", locationET.text.toString())
+                it.putExtra("group02.lab1.BIRTH", birthET.text.toString())
 
                 //check if photo is changed
-                if (flagPhotoModified){
+                if (flagPhotoModified) {
                     Log.d("POLIMAD", "New photo saved in: $imagePath")
                     File(imagePath).writeBitmap(statusBitmap, Bitmap.CompressFormat.PNG, 100)
                 }

@@ -23,6 +23,7 @@ class ShowProfileActivity : AppCompatActivity() {
     private lateinit var location: TextView
     private lateinit var email: TextView
     private lateinit var photo: ImageView
+    private lateinit var birth: TextView
 
     private lateinit var imagePath: String
     private lateinit var sharedPref: SharedPreferences
@@ -36,6 +37,7 @@ class ShowProfileActivity : AppCompatActivity() {
         email = findViewById(R.id.email)
         location = findViewById(R.id.location)
         photo = findViewById(R.id.edit_photo)
+        birth = findViewById(R.id.birthDate)
 
         sharedPref = this.getPreferences(Context.MODE_PRIVATE)
 
@@ -45,6 +47,7 @@ class ShowProfileActivity : AppCompatActivity() {
         jsonObject.put("nickName", "mario89")
         jsonObject.put("email", "mario.rossi@polito.it")
         jsonObject.put("location", "Lombardia")
+        jsonObject.put("birth", "01/01/1990")
         jsonObject.put("photoPath", getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/profile.png")
 
         //retriving data from the file (if present)
@@ -54,6 +57,7 @@ class ShowProfileActivity : AppCompatActivity() {
         nickName.text =  jsonGlobal.getString("nickName")
         email.text = jsonGlobal.getString("email")
         location.text =  jsonGlobal.getString("location")
+        birth.text = jsonGlobal.getString("birth")
 
         imagePath = jsonGlobal.getString("photoPath")
         reloadImageView(photo, imagePath)
@@ -66,6 +70,7 @@ class ShowProfileActivity : AppCompatActivity() {
         outState.putString("nickname", nickName.text.toString())
         outState.putString("email", email.text.toString())
         outState.putString("location", location.text.toString())
+        outState.putString("birth", birth.text.toString())
     }
 
     //restore state of the activity
@@ -75,6 +80,7 @@ class ShowProfileActivity : AppCompatActivity() {
         nickName.text = savedInstanceState.getString("nickname")
         email.text = savedInstanceState.getString("email")
         location.text = savedInstanceState.getString("location")
+        birth.text = savedInstanceState.getString("birth")
     }
 
     //create option menu for calling the EditProfileActivity
@@ -97,6 +103,7 @@ class ShowProfileActivity : AppCompatActivity() {
         intent.putExtra("group02.lab1.EMAIL", email.text)
         intent.putExtra("group02.lab1.LOCATION", location.text)
         intent.putExtra("group02.lab1.IMAGE_PATH", imagePath)
+        intent.putExtra("group02.lab1.BIRTH", birth.text)
 
         startActivityForResult(intent, 1)
     }
@@ -115,11 +122,13 @@ class ShowProfileActivity : AppCompatActivity() {
         nickName.text = data?.getStringExtra("group02.lab1.NICK_NAME")
         email.text = data?.getStringExtra("group02.lab1.EMAIL")
         location.text = data?.getStringExtra("group02.lab1.LOCATION")
+        birth.text = data?.getStringExtra("group02.lab1.BIRTH")
         reloadImageView(photo, imagePath)
         jsonGlobal.put("fullName", fullName.text.toString())
         jsonGlobal.put("nickName", nickName.text.toString())
         jsonGlobal.put("email", email.text.toString())
         jsonGlobal.put("location", location.text.toString())
+        jsonGlobal.put("birth", birth.text.toString())
         if(!jsonGlobal.getString("photoPath").equals(imagePath)) {jsonGlobal.put("photoPath", imagePath)}
         with (sharedPref.edit()){
             putString("profile", jsonGlobal.toString())

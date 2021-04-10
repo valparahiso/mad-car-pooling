@@ -39,7 +39,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/edit_photo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/edit_photo"
-        app:layout_constraintTop_toTopOf="@+id/edit_photo">
+        app:layout_constraintTop_toTopOf="@+id/edit_photo"
+        android:fadeScrollbars="false">
 
         <LinearLayout
             android:id="@+id/linearLayout0"
@@ -48,40 +49,79 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/fullName"
+                android:id="@+id/fullName_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:fontFamily="sans-serif-medium"
                 android:text="Full Name"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/fullName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Full Name"
+                android:textColor="@color/black"
                 android:textSize="36sp" />
 
+            <TextView
+                android:id="@+id/nickName_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Nickname"
+                android:textSize="16sp" />
             <TextView
                 android:id="@+id/nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:text="NickName"
                 android:textSize="30sp"
-                android:textStyle="italic" />
+                android:textColor="@color/black" />
 
+            <TextView
+                android:id="@+id/email_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Email"
+                android:textSize="16sp" />
             <TextView
                 android:id="@+id/email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:text="email@address"
                 android:textSize="30sp"
-                android:textStyle="italic" />
+                android:textColor="@color/black"/>
 
             <TextView
-                android:id="@+id/location"
+                android:id="@+id/location_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Location"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location"
                 android:textSize="30sp"
-                android:textStyle="italic" />
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/birthDate_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Date of Birth"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/birthDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="01/01/1990"
+                android:textSize="30sp"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 

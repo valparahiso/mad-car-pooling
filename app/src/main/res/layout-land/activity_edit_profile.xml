@@ -54,51 +54,93 @@
         app:layout_constraintBottom_toBottomOf="@+id/edit_photo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/edit_photo"
-        app:layout_constraintTop_toTopOf="@+id/edit_photo">
+        app:layout_constraintTop_toTopOf="@+id/edit_photo"
+        android:fadeScrollbars="false">
 
         <LinearLayout
             android:id="@+id/linearLayout0"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:scrollbarAlwaysDrawHorizontalTrack="false"
+            android:scrollbarAlwaysDrawVerticalTrack="false">
 
+            <TextView
+                android:id="@+id/fullName_edit_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Full Name"
+                android:textSize="16sp" />
             <EditText
                 android:id="@+id/edit_fullName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:fontFamily="sans-serif-medium"
                 android:hint="Full Name"
                 android:inputType="text"
                 android:textSize="36sp" />
 
+            <TextView
+                android:id="@+id/nickname_edit_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Nickname"
+                android:textSize="16sp" />
             <EditText
                 android:id="@+id/edit_nickName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:hint="NickName"
                 android:inputType="text"
                 android:textSize="30sp"
                 android:textStyle="italic" />
 
+            <TextView
+                android:id="@+id/email_edit_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Email"
+                android:textSize="16sp" />
             <EditText
                 android:id="@+id/edit_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:hint="email@address"
                 android:inputType="textEmailAddress"
                 android:textSize="30sp"
                 android:textStyle="italic" />
 
+            <TextView
+                android:id="@+id/location_edit_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Location"
+                android:textSize="16sp" />
             <EditText
                 android:id="@+id/edit_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:hint="location"
                 android:inputType="text"
+                android:textSize="30sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/birthDate_edit_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Date of Birth"
+                android:textSize="16sp" />
+            <EditText
+                android:id="@+id/edit_birthDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date"
                 android:textSize="30sp"
                 android:textStyle="italic" />
 

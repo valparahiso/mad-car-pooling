@@ -41,60 +41,69 @@
         app:layout_constraintTop_toTopOf="@+id/edit_photo"
         app:layout_constraintVertical_bias="0" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout0"
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:fillViewport="false"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@+id/edit_photo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/edit_photo"
         app:layout_constraintTop_toTopOf="@+id/edit_photo">
 
-        <EditText
-            android:id="@+id/edit_fullName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="sans-serif-medium"
-            android:hint="Full Name"
-            android:inputType="text"
-            android:textSize="36sp" />
+        <LinearLayout
+            android:id="@+id/linearLayout0"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/edit_nickName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="NickName"
-            android:inputType="text"
-            android:textSize="30sp"
-            android:textStyle="italic" />
+            <EditText
+                android:id="@+id/edit_fullName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:hint="Full Name"
+                android:inputType="text"
+                android:textSize="36sp" />
 
-        <EditText
-            android:id="@+id/edit_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="email@address"
-            android:inputType="textEmailAddress"
-            android:textSize="30sp"
-            android:textStyle="italic" />
+            <EditText
+                android:id="@+id/edit_nickName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="NickName"
+                android:inputType="text"
+                android:textSize="30sp"
+                android:textStyle="italic" />
 
-        <EditText
-            android:id="@+id/edit_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="location"
-            android:inputType="text"
-            android:textSize="30sp"
-            android:textStyle="italic" />
+            <EditText
+                android:id="@+id/edit_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="email@address"
+                android:inputType="textEmailAddress"
+                android:textSize="30sp"
+                android:textStyle="italic" />
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/edit_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="location"
+                android:inputType="text"
+                android:textSize="30sp"
+                android:textStyle="italic" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

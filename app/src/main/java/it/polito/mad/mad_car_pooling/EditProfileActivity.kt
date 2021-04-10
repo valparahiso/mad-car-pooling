@@ -83,7 +83,7 @@ class EditProfileActivity : AppCompatActivity() {
             photoIV.setImageURI(file.toUri())
         }else{
             val options = BitmapFactory.Options()
-            options.inSampleSize = 2
+            options.inScaled = false;
             statusBitmap = BitmapFactory.decodeResource(resources, R.drawable.user_image, options)
             photoIV.setImageResource(R.drawable.user_image)
         }

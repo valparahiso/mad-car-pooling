@@ -27,10 +27,6 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:fillViewport="false"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,6 +35,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_photo"
         app:layout_constraintVertical_bias="0.0"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:fadeScrollbars="false">
 
         <LinearLayout
@@ -53,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Full Name"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
             <TextView
                 android:id="@+id/fullName"

@@ -41,10 +41,6 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:fillViewport="false"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -53,12 +49,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_photo"
         app:layout_constraintVertical_bias="0.0"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:fadeScrollbars="false">
 
     <LinearLayout
         android:id="@+id/linearLayout0"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
         android:orientation="vertical">
 
         <TextView
@@ -72,10 +74,9 @@
             android:id="@+id/edit_fullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
             android:hint="Full Name"
             android:inputType="text"
-            android:textSize="36sp" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/nickname_edit_title"
@@ -90,8 +91,7 @@
             android:layout_height="wrap_content"
             android:hint="NickName"
             android:inputType="text"
-            android:textSize="30sp"
-            android:textStyle="italic" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/email_edit_title"
@@ -106,8 +106,7 @@
             android:layout_height="wrap_content"
             android:hint="email@address"
             android:inputType="textEmailAddress"
-            android:textSize="30sp"
-            android:textStyle="italic" />
+            android:textSize="30sp"/>
 
         <TextView
             android:id="@+id/location_edit_title"
@@ -122,8 +121,7 @@
             android:layout_height="wrap_content"
             android:hint="location"
             android:inputType="text"
-            android:textSize="30sp"
-            android:textStyle="italic" />
+            android:textSize="30sp"/>
 
         <TextView
             android:id="@+id/birthDate_edit_title"
@@ -137,8 +135,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="date"
-            android:textSize="30sp"
-            android:textStyle="italic" />
+            android:textSize="30sp"/>
 
     </LinearLayout>
 

@@ -4,4 +4,7 @@
     <item android:id="@+id/save"
         android:title="Save" />
 
+    <item android:id="@+id/clear"
+        android:title="Clear Fields" />
+
 </menu>

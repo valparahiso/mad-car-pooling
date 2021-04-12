@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Full Name"
+            android:text="Full Name*"
             android:textSize="16sp" />
         <EditText
             android:id="@+id/edit_fullName"
@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Nickname"
+            android:text="Nickname*"
             android:textSize="16sp" />
         <EditText
             android:id="@+id/edit_nickName"
@@ -97,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Email"
+            android:text="Email*"
             android:textSize="16sp" />
         <EditText
             android:id="@+id/edit_email"
@@ -112,29 +112,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Location"
+            android:text="Location*"
             android:textSize="16sp" />
+
         <EditText
             android:id="@+id/edit_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="location"
+            android:hint="Location"
             android:inputType="text"
-            android:textSize="30sp"/>
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/birthDate_edit_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Date of Birth (18+)"
+            android:text="Date of Birth (18+)*"
             android:textSize="16sp" />
+
         <EditText
             android:id="@+id/edit_birthDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="Date of Birth"
             android:inputType="date"
-            android:textSize="30sp"/>
+            android:textSize="30sp" />
 
     </LinearLayout>
 

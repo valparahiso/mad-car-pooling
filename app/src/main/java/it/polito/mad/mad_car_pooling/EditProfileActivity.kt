@@ -21,7 +21,6 @@ import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
-import com.google.android.material.datepicker.MaterialDatePicker.Builder.datePicker
 import java.io.File
 import java.util.*
 import org.joda.time.DateTime
@@ -212,6 +211,10 @@ class EditProfileActivity : AppCompatActivity() {
                 saveContent()
                 true
             }
+            R.id.clear -> {
+                clearFields()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -282,6 +285,15 @@ class EditProfileActivity : AppCompatActivity() {
             bitmap.compress(format, quality, out)
             out.flush()
         }
+    }
+
+    private fun clearFields(){
+        fullNameET.setText("");
+        nicknameET.setText("");
+        emailET.setText("");
+        locationET.setText("");
+        birthET.setText("");
+
     }
 
 }

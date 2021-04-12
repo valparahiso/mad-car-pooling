@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Full Name"
-                android:textColor="@color/black"
+                android:textColor="?android:attr/colorForeground"
                 android:textSize="36sp" />
 
             <TextView
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:text="NickName"
                 android:textSize="30sp"
-                android:textColor="@color/black" />
+                android:textColor="?android:attr/colorForeground" />
 
             <TextView
                 android:id="@+id/email_title"
@@ -91,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:text="email@address"
                 android:textSize="30sp"
-                android:textColor="@color/black"/>
+                android:textColor="?android:attr/colorForeground"/>
 
             <TextView
                 android:id="@+id/location_title"
@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:text="Location"
                 android:textSize="30sp"
-                android:textColor="@color/black"/>
+                android:textColor="?android:attr/colorForeground"/>
 
             <TextView
                 android:id="@+id/birthDate_title"
@@ -121,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:text="01/01/1990"
                 android:textSize="30sp"
-                android:textColor="@color/black"/>
+                android:textColor="?android:attr/colorForeground"/>
 
         </LinearLayout>
 

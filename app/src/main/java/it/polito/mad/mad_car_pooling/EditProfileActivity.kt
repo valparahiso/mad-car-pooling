@@ -3,12 +3,8 @@ package it.polito.mad.mad_car_pooling
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
-import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -21,9 +17,9 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
 import org.joda.time.DateTime
 import java.io.File
 import java.util.*
@@ -41,9 +37,9 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var photoIV: ImageView
     private lateinit var birthET: EditText
 
-    private lateinit var statusBitmap: Bitmap
+    private var imageTempModified: Boolean = false
+    private lateinit var imageTemp: String
     private lateinit var imagePath: String
-    private var flagPhotoModified: Boolean = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,33 +65,24 @@ class EditProfileActivity : AppCompatActivity() {
         var minMonth = month
         var minDay = day
 
-        birthET.setOnFocusChangeListener { v, hasFocus -> run {
+        birthET.setOnFocusChangeListener { _, hasFocus -> run {
             if(hasFocus)
                 openCalendarDialog(year, month, day)
         } }
 
         imagePath = intent.getStringExtra("group02.lab1.IMAGE_PATH").toString()   //get path of profile picture
+        imageTemp = externalCacheDir.toString() + "/tmp.png"
         setEditText()
 
         //load photo and save status bitmap
-        var file = File(imagePath)
-        if(file.exists()) {
-            statusBitmap = BitmapFactory.decodeFile(imagePath);
-            photoIV.setImageResource(R.drawable.user_image)
-            photoIV.setImageURI(file.toUri())
-        }else{
-            val options = BitmapFactory.Options()
-            options.inScaled = false;
-            statusBitmap = BitmapFactory.decodeResource(resources, R.drawable.user_image, options)
-            photoIV.setImageResource(R.drawable.user_image)
-        }
+        loadImage(photoIV, imagePath)
     }
 
     //open Calendar Dialog for Birth Date and remove focus form the EditText
     @RequiresApi(Build.VERSION_CODES.O)
     private fun openCalendarDialog(year: Int, month: Int, day: Int){
-        birthET.setInputType(InputType.TYPE_NULL);
-        val listener = OnDateSetListener { view, year, monthOfYear, dayOfMonth -> birthET.setText("" + dayOfMonth + "/" + monthOfYear + "/" + year + "") }
+        birthET.inputType = InputType.TYPE_NULL;
+        val listener = OnDateSetListener { _, dayOfMonth, monthOfYear, Year-> birthET.setText("${dayOfMonth}/${monthOfYear}/${Year}") }
         val dpDialog = DatePickerDialog(this, listener, year, month, day)
         dpDialog.datePicker.maxDate = DateTime().minusYears(18).millis    //set the maximum date (at least 18 years old)
         dpDialog.show()
@@ -105,18 +92,22 @@ class EditProfileActivity : AppCompatActivity() {
     //save the state in order to restore it on recreation of the activity
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable("BitmapImage", statusBitmap)
-        outState.putBoolean("BitmapModified", flagPhotoModified)
+        outState.putBoolean("imageTempModified", imageTempModified)
     }
 
     //restore the photo after the destruction and the creation of the activity (change of orientation of the device)
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        flagPhotoModified =savedInstanceState.getBoolean("BitmapModified")
-        photoIV.setImageBitmap(savedInstanceState.getParcelable("BitmapImage"))
-        statusBitmap = savedInstanceState.getParcelable("BitmapImage")!!
+        imageTempModified = savedInstanceState.getBoolean("imageTempModified")
+        if (imageTempModified){
+            photoIV.setImageResource(R.drawable.user_image)
+            photoIV.setImageURI(imageTemp.toUri())
+        } else {
+            loadImage(photoIV, imagePath)
+        }
 
     }
+
 
     //permits to create the floating context menu
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
@@ -141,53 +132,45 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    //function to open the camera
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun dispatchTakePictureIntent() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        try {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-        } catch (e: ActivityNotFoundException) {
-            // display error state to the user
-            Log.e("POLITOMAD", "ActivityNotFoundException - Camera")
-        }
-
-    }
-
     //create an intent for the gallery activity
     private fun openGallery() {
         val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         intent.type = "image/*"
-        try {
-            startActivityForResult(gallery, PICK_IMAGE)
-        } catch (e: ActivityNotFoundException) {
-            // display error state to the user
-            Log.e("POLITOMAD", "ActivityNotFoundException - Gallery")
-        }
+        startActivityForResult(gallery, PICK_IMAGE)
+    }
+    //function to open the camera
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun dispatchTakePictureIntent() {
+        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        val photoUri = FileProvider.getUriForFile(
+            this,
+            "$packageName.provider",
+            File(imageTemp)
+        )
+
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+        startActivityForResult(takePhotoIntent, REQUEST_IMAGE_CAPTURE)
     }
 
     //permits to receive the photo from the camera or gallery
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        flagPhotoModified = true
         when (requestCode) {
             //return from camera
             REQUEST_IMAGE_CAPTURE -> {
                 if (resultCode == RESULT_OK) {
                     try {
-                        //statusBitmap = data?.extras?.get("data") as Bitmap
-                        //photoIV.setImageBitmap(statusBitmap)
-
-
-                        CropImage.activity(data?.data)
+                        var file = File(imageTemp)
+                        if(file.exists()) {
+                            CropImage.activity(file.toUri())
                                 .setAspectRatio(1,1)
-                                //.setOutputCompressQuality(3)
-                                //.setMaxCropResultSize(800,800)
                                 .start(this);
-
+                        }
                     } catch (e: kotlin.TypeCastException) {
-                        Log.e("POLITOMAD", "TypeCastException - Camera")
+                        Log.e("POLITOMAD", "Camera Exception")
                     }
                 }
             }
@@ -198,39 +181,30 @@ class EditProfileActivity : AppCompatActivity() {
                         val imageUri = data?.data
                         CropImage.activity(imageUri)
                                 .setAspectRatio(1,1)
-                                //.setOutputCompressQuality(2)
-                                //.setMaxCropResultSize(800,800)
                                 .start(this);
-
-                        //val source: ImageDecoder.Source = ImageDecoder.createSource(this.contentResolver, imageUri!!)
-                        //statusBitmap = ImageDecoder.decodeBitmap(source)
-                        //Log.d("POLITOMAD", "SIZE: ")
-                        //photoIV.setImageBitmap(statusBitmap)
                     } catch (e: kotlin.TypeCastException) {
-                        Log.e("POLITOMAD", "TypeCastException - Gallery")
+                        Log.e("POLITOMAD", "Gallery Exception")
                     }
                 }
             }
 
             CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
-
-                val tmpResult = CropImage.getActivityResult(data).uri
-                val source: ImageDecoder.Source = ImageDecoder.createSource(this.contentResolver, tmpResult!!)
-                val tmpBitmap = ImageDecoder.decodeBitmap(source)
-                statusBitmap = getResizedBitmap(tmpBitmap, 500)
-                photoIV.setImageBitmap(statusBitmap)
-
-                /*if (resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     try {
-                        val resultUri: Uri = result.uri
+                        File(CropImage.getActivityResult(data).uri.path).copyTo(
+                            File(imageTemp),
+                            overwrite = true
+                        )
+                        imageTempModified = true
+                        photoIV.setImageResource(R.drawable.user_image)
+                        photoIV.setImageURI(imageTemp.toUri())
                     } catch (e: kotlin.TypeCastException) {
-                        Log.e("POLITOMAD", "TypeCastException - Crop")
+                        Log.e("POLITOMAD", "Crop Exception")
                     }
-                }*/
+                }
+
             }
         }
-
-
     }
 
     //option menu for saving
@@ -306,24 +280,19 @@ class EditProfileActivity : AppCompatActivity() {
                 it.putExtra("group02.lab1.LOCATION", locationET.text.toString())
                 it.putExtra("group02.lab1.BIRTH", birthET.text.toString())
 
-                //check if photo is changed
-                if (flagPhotoModified) {
+                //check if photo is changed -> save photo and delete tmp cached file
+                if (imageTempModified) {
                     Log.d("POLIMAD", "New photo saved in: $imagePath")
-                    File(imagePath).writeBitmap(statusBitmap, Bitmap.CompressFormat.PNG, 100)
+                    val tmpFile = File(imageTemp)
+                    tmpFile.copyTo(File(imagePath), overwrite = true)
+                    tmpFile.delete()
                 }
             })
             finish()
         }
     }
 
-    //save the bitmap (photo) on file
-    private fun File.writeBitmap(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int) {
-        outputStream().use { out ->
-            bitmap.compress(format, quality, out)
-            out.flush()
-        }
-    }
-
+    //function to reset textEdit
     private fun clearFields(){
         fullNameET.setText("");
         nicknameET.setText("");
@@ -333,19 +302,17 @@ class EditProfileActivity : AppCompatActivity() {
 
     }
 
-    fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap {
-        var width = image.width
-        var height = image.height
-        val bitmapRatio = width.toFloat() / height.toFloat()
-        if (bitmapRatio > 1) {
-            width = maxSize
-            height = (width / bitmapRatio).toInt()
-        } else {
-            height = maxSize
-            width = (height * bitmapRatio).toInt()
+    //function to load the picture if exist (icon default)
+    private fun loadImage(image:ImageView, path:String){
+        var file = File(path)
+        if(file.exists()) {
+            image.setImageResource(R.drawable.user_image)
+            image.setImageURI(path.toUri())
+        }else{
+            val options = BitmapFactory.Options()
+            options.inScaled = false;
+            image.setImageResource(R.drawable.user_image)
         }
-        return Bitmap.createScaledBitmap(image, width, height, true)
     }
-
 
 }

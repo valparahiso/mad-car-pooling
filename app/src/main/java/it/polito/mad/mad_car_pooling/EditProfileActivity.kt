@@ -49,6 +49,10 @@ class EditProfileActivity : AppCompatActivity() {
         val imageButton = findViewById<ImageButton>(R.id.camera)
         registerForContextMenu(imageButton)
 
+        imageButton.setOnClickListener {
+            openContextMenu(it);
+        }
+
         fullNameET = findViewById<EditText>(R.id.edit_fullName)
         nicknameET = findViewById<EditText>(R.id.edit_nickName)
         locationET = findViewById<EditText>(R.id.edit_location)
@@ -130,7 +134,10 @@ class EditProfileActivity : AppCompatActivity() {
             }
             else -> super.onContextItemSelected(item)
         }
+
     }
+
+
 
     //create an intent for the gallery activity
     private fun openGallery() {

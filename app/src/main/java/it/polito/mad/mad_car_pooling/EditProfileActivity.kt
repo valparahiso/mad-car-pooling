@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -21,9 +22,11 @@ import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
+import org.joda.time.DateTime
 import java.io.File
 import java.util.*
-import org.joda.time.DateTime
 
 
 class EditProfileActivity : AppCompatActivity() {
@@ -173,8 +176,16 @@ class EditProfileActivity : AppCompatActivity() {
             REQUEST_IMAGE_CAPTURE -> {
                 if (resultCode == RESULT_OK) {
                     try {
-                        statusBitmap = data?.extras?.get("data") as Bitmap
-                        photoIV.setImageBitmap(statusBitmap)
+                        //statusBitmap = data?.extras?.get("data") as Bitmap
+                        //photoIV.setImageBitmap(statusBitmap)
+
+
+                        CropImage.activity(data?.data)
+                                .setAspectRatio(1,1)
+                                //.setOutputCompressQuality(3)
+                                //.setMaxCropResultSize(800,800)
+                                .start(this);
+
                     } catch (e: kotlin.TypeCastException) {
                         Log.e("POLITOMAD", "TypeCastException - Camera")
                     }
@@ -185,15 +196,41 @@ class EditProfileActivity : AppCompatActivity() {
                 if (resultCode == RESULT_OK) {
                     try {
                         val imageUri = data?.data
-                        val source: ImageDecoder.Source = ImageDecoder.createSource(this.contentResolver, imageUri!!)
-                        statusBitmap = ImageDecoder.decodeBitmap(source)
-                        photoIV.setImageBitmap(statusBitmap)
+                        CropImage.activity(imageUri)
+                                .setAspectRatio(1,1)
+                                //.setOutputCompressQuality(2)
+                                //.setMaxCropResultSize(800,800)
+                                .start(this);
+
+                        //val source: ImageDecoder.Source = ImageDecoder.createSource(this.contentResolver, imageUri!!)
+                        //statusBitmap = ImageDecoder.decodeBitmap(source)
+                        //Log.d("POLITOMAD", "SIZE: ")
+                        //photoIV.setImageBitmap(statusBitmap)
                     } catch (e: kotlin.TypeCastException) {
                         Log.e("POLITOMAD", "TypeCastException - Gallery")
                     }
                 }
             }
+
+            CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
+
+                val tmpResult = CropImage.getActivityResult(data).uri
+                val source: ImageDecoder.Source = ImageDecoder.createSource(this.contentResolver, tmpResult!!)
+                val tmpBitmap = ImageDecoder.decodeBitmap(source)
+                statusBitmap = getResizedBitmap(tmpBitmap, 500)
+                photoIV.setImageBitmap(statusBitmap)
+
+                /*if (resultCode == RESULT_OK) {
+                    try {
+                        val resultUri: Uri = result.uri
+                    } catch (e: kotlin.TypeCastException) {
+                        Log.e("POLITOMAD", "TypeCastException - Crop")
+                    }
+                }*/
+            }
         }
+
+
     }
 
     //option menu for saving
@@ -295,5 +332,20 @@ class EditProfileActivity : AppCompatActivity() {
         birthET.setText("");
 
     }
+
+    fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap {
+        var width = image.width
+        var height = image.height
+        val bitmapRatio = width.toFloat() / height.toFloat()
+        if (bitmapRatio > 1) {
+            width = maxSize
+            height = (width / bitmapRatio).toInt()
+        } else {
+            height = maxSize
+            width = (height * bitmapRatio).toInt()
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true)
+    }
+
 
 }

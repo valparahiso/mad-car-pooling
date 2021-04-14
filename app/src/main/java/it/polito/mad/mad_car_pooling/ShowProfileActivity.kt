@@ -38,14 +38,20 @@ class ShowProfileActivity : AppCompatActivity() {
         photo = findViewById(R.id.edit_photo)
         birth = findViewById(R.id.birthDate)
 
+
+        fullName.setOnClickListener{ (it as TextView).maxLines = if(it.maxLines==10) 1 else 10 }
+        nickName.setOnClickListener{ (it as TextView).maxLines = if(it.maxLines==10) 1 else 10 }
+        email.setOnClickListener{ (it as TextView).maxLines = if(it.maxLines==10) 1 else 10 }
+        location.setOnClickListener{ (it as TextView).maxLines = if(it.maxLines==10) 1 else 10 }
+
         sharedPref = this.getPreferences(Context.MODE_PRIVATE)
 
         //jsonObject for default values
         var jsonObject: JSONObject = JSONObject()
-        jsonObject.put("fullName", "Mario Rossi")
-        jsonObject.put("nickName", "mario89")
-        jsonObject.put("email", "mario.rossi@polito.it")
-        jsonObject.put("location", "Lombardia")
+        jsonObject.put("fullName", "John Doe")
+        jsonObject.put("nickName", "Gionny")
+        jsonObject.put("email", "john.doe.90@polito.it")
+        jsonObject.put("location", "Turin")
         jsonObject.put("birth", "01/01/1990")
         jsonObject.put("photoPath", getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/profile.png")
 

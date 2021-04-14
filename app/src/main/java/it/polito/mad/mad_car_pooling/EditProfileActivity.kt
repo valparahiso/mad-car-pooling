@@ -1,5 +1,6 @@
 package it.polito.mad.mad_car_pooling
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
@@ -50,8 +51,11 @@ class EditProfileActivity : AppCompatActivity() {
         registerForContextMenu(imageButton)
 
         imageButton.setOnClickListener {
-            openContextMenu(it);
+            openContextMenu(it)
         }
+
+        imageButton.setOnLongClickListener { true }
+
 
         fullNameET = findViewById<EditText>(R.id.edit_fullName)
         nicknameET = findViewById<EditText>(R.id.edit_nickName)
@@ -62,12 +66,9 @@ class EditProfileActivity : AppCompatActivity() {
 
         val mcalendar: Calendar = Calendar.getInstance()
 
-        var day = mcalendar.get(Calendar.DAY_OF_MONTH);
-        var year = mcalendar.get(Calendar.YEAR);
-        var month = mcalendar.get(Calendar.MONTH);
-        var minYear = year - 18
-        var minMonth = month
-        var minDay = day
+        val day = mcalendar.get(Calendar.DAY_OF_MONTH)
+        val year = mcalendar.get(Calendar.YEAR)
+        val month = mcalendar.get(Calendar.MONTH)
 
         birthET.setOnFocusChangeListener { _, hasFocus -> run {
             if(hasFocus)
@@ -83,10 +84,11 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     //open Calendar Dialog for Birth Date and remove focus form the EditText
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun openCalendarDialog(year: Int, month: Int, day: Int){
-        birthET.inputType = InputType.TYPE_NULL;
-        val listener = OnDateSetListener { _, dayOfMonth, monthOfYear, Year-> birthET.setText("${dayOfMonth}/${monthOfYear}/${Year}") }
+        birthET.inputType = InputType.TYPE_NULL
+        val listener = OnDateSetListener { _, Year, monthOfYear , dayOfMonth-> birthET.setText("${dayOfMonth}/${monthOfYear + 1}/${Year}") }
         val dpDialog = DatePickerDialog(this, listener, year, month, day)
         dpDialog.datePicker.maxDate = DateTime().minusYears(18).millis    //set the maximum date (at least 18 years old)
         dpDialog.show()
@@ -149,7 +151,7 @@ class EditProfileActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun dispatchTakePictureIntent() {
         val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
         val photoUri = FileProvider.getUriForFile(
             this,
@@ -170,13 +172,13 @@ class EditProfileActivity : AppCompatActivity() {
             REQUEST_IMAGE_CAPTURE -> {
                 if (resultCode == RESULT_OK) {
                     try {
-                        var file = File(imageTemp)
+                        val file = File(imageTemp)
                         if(file.exists()) {
                             CropImage.activity(file.toUri())
                                 .setAspectRatio(1,1)
-                                .start(this);
+                                .start(this)
                         }
-                    } catch (e: kotlin.TypeCastException) {
+                    } catch (e: TypeCastException) {
                         Log.e("POLITOMAD", "Camera Exception")
                     }
                 }
@@ -188,8 +190,8 @@ class EditProfileActivity : AppCompatActivity() {
                         val imageUri = data?.data
                         CropImage.activity(imageUri)
                                 .setAspectRatio(1,1)
-                                .start(this);
-                    } catch (e: kotlin.TypeCastException) {
+                                .start(this)
+                    } catch (e: TypeCastException) {
                         Log.e("POLITOMAD", "Gallery Exception")
                     }
                 }
@@ -198,14 +200,14 @@ class EditProfileActivity : AppCompatActivity() {
             CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
                 if (resultCode == RESULT_OK) {
                     try {
-                        File(CropImage.getActivityResult(data).uri.path).copyTo(
+                        File(CropImage.getActivityResult(data).uri.path!!).copyTo(
                             File(imageTemp),
                             overwrite = true
                         )
                         imageTempModified = true
                         photoIV.setImageResource(R.drawable.user_image)
                         photoIV.setImageURI(imageTemp.toUri())
-                    } catch (e: kotlin.TypeCastException) {
+                    } catch (e: TypeCastException) {
                         Log.e("POLITOMAD", "Crop Exception")
                     }
                 }
@@ -301,24 +303,34 @@ class EditProfileActivity : AppCompatActivity() {
 
     //function to reset textEdit
     private fun clearFields(){
-        fullNameET.setText("");
-        nicknameET.setText("");
-        emailET.setText("");
-        locationET.setText("");
-        birthET.setText("");
+        fullNameET.setText("")
+        nicknameET.setText("")
+        emailET.setText("")
+        locationET.setText("")
+        birthET.setText("")
 
     }
 
     //function to load the picture if exist (icon default)
     private fun loadImage(image:ImageView, path:String){
-        var file = File(path)
+        val file = File(path)
         if(file.exists()) {
             image.setImageResource(R.drawable.user_image)
             image.setImageURI(path.toUri())
         }else{
-            val options = BitmapFactory.Options()
-            options.inScaled = false;
+            val options = BitmapFactory.Options() 
+            options.inScaled = false
             image.setImageResource(R.drawable.user_image)
+        }
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (imageTempModified) {
+            Log.d("POLIMAD", "ONDestroy: $imagePath")
+            val tmpFile = File(imageTemp)
+            tmpFile.delete()
         }
     }
 

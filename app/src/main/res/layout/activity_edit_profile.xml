@@ -75,7 +75,9 @@
             android:layout_height="wrap_content"
             android:hint="Full Name"
             android:inputType="text"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:maxLength="30"
+            />
 
         <TextView
             android:id="@+id/nickname_edit_title"
@@ -90,7 +92,8 @@
             android:layout_height="wrap_content"
             android:hint="NickName"
             android:inputType="text"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:maxLength="15"/>
 
         <TextView
             android:id="@+id/email_edit_title"
@@ -105,7 +108,8 @@
             android:layout_height="wrap_content"
             android:hint="email@address"
             android:inputType="textEmailAddress"
-            android:textSize="30sp"/>
+            android:textSize="30sp"
+            android:maxLength="30"/>
 
         <TextView
             android:id="@+id/location_edit_title"
@@ -121,7 +125,8 @@
             android:layout_height="wrap_content"
             android:hint="Location"
             android:inputType="text"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:maxLength="30"/>
 
         <TextView
             android:id="@+id/birthDate_edit_title"

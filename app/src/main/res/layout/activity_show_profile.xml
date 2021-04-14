@@ -60,7 +60,9 @@
                 android:layout_height="wrap_content"
                 android:text="Full Name"
                 android:textColor="?android:attr/colorForeground"
-                android:textSize="30sp" />
+                android:textSize="30sp"
+                android:ellipsize="end"
+                android:maxLines="1"/>
 
             <TextView
                 android:id="@+id/nickName_title"
@@ -75,7 +77,9 @@
                 android:layout_height="wrap_content"
                 android:text="NickName"
                 android:textSize="30sp"
-                android:textColor="?android:attr/colorForeground" />
+                android:textColor="?android:attr/colorForeground"
+                android:ellipsize="end"
+                android:maxLines="1" />
 
             <TextView
                 android:id="@+id/email_title"
@@ -90,7 +94,10 @@
                 android:layout_height="wrap_content"
                 android:text="email@address"
                 android:textSize="30sp"
-                android:textColor="?android:attr/colorForeground"/>
+                android:textColor="?android:attr/colorForeground"
+                android:ellipsize="end"
+                android:maxLines="1"
+                />
 
             <TextView
                 android:id="@+id/location_title"
@@ -105,7 +112,9 @@
                 android:layout_height="wrap_content"
                 android:text="Location"
                 android:textSize="30sp"
-                android:textColor="?android:attr/colorForeground"/>
+                android:textColor="?android:attr/colorForeground"
+                android:ellipsize="end"
+                android:maxLines="1" />
 
             <TextView
                 android:id="@+id/birthDate_title"
@@ -120,7 +129,9 @@
                 android:layout_height="wrap_content"
                 android:text="01/01/1990"
                 android:textSize="30sp"
-                android:textColor="?android:attr/colorForeground"/>
+                android:textColor="?android:attr/colorForeground"
+                android:ellipsize="end"
+                android:maxLines="1" />
 
         </LinearLayout>
 

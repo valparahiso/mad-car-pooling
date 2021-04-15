@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@color/lightgrey">
+
+    <TextView
+        android:id="@+id/departure_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Departure" />
+
+    <TextView
+        android:id="@+id/departure_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    <TextView
+        android:id="@+id/destination_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Destination" />
+
+    <TextView
+        android:id="@+id/destination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Destinazione"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    <TextView
+        android:id="@+id/departure_time_labl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Departure Time" />
+
+        <TextView
+            android:id="@+id/departure_time"
+            android:layout_width="353dp"
+            android:layout_height="wrap_content"
+            android:text="Departure Time"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

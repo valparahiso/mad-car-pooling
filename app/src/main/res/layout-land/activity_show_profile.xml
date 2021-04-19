@@ -91,7 +91,8 @@
                 android:layout_height="wrap_content"
                 android:text="email@address"
                 android:textSize="30sp"
-                android:textColor="?android:attr/colorForeground"/>
+                android:textColor="?android:attr/colorForeground"
+                />
 
             <TextView
                 android:id="@+id/location_title"

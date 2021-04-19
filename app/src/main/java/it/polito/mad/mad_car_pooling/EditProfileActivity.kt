@@ -95,6 +95,8 @@ class EditProfileActivity : AppCompatActivity() {
         birthET.clearFocus()
     }
 
+
+
     //save the state in order to restore it on recreation of the activity
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -282,7 +284,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         if(flagPresentValue) {
-            setResult(Activity.RESULT_OK, Intent().also {
+            setResult(RESULT_OK, Intent().also {
                 it.putExtra("group02.lab1.FULL_NAME", fullNameET.text.toString())
                 it.putExtra("group02.lab1.NICK_NAME", nicknameET.text.toString())
                 it.putExtra("group02.lab1.EMAIL", emailET.text.toString())

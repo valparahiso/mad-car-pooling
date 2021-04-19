@@ -7,6 +7,7 @@
     android:padding="16dp">
 
     <LinearLayout
+        android:id="@+id/item_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -20,10 +21,9 @@
         android:text="Departure" />
 
     <TextView
-        android:id="@+id/departure_text"
+        android:id="@+id/departure"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <TextView
@@ -36,7 +36,6 @@
         android:id="@+id/destination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Destinazione"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <TextView
@@ -49,7 +48,6 @@
             android:id="@+id/departure_time"
             android:layout_width="353dp"
             android:layout_height="wrap_content"
-            android:text="Departure Time"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     </LinearLayout>

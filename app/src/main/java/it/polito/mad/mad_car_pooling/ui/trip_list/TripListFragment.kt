@@ -8,8 +8,19 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import it.polito.mad.mad_car_pooling.R
+import it.polito.mad.mad_car_pooling.Trip
 import it.polito.mad.mad_car_pooling.TripAdapter
+import java.net.URI
+
+
 class TripListFragment : Fragment() {
+
+    private val trips: List<Trip> = listOf(
+        Trip(URI(""), "Torino", "Milano", "10/03/2020 10:20", "10/03/2020 10:30", 0.10, 100, 30.20, ""),
+        Trip(URI(""), "Milano", "Treviso", "10/03/2020 10:20", "10/03/2020 10:30", 0.10, 100, 30.20, ""),
+        Trip(URI(""), "Roma", "Udine", "10/03/2020 10:20", "10/03/2020 10:30", 0.10, 100, 30.20, ""),
+        Trip(URI(""), "Napoli", "Vibo Valentia", "10/03/2020 10:20", "10/03/2020 10:30", 0.10, 100, 30.20, ""))
+
 
 
     override fun onCreateView(
@@ -25,9 +36,10 @@ class TripListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = view.findViewById<RecyclerView>(R.id.tripListRecyclerView)
 
-        val list: List<String> = listOf("Stringa1", "Stringa2", "Stringa3", "Stringa1", "Stringa2", "Stringa3","Stringa1", "Stringa2", "Stringa3" , "Stringa1", "Stringa2", "Stringa3")
 
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = TripAdapter(list)
+        recyclerView.adapter = TripAdapter(trips, requireContext())
     }
+
+
 }

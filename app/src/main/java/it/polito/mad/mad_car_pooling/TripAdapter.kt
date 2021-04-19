@@ -32,7 +32,7 @@ class TripAdapter(private val data: List<Trip>, private val context_: Context, p
             departure_time.text = u.departureDateTime
             item_button.setOnClickListener {
                 //(context as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, next_fragment, "TripDetailsFragment").commit()
-                fragment.findNavController().navigate(R.id.details_trip_fragment)
+                fragment.findNavController().navigate(R.id.action_nav_list_to_details_trip_fragment2)
             }
         }
     }

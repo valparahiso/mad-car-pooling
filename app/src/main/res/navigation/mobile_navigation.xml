@@ -3,13 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_list">
+
+    <fragment
+        android:id="@+id/nav_list"
+        android:name="it.polito.mad.mad_car_pooling.ui.trip_list.TripListFragment"
+        android:label="Trip List"
+        tools:layout="@layout/fragment_trip_list" />
 
     <fragment
         android:id="@+id/nav_home"
         android:name="it.polito.mad.mad_car_pooling.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_trip_list" />
+        android:label="Home"
+        tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_gallery"

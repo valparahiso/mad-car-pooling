@@ -42,11 +42,14 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        /*
         val fragment = supportFragmentManager.findFragmentByTag("tripListFragmentTag")
         if (fragment == null) supportFragmentManager.commit {
             add(R.id.fragment_container_view, TripListFragment(), "tripListFragmentTag")
             //addToBackStack("secondIn")
         }
+
+         */
         /*else {
             supportFragmentManager.commit {
                 remove(fragment)

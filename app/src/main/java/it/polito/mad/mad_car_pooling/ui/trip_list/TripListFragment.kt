@@ -38,7 +38,7 @@ class TripListFragment : Fragment() {
 
 
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = TripAdapter(trips, requireContext())
+        recyclerView.adapter = TripAdapter(trips, requireContext(), this)
     }
 
 

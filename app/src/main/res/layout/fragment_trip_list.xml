@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/trip_list_fragment"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/trip_list_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:tag="TripListFragment"
     tools:context=".ui.trip_list.TripListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tripListRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

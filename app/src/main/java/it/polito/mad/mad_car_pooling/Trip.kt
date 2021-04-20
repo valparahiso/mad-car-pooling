@@ -14,7 +14,8 @@ data class Trip(
     private var price_: Double,
     private var description_: String
 ){
-
+    private var id_: Int = -1
+    val index: Int get() = id_
     val photo: URI get() = photo_
     val departureLocation: String get() = departureLocation_
     val arrivalLocation: String get() = arrivalLocation_
@@ -31,7 +32,8 @@ data class Trip(
     }
 
     init {
-        Log.d("POLITOMAD_Trip", "ID: $id")
+        id_ = id
+        Log.d("POLITOMAD_Trip", "ID: $id_")
         Log.d("POLITOMAD_Trip", "Departure: " + this.departureLocation_)
         id++
     }

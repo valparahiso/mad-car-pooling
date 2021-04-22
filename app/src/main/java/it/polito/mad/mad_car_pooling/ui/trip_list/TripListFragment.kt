@@ -16,12 +16,13 @@ import java.net.URI
 
 
 class TripListFragment : Fragment() {
-
+    /*
     private val trips: List<Trip> = listOf(
         Trip(URI(""), "Torino", "Milano", "10/03/2020 10:20", "10/03/2020 10:30", 0.10, 100, 30.20, ""),
         Trip(URI(""), "Milano", "Treviso", "10/03/2020 10:20", "10/03/2020 10:30", 0.10, 100, 30.20, ""),
         Trip(URI(""), "Roma", "Udine", "10/03/2020 10:20", "10/03/2020 10:30", 0.10, 100, 30.20, ""),
         Trip(URI(""), "Napoli", "Vibo Valentia", "10/03/2020 10:20", "10/03/2020 10:30", 0.10, 100, 30.20, ""))
+     */
 
 
     private val viewModel : TripListViewModel by activityViewModels()

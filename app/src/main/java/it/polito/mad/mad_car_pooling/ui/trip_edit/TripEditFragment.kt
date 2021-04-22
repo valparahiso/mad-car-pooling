@@ -1,4 +1,4 @@
-package it.polito.mad.mad_car_pooling.ui.gallery
+package it.polito.mad.mad_car_pooling.ui.trip_edit
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,9 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import it.polito.mad.mad_car_pooling.R
 
-class GalleryFragment : Fragment() {
+class TripEditFragment : Fragment() {
 
-    private lateinit var galleryViewModel: GalleryViewModel
+    private lateinit var galleryViewModel: TripEditViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -20,12 +20,8 @@ class GalleryFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         galleryViewModel =
-                ViewModelProvider(this).get(GalleryViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_gallery, container, false)
-        val textView: TextView = root.findViewById(R.id.text_gallery)
-        galleryViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
+                ViewModelProvider(this).get(TripEditViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_trip_edit, container, false)
         return root
     }
 }

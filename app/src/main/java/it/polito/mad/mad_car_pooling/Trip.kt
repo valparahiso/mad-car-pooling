@@ -23,8 +23,8 @@ data class Trip(
     val arrivalDateTime: String get() = arrivalDateTime_
     val duration: Double get() = duration_
     val seats: Int get() = seats_
-    val price: Double get() = price
-    val description: String get() = description
+    val price: Double get() = price_
+    val description: String get() = description_
 
 
     companion object {

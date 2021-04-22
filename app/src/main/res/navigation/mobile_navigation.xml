@@ -19,7 +19,11 @@
         android:id="@+id/details_trip_fragment"
         android:name="it.polito.mad.mad_car_pooling.ui.trip_details.TripDetailsFragment"
         android:label="Trip Details"
-        tools:layout="@layout/fragment_trip_details" />
+        tools:layout="@layout/fragment_trip_details" >
+        <action
+            android:id="@+id/action_details_trip_fragment_to_nav_edit_trip_details"
+            app:destination="@id/nav_edit_trip_details" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_home"
@@ -28,10 +32,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="it.polito.mad.mad_car_pooling.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_edit_trip_details"
+        android:name="it.polito.mad.mad_car_pooling.ui.trip_edit.TripEditFragment"
+        android:label="Edit Trip Details"
+        tools:layout="@layout/fragment_trip_edit" >
+        <action
+            android:id="@+id/action_nav_edit_trip_details_to_details_trip_fragment"
+            app:destination="@id/details_trip_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_slideshow"

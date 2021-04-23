@@ -45,6 +45,7 @@
             android:id="@+id/linearLayout0"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:paddingRight="10dp"
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout

@@ -1,7 +1,6 @@
 package it.polito.mad.mad_car_pooling
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
@@ -61,7 +60,7 @@ class EditProfileActivity : AppCompatActivity() {
         nicknameET = findViewById<EditText>(R.id.edit_nickName)
         locationET = findViewById<EditText>(R.id.edit_location)
         emailET = findViewById<EditText>(R.id.edit_email)
-        photoIV = findViewById(R.id.edit_photo)
+        photoIV = findViewById(R.id.show_photo)
         birthET = findViewById(R.id.edit_birthDate)
 
         val mcalendar: Calendar = Calendar.getInstance()

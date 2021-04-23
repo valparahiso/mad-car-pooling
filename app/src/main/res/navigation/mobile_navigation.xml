@@ -12,11 +12,11 @@
         tools:layout="@layout/fragment_trip_list" >
         <action
             android:id="@+id/action_nav_list_to_details_trip_fragment2"
-            app:destination="@id/details_trip_fragment" />
+            app:destination="@id/nav_trip_details" />
     </fragment>
 
     <fragment
-        android:id="@+id/details_trip_fragment"
+        android:id="@+id/nav_trip_details"
         android:name="it.polito.mad.mad_car_pooling.ui.trip_details.TripDetailsFragment"
         android:label="Trip Details"
         tools:layout="@layout/fragment_trip_details" >
@@ -32,8 +32,26 @@
         tools:layout="@layout/fragment_trip_edit" >
         <action
             android:id="@+id/action_nav_edit_trip_details_to_details_trip_fragment"
-            app:destination="@id/details_trip_fragment"
+            app:destination="@id/nav_trip_details"
             app:popUpTo="@id/nav_list" />
     </fragment>
 
+    <fragment
+        android:id="@+id/nav_show_profile"
+        android:name="it.polito.mad.mad_car_pooling.ui.show_profile.ShowProfileFragment"
+        android:label="Show Profile"
+        tools:layout="@layout/fragment_show_profile" >
+        <action
+            android:id="@+id/action_show_profile_fragment_to_nav_edit_profile"
+            app:destination="@id/nav_edit_profile" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_edit_profile"
+        android:name="it.polito.mad.mad_car_pooling.ui.edit_profile.EditProfileFragment"
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_edit_profile" >
+        <action
+            android:id="@+id/action_nav_edit_profile_to_show_profile_fragment"
+            app:destination="@id/nav_show_profile" />
+    </fragment>
 </navigation>

@@ -35,7 +35,7 @@ class ShowProfileActivity : AppCompatActivity() {
         nickName = findViewById(R.id.nickname)
         email = findViewById(R.id.email)
         location = findViewById(R.id.location)
-        photo = findViewById(R.id.edit_photo)
+        photo = findViewById(R.id.show_photo)
         birth = findViewById(R.id.birthDate)
 
 

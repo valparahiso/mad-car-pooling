@@ -6,18 +6,215 @@
     android:layout_height="match_parent"
     tools:context=".ui.edit_profile.EditProfileFragment">
 
-    <TextView
-        android:id="@+id/text_home"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/show_photo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:layout_alignParentTop="true"
+
+        android:padding="16dp"
+        android:src="@drawable/user_image"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent=".33"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/camera"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
+        android:src="@drawable/ic_menu_camera"
+        app:layout_constraintEnd_toEndOf="@+id/show_photo"
+        app:layout_constraintTop_toTopOf="@+id/show_photo" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:fadeScrollbars="false"
+        android:fillViewport="false"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center_horizontal" />
+        app:layout_constraintTop_toBottomOf="@+id/show_photo"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:id="@+id/linearLayout0"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingRight="10dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Full Name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_fullName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:imeActionLabel="Full Name *" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nickname">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nickname_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:imeActionLabel="Nickname *" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/email_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:imeActionLabel="Email *"
+                    android:inputType="date" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Location">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/location_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:imeActionLabel="Location *" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Date of Birth">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_birthDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:imeActionLabel="Date of Birth (18+) *" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!--
+
+        <TextView
+            android:id="@+id/fullName_edit_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Full Name*"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/edit_fullName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Full Name"
+            android:inputType="text"
+            android:textSize="30sp"
+            android:maxLength="30"
+            />
+
+        <TextView
+            android:id="@+id/nickname_edit_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Nickname*"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/edit_nickName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="NickName"
+            android:inputType="text"
+            android:textSize="30sp"
+            android:maxLength="15"/>
+
+        <TextView
+            android:id="@+id/email_edit_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Email*"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/edit_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="email@address"
+            android:inputType="textEmailAddress"
+            android:textSize="30sp"
+            android:maxLength="30"/>
+
+        <TextView
+            android:id="@+id/location_edit_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Location*"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/edit_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Location"
+            android:inputType="text"
+            android:textSize="30sp"
+            android:maxLength="30"/>
+
+        <TextView
+            android:id="@+id/birthDate_edit_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Date of Birth (18+)*"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/edit_birthDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Date of Birth"
+            android:inputType="date"
+            android:textSize="30sp" />
+
+        -->
+        </LinearLayout>
+
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,13 +1,15 @@
 package it.polito.mad.mad_car_pooling.ui.show_profile
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import it.polito.mad.mad_car_pooling.Profile
 
-class SlideshowViewModel : ViewModel() {
+class ShowProfileViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is slideshow Fragment"
+    var profile = MutableLiveData<Profile>()
+
+    fun setProfile(item : Profile){
+        profile.value = item
     }
-    val text: LiveData<String> = _text
+
 }

@@ -1,7 +1,6 @@
 package it.polito.mad.mad_car_pooling.ui.trip_details
 
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -28,9 +27,8 @@ class TripDetailsFragment : Fragment() {
     ): View? {
 
         setHasOptionsMenu(true)
-        val root = inflater.inflate(R.layout.fragment_trip_details, container, false)
 
-        return root
+        return inflater.inflate(R.layout.fragment_trip_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -53,12 +53,11 @@
                 android:hint="Departure location">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/departure_edit"
                     android:layout_width="match_parent"
-                    android:id="@+id/points_gs_input_departure"
                     android:layout_height="wrap_content"
-                    android:imeActionLabel="Departure location"
                     android:layout_marginBottom="8dp"
-                    />
+                    android:imeActionLabel="Departure location" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,12 +67,11 @@
                 android:hint="Arrival location">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/arrival_edit"
                     android:layout_width="match_parent"
-                    android:id="@+id/points_gs_input_arrival"
                     android:layout_height="wrap_content"
-                    android:imeActionLabel="Arrival location"
                     android:layout_marginBottom="8dp"
-                    />
+                    android:imeActionLabel="Arrival location" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -83,13 +81,12 @@
                 android:hint="Departure Date">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/departure_date_edit"
                     android:layout_width="match_parent"
-                    android:id="@+id/points_gs_input_date"
                     android:layout_height="wrap_content"
-                    android:imeActionLabel="Departure Date"
-                    android:inputType="date"
                     android:layout_marginBottom="8dp"
-                    />
+                    android:imeActionLabel="Departure Date"
+                    android:inputType="date" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -99,12 +96,11 @@
                 android:hint="Departure Time">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/departure_time_edit"
                     android:layout_width="match_parent"
-                    android:id="@+id/points_gs_input_time"
                     android:layout_height="wrap_content"
-                    android:imeActionLabel="Departure Time"
                     android:layout_marginBottom="8dp"
-                    />
+                    android:imeActionLabel="Departure Time" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -114,12 +110,11 @@
                 android:hint="Estimate trip duration">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/duration_edit"
                     android:layout_width="match_parent"
-                    android:id="@+id/points_gs_input_duration"
                     android:layout_height="wrap_content"
-                    android:imeActionLabel="Estimate trip duration"
                     android:layout_marginBottom="8dp"
-                    />
+                    android:imeActionLabel="Estimate trip duration" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -129,12 +124,11 @@
                 android:hint="Available Seats">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/seat_edit"
                     android:layout_width="match_parent"
-                    android:id="@+id/points_gs_input_seats"
                     android:layout_height="wrap_content"
-                    android:imeActionLabel="Available Seats"
                     android:layout_marginBottom="8dp"
-                    />
+                    android:imeActionLabel="Available Seats" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -144,12 +138,11 @@
                 android:hint="Price">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/price_edit"
                     android:layout_width="match_parent"
-                    android:id="@+id/points_gs_input_price"
                     android:layout_height="wrap_content"
-                    android:imeActionLabel="Price"
                     android:layout_marginBottom="8dp"
-                    />
+                    android:imeActionLabel="Price" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -159,12 +152,11 @@
                 android:hint="Additional information">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/description_edit"
                     android:layout_width="match_parent"
-                    android:id="@+id/points_gs_input_additional"
                     android:layout_height="wrap_content"
-                    android:imeActionLabel="Additional information"
                     android:layout_marginBottom="8dp"
-                    />
+                    android:imeActionLabel="Additional information" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

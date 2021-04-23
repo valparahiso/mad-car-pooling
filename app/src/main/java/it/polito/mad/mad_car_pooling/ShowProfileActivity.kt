@@ -47,7 +47,7 @@ class ShowProfileActivity : AppCompatActivity() {
         sharedPref = this.getPreferences(Context.MODE_PRIVATE)
 
         //jsonObject for default values
-        var jsonObject: JSONObject = JSONObject()
+        var jsonObject = JSONObject()
         jsonObject.put("fullName", "John Doe")
         jsonObject.put("nickName", "Gionny")
         jsonObject.put("email", "john.doe.90@polito.it")

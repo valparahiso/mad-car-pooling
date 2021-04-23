@@ -1,4 +1,4 @@
-package it.polito.mad.mad_car_pooling.ui.slideshow
+package it.polito.mad.mad_car_pooling.ui.show_profile
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

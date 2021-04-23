@@ -27,8 +27,4 @@ class TripListViewModel: ViewModel() {
           trip_.value = trip
      }
 
-
-
-
-
 }

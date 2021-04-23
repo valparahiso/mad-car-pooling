@@ -54,12 +54,122 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:id="@+id/points_gs_input"
+                    android:id="@+id/points_gs_input_departure"
                     android:layout_height="wrap_content"
-                    android:imeActionLabel="Departure location"/>
+                    android:imeActionLabel="Departure location"
+                    android:layout_marginBottom="8dp"
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Arrival location">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/points_gs_input_arrival"
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="Arrival location"
+                    android:layout_marginBottom="8dp"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Departure Date">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/points_gs_input_date"
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="Departure Date"
+                    android:inputType="date"
+                    android:layout_marginBottom="8dp"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Departure Time">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/points_gs_input_time"
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="Departure Time"
+                    android:layout_marginBottom="8dp"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Estimate trip duration">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/points_gs_input_duration"
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="Estimate trip duration"
+                    android:layout_marginBottom="8dp"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Available Seats">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/points_gs_input_seats"
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="Available Seats"
+                    android:layout_marginBottom="8dp"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Price">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/points_gs_input_price"
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="Price"
+                    android:layout_marginBottom="8dp"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Additional information">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/points_gs_input_additional"
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="Additional information"
+                    android:layout_marginBottom="8dp"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!--
             <TextView
                 android:id="@+id/arrival_title"
                 android:layout_width="wrap_content"
@@ -149,7 +259,7 @@
                 android:text="Description"
                 android:textColor="?android:attr/colorForeground"
                 android:textSize="30sp" />
-
+        -->
         </LinearLayout>
 
     </ScrollView>

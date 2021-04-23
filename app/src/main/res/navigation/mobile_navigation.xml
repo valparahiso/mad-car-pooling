@@ -26,24 +26,14 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="it.polito.mad.mad_car_pooling.ui.home.HomeFragment"
-        android:label="Home"
-        tools:layout="@layout/fragment_home" />
-
-    <fragment
         android:id="@+id/nav_edit_trip_details"
         android:name="it.polito.mad.mad_car_pooling.ui.trip_edit.TripEditFragment"
         android:label="Edit Trip Details"
         tools:layout="@layout/fragment_trip_edit" >
         <action
             android:id="@+id/action_nav_edit_trip_details_to_details_trip_fragment"
-            app:destination="@id/details_trip_fragment" />
+            app:destination="@id/details_trip_fragment"
+            app:popUpTo="@id/nav_list" />
     </fragment>
 
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="it.polito.mad.mad_car_pooling.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
 </navigation>

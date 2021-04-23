@@ -3,29 +3,35 @@ package it.polito.mad.mad_car_pooling
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Environment
-import android.view.Menu
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import android.preference.PreferenceManager
+import android.util.Log
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
+import it.polito.mad.mad_car_pooling.ui.trip_list.TripListViewModel
 import org.json.JSONObject
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var sharedPref: SharedPreferences
-    private lateinit var jsonGlobal: JSONObject
+    private val viewModel: TripListViewModel by viewModels()
+    private var trips: MutableList<Trip> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        getTrips()
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -45,30 +51,48 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        /*
-        val fragment = supportFragmentManager.findFragmentByTag("tripListFragmentTag")
-        if (fragment == null) supportFragmentManager.commit {
-            add(R.id.fragment_container_view, TripListFragment(), "tripListFragmentTag")
-            //addToBackStack("secondIn")
-        }
-
-         */
-        /*else {
-            supportFragmentManager.commit {
-                remove(fragment)
-                //addToBackStack("secondOut")
-            }
-         */
     }
-
-    /*override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }*/
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun getTrips() {
+        trips.clear()
+
+        //jsonObject for default values
+        var jsonObjectTrip = JSONObject()
+        jsonObjectTrip.put("car_photo", "")
+        jsonObjectTrip.put("departure_location", "Torino")
+        jsonObjectTrip.put("arrival_location", "Milano")
+        jsonObjectTrip.put("departure_date_time", "20/02/2012 15:20")
+        jsonObjectTrip.put("duration", "10")
+        jsonObjectTrip.put("seats", "12")
+        jsonObjectTrip.put("price", "12")
+        jsonObjectTrip.put("description", "descr")
+        var jsonObjectTripSet: Set<String> = listOf(jsonObjectTrip.toString()).toSet()
+
+        sharedPref = this.getSharedPreferences("trip_list", Context.MODE_PRIVATE)
+
+        val trips_json = sharedPref.getStringSet("trips", jsonObjectTripSet)?.toList()
+
+        val iterator = trips_json!!.listIterator()
+        for (item in iterator) {
+            var item_json = JSONObject(item)
+            Log.d("POLITOMAD_Trip", item_json.toString())
+            trips.add(Trip(item_json.get("car_photo") as String,
+                    item_json.get("departure_location") as String,
+                    item_json.get("arrival_location") as String,
+                    item_json.get("departure_date_time") as String,
+                    item_json.get("duration") as String,
+                    item_json.get("seats") as String,
+                    item_json.get("price") as String,
+                    item_json.get("description") as String,
+                    mutableListOf()))
+        }
+
+        viewModel.initTrips(trips)
+
     }
 }

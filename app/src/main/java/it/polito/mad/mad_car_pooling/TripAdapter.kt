@@ -12,19 +12,21 @@ import it.polito.mad.mad_car_pooling.ui.trip_list.TripListFragment
 class TripAdapter(private val data: List<Trip>, private val fragment_: TripListFragment): RecyclerView.Adapter<TripAdapter.TripViewHolder> (){
 
     class TripViewHolder(v: View, fragment_: TripListFragment): RecyclerView.ViewHolder(v){
-        private val departure_location: TextView = v.findViewById(R.id.departure)
-        private val destination: TextView = v.findViewById(R.id.destination)
-        private val departure_time: TextView = v.findViewById(R.id.departure_time)
-        private val item_button: LinearLayout = v.findViewById(R.id.item_button)
+        private val departureLocation: TextView = v.findViewById(R.id.departure)
+        private val arrivalLocation: TextView = v.findViewById(R.id.destination)
+        private val departureDateTime: TextView = v.findViewById(R.id.departure_time)
+        private val duration: TextView = v.findViewById(R.id.duration)
+        private val itemButton: LinearLayout = v.findViewById(R.id.item_button)
         private val fragment = fragment_
 
         //passare poi un oggetto Trip
         fun bind(u: Trip){
-            destination.text = u.arrivalLocation
-            departure_location.text = u.departureLocation
-            departure_time.text = u.departureDateTime
-            item_button.setOnClickListener {
-                //(context as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, next_fragment, "TripDetailsFragment").commit()
+            arrivalLocation.text = u.arrivalLocation
+            departureLocation.text = u.departureLocation
+            departureDateTime.text = u.departureDateTime
+            duration.text = u.duration
+            itemButton.setOnClickListener {
+                
                 fragment.updateTrip(u)
                 fragment.findNavController().navigate(R.id.action_nav_list_to_details_trip_fragment2)
             }

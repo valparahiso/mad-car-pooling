@@ -62,8 +62,8 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="Departure Location"
                 android:textColor="?android:attr/colorForeground"
+                android:text=""
                 android:textSize="30sp" />
 
             <TextView
@@ -80,7 +80,26 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="Arrival Location"
+                android:textColor="?android:attr/colorForeground"
+                android:text=""
+                android:textSize="30sp" />
+
+
+            <TextView
+                android:id="@+id/departure_date_time_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Departure Date and Time"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/departure_date_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text=""
                 android:textColor="?android:attr/colorForeground"
                 android:textSize="30sp" />
 
@@ -98,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="Estimate Trip Duration"
+                android:text=""
                 android:textColor="?android:attr/colorForeground"
                 android:textSize="30sp" />
 
@@ -116,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="Available Seats"
+                android:text=""
                 android:textColor="?android:attr/colorForeground"
                 android:textSize="30sp" />
 
@@ -134,7 +153,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="Price"
+                android:text=""
                 android:textColor="?android:attr/colorForeground"
                 android:textSize="30sp" />
 
@@ -152,9 +171,10 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="Description"
+                android:text=""
                 android:textColor="?android:attr/colorForeground"
                 android:textSize="30sp" />
+
 
         </LinearLayout>
 

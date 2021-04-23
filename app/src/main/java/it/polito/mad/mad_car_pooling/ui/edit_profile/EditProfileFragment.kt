@@ -1,7 +1,6 @@
-package it.polito.mad.mad_car_pooling.ui.home
+package it.polito.mad.mad_car_pooling.ui.edit_profile
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

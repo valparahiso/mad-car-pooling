@@ -65,7 +65,7 @@ class EditProfileFragment : Fragment() {
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_edit_profile, container, false)
 
-    }
+    } 
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -60,7 +60,7 @@ class TripEditFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
-        inflater.inflate(R.menu.save_menu, menu)
+        inflater.inflate(R.menu.menu_option_save, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -90,6 +90,17 @@ class TripEditFragment : Fragment() {
                 })
 
                 findNavController().navigate(R.id.action_nav_edit_trip_details_to_details_trip_fragment)
+                true
+            }
+            R.id.clear -> {
+                departureLocation.text = ""
+                arrivalLocation.text = ""
+                departureDateTime.text = ""
+                duration.text = ""
+                seats.text = ""
+                price.text = ""
+                description.text = ""
+
                 true
             }
             else -> {

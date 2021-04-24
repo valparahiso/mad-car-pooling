@@ -1,9 +1,7 @@
 package it.polito.mad.mad_car_pooling.ui.trip_list
 
-import android.content.Context
-import android.content.SharedPreferences
+
 import android.os.Bundle
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import it.polito.mad.mad_car_pooling.R
 import it.polito.mad.mad_car_pooling.Trip
 import it.polito.mad.mad_car_pooling.TripAdapter
-import org.json.JSONObject
-import java.net.URI
 
 class TripListFragment : Fragment() {
 

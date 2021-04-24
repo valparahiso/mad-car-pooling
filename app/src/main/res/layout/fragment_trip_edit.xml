@@ -148,104 +148,12 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
-            <!--
-            <TextView
-                android:id="@+id/arrival_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Arrival Location"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/arrival"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="Arrival Location"
-                android:textColor="?android:attr/colorForeground"
-                android:textSize="30sp" />
-
-            <TextView
-                android:id="@+id/estimateTrip_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Estimate Trip Duration"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/estimateTrip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="Estimate Trip Duration"
-                android:textColor="?android:attr/colorForeground"
-                android:textSize="30sp" />
-
-            <TextView
-                android:id="@+id/availableSeats_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Available Seats"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/availableSeats"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="Available Seats"
-                android:textColor="?android:attr/colorForeground"
-                android:textSize="30sp" />
-
-            <TextView
-                android:id="@+id/price_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Price"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="Price"
-                android:textColor="?android:attr/colorForeground"
-                android:textSize="30sp" />
-
-            <TextView
-                android:id="@+id/description_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Description"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="Description"
-                android:textColor="?android:attr/colorForeground"
-                android:textSize="30sp" />
-        -->
         </LinearLayout>
 
     </ScrollView>
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_menu_camera"

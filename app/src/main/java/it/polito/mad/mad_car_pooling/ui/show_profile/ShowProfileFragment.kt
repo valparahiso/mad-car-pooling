@@ -97,7 +97,9 @@ class ShowProfileFragment : Fragment() {
         //return super.onOptionsItemSelected(item)
         return when(item.itemId){
             R.id.edit -> {
-                findNavController().navigate(R.id.action_show_profile_fragment_to_nav_edit_profile)
+                val bundle = Bundle()
+                bundle.putString("imagePath", imagePath)
+                findNavController().navigate(R.id.action_show_profile_fragment_to_nav_edit_profile, bundle)
                 true
             }
             else -> {

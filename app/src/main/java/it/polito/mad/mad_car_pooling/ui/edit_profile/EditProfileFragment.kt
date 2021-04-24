@@ -1,20 +1,24 @@
 package it.polito.mad.mad_car_pooling.ui.edit_profile
 
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import android.view.ContextMenu.ContextMenuInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import it.polito.mad.mad_car_pooling.Profile
 import it.polito.mad.mad_car_pooling.R
 import it.polito.mad.mad_car_pooling.ui.show_profile.ShowProfileViewModel
 import java.io.File
 import java.util.*
+
 
 class EditProfileFragment : Fragment() {
 
@@ -32,7 +36,10 @@ class EditProfileFragment : Fragment() {
 
     private var imageTempModified: Boolean = false
     private lateinit var imageTemp: String
-    private lateinit var imagePath: String
+    private var imagePath: String = String()
+
+    private lateinit var prof: Profile
+
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -51,14 +58,14 @@ class EditProfileFragment : Fragment() {
         registerForContextMenu(imageButton)
 
         imageButton.setOnClickListener {
-            //openContextMenu(it)
+            activity?.openContextMenu(it)
         }
         imageButton.setOnLongClickListener { true }
 
-        fullNameET = view.findViewById<EditText>(R.id.edit_fullname)
-        nicknameET = view.findViewById<EditText>(R.id.edit_nickname)
-        locationET = view.findViewById<EditText>(R.id.edit_location)
-        emailET = view.findViewById<EditText>(R.id.edit_email)
+        fullNameET = view.findViewById(R.id.edit_fullname)
+        nicknameET = view.findViewById(R.id.edit_nickname)
+        locationET = view.findViewById(R.id.edit_location)
+        emailET = view.findViewById(R.id.edit_email)
         photoIV = view.findViewById(R.id.show_photo)
         birthET = view.findViewById(R.id.edit_birthDate)
 
@@ -74,22 +81,17 @@ class EditProfileFragment : Fragment() {
         } }
 
         imageTemp = context?.externalCacheDir.toString() + "/tmp.png"
-        viewModel.profile.observe(viewLifecycleOwner, Observer { profile -> imagePath = profile.imagePath }) ////// PROBLEM!
+        imagePath = arguments?.getString("imagePath").toString();
         setEditText()
 
-        Log.e("POLIMAD", "imagePath = ${imagePath}")
-
         //load photo and save status bitmap
-        //loadImage(photoIV, imagePath)
+        loadImage(photoIV, imagePath)
     }
 
-    /*
-
     //permits to create the floating context menu
-    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.menu_context_photo, menu)
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
+        //val inflater: MenuInflater = menuInflater
+        activity?.menuInflater?.inflate(R.menu.menu_context_photo, menu)
     }
 
     //behaviour of item in the floating context menu
@@ -109,8 +111,6 @@ class EditProfileFragment : Fragment() {
 
     }
 
-    */
-
     //retrieve data from intent of ShowActivityProfile
     private fun setEditText() {
 
@@ -128,7 +128,7 @@ class EditProfileFragment : Fragment() {
     }
 
     //function to load the picture if exist (icon default)
-    private fun loadImage(image:ImageView, path:String){
+    private fun loadImage(image: ImageView, path: String){
         val file = File(path)
         if(file.exists()) {
             image.setImageResource(R.drawable.user_image)

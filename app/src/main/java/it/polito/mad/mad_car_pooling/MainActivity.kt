@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
     private fun getTrips() {
         trips.clear()
 
-        //jsonObject for default values
+        //jsonObject for default values (Trip List)
         var jsonObjectTrip = JSONObject()
         jsonObjectTrip.put("car_photo", "")
         jsonObjectTrip.put("departure_location", "Torino")
@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.initTrips(trips)
 
-        //jsonObject for default values
+        //jsonObject for default values (Profile)
         var jsonObject = JSONObject()
         jsonObject.put("fullName", "John Doe")
         jsonObject.put("nickName", "Gionny")
@@ -113,8 +113,8 @@ class MainActivity : AppCompatActivity() {
         viewModelProfile.setProfile(Profile(
                 jsonGlobal.getString("fullName"),
                 jsonGlobal.getString("nickName"),
-                jsonGlobal.getString("email"),
                 jsonGlobal.getString("location"),
+                jsonGlobal.getString("email"),
                 jsonGlobal.getString("birth"),
                 jsonGlobal.getString("photoPath")
         ))

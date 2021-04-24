@@ -3,6 +3,7 @@ package it.polito.mad.mad_car_pooling.ui.edit_profile
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -29,6 +30,7 @@ import it.polito.mad.mad_car_pooling.Profile
 import it.polito.mad.mad_car_pooling.R
 import it.polito.mad.mad_car_pooling.ui.show_profile.ShowProfileViewModel
 import org.joda.time.DateTime
+import org.json.JSONObject
 import java.io.File
 import java.util.*
 
@@ -242,6 +244,21 @@ class EditProfileFragment : Fragment() {
                         imagePath)
 
                 viewModel.setProfile(newProfile)
+
+                val sharedPref = requireActivity().getSharedPreferences("profile_pref", Context.MODE_PRIVATE)
+                val jsonGlobal = JSONObject()
+                jsonGlobal.put("fullName", fullNameET.text.toString())
+                jsonGlobal.put("nickName", nicknameET.text.toString())
+                jsonGlobal.put("email", emailET.text.toString())
+                jsonGlobal.put("location", locationET.text.toString())
+                jsonGlobal.put("birth", birthET.text.toString())
+                jsonGlobal.put("photoPath", imagePath)
+
+                with(sharedPref.edit()) {
+                    putString("profile", jsonGlobal.toString())
+                    apply()
+                }
+
                 findNavController().navigate(R.id.action_nav_edit_profile_to_show_profile_fragment)
                 true
             }

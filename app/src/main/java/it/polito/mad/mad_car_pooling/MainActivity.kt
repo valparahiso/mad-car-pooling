@@ -3,6 +3,7 @@ package it.polito.mad.mad_car_pooling
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Environment
 import android.preference.PreferenceManager
 import android.util.Log
 import androidx.activity.viewModels
@@ -17,6 +18,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import it.polito.mad.mad_car_pooling.ui.show_profile.ShowProfileViewModel
 import it.polito.mad.mad_car_pooling.ui.trip_list.TripListViewModel
 import org.json.JSONObject
 
@@ -25,7 +27,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var sharedPref: SharedPreferences
+    private lateinit var sharedPrefProfile: SharedPreferences
     private val viewModel: TripListViewModel by viewModels()
+    private val viewModelProfile: ShowProfileViewModel by viewModels()
     private var trips: MutableList<Trip> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,5 +98,25 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.initTrips(trips)
 
+        //jsonObject for default values
+        var jsonObject = JSONObject()
+        jsonObject.put("fullName", "John Doe")
+        jsonObject.put("nickName", "Gionny")
+        jsonObject.put("email", "john.doe.90@polito.it")
+        jsonObject.put("location", "Turin")
+        jsonObject.put("birth", "01/01/1990")
+        jsonObject.put("photoPath", getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/profile.png")
+
+        sharedPrefProfile = this.getSharedPreferences("profile_pref", Context.MODE_PRIVATE)
+        val str: String? = sharedPref.getString("profile", jsonObject.toString())
+        val jsonGlobal = JSONObject(str!!)
+        viewModelProfile.setProfile(Profile(
+                jsonGlobal.getString("fullName"),
+                jsonGlobal.getString("nickName"),
+                jsonGlobal.getString("email"),
+                jsonGlobal.getString("location"),
+                jsonGlobal.getString("birth"),
+                jsonGlobal.getString("photoPath")
+        ))
     }
 }

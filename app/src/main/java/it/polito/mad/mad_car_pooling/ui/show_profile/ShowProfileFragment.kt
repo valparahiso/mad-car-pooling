@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import it.polito.mad.mad_car_pooling.Profile
 import it.polito.mad.mad_car_pooling.R
 import org.json.JSONObject
 import java.io.File
@@ -76,15 +77,10 @@ class ShowProfileFragment : Fragment() {
         imagePath = jsonGlobal.getString("photoPath")
         reloadImageView(photo, imagePath)
 
-        viewModel.profile.observe(viewLifecycleOwner, Observer { profile ->
-            // Update the selected filters UI
-            fullName.text = profile.fullName
-            nickName.text = profile.nickName
-            email.text = profile.email
-            location.text = profile.location
-            birth.text = profile.birth
-            imagePath = profile.imagePath
-        })
+        viewModel.setProfile(
+                Profile(fullName.toString(), nickName.toString(), email.toString(), location.toString(), birth.toString(), imagePath)
+        )
+
 
     }
 

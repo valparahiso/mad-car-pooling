@@ -1,5 +1,6 @@
 package it.polito.mad.mad_car_pooling.ui.show_profile
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import it.polito.mad.mad_car_pooling.Profile

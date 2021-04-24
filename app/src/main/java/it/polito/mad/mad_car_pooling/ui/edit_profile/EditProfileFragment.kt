@@ -74,10 +74,13 @@ class EditProfileFragment : Fragment() {
         } }
 
         imageTemp = context?.externalCacheDir.toString() + "/tmp.png"
-        getData_setViews()
+        viewModel.profile.observe(viewLifecycleOwner, Observer { profile -> imagePath = profile.imagePath }) ////// PROBLEM!
+        setEditText()
+
+        Log.e("POLIMAD", "imagePath = ${imagePath}")
 
         //load photo and save status bitmap
-        loadImage(photoIV, imagePath)
+        //loadImage(photoIV, imagePath)
     }
 
     /*
@@ -109,19 +112,19 @@ class EditProfileFragment : Fragment() {
     */
 
     //retrieve data from intent of ShowActivityProfile
-    private fun getData_setViews() {
+    private fun setEditText() {
 
         viewModel.profile.observe(viewLifecycleOwner, Observer { profile ->
+
             // Update the selected filters UI
             fullNameET.setText(profile.fullName)
             nicknameET.setText(profile.nickName)
             emailET.setText(profile.email)
             locationET.setText(profile.location)
             birthET.setText(profile.birth)
-            imagePath = profile.imagePath
+
         })
 
-        Log.e("POLIMAD", "imagePath= ${fullNameET.text}")
     }
 
     //function to load the picture if exist (icon default)

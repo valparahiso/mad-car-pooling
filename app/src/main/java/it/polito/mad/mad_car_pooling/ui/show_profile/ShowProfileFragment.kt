@@ -77,8 +77,12 @@ class ShowProfileFragment : Fragment() {
         imagePath = jsonGlobal.getString("photoPath")
         reloadImageView(photo, imagePath)
 
-        viewModel.setProfile(
-                Profile(fullName.toString(), nickName.toString(), email.toString(), location.toString(), birth.toString(), imagePath)
+        viewModel.setProfile(   Profile(fullName.text.toString(),
+                                        nickName.text.toString(),
+                                        email.text.toString(),
+                                        location.text.toString(),
+                                        birth.text.toString(),
+                                        imagePath)
         )
 
 

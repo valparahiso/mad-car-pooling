@@ -27,7 +27,7 @@ class ShowProfileFragment : Fragment() {
     private lateinit var photo: ImageView
     private lateinit var birth: TextView
 
-    private lateinit var imagePath: String
+    private var imagePath: String =""
     private lateinit var sharedPref: SharedPreferences
     private lateinit var jsonGlobal: JSONObject
 
@@ -58,7 +58,7 @@ class ShowProfileFragment : Fragment() {
         val sharedPref = requireActivity().getSharedPreferences("profile", Context.MODE_PRIVATE)
 
         //jsonObject for default values
-        var jsonObject = JSONObject()
+       /* var jsonObject = JSONObject()
         jsonObject.put("fullName", "John Doe")
         jsonObject.put("nickName", "Gionny")
         jsonObject.put("email", "john.doe.90@polito.it")
@@ -84,8 +84,16 @@ class ShowProfileFragment : Fragment() {
                                         birth.text.toString(),
                                         imagePath)
         )
-
-
+*/
+        viewModel.profile.observe(viewLifecycleOwner, Observer { profile ->
+            // Update the selected filters UI
+            fullName.text = profile.fullName
+            nickName.text = profile.nickName
+            location.text = profile.location
+            birth.text = profile.birth
+            email.text = profile.email
+            imagePath = profile.imagePath
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

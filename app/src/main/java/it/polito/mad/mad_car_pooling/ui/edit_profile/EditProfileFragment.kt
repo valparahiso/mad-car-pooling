@@ -1,21 +1,34 @@
 package it.polito.mad.mad_car_pooling.ui.edit_profile
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.DatePickerDialog
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.text.InputType
+import android.util.Log
 import android.view.*
 import android.view.ContextMenu.ContextMenuInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import com.theartofdev.edmodo.cropper.CropImage
+import it.polito.mad.mad_car_pooling.MainActivity
 import it.polito.mad.mad_car_pooling.Profile
 import it.polito.mad.mad_car_pooling.R
 import it.polito.mad.mad_car_pooling.ui.show_profile.ShowProfileViewModel
+import org.joda.time.DateTime
 import java.io.File
 import java.util.*
 
@@ -52,6 +65,7 @@ class EditProfileFragment : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val imageButton = view.findViewById<ImageButton>(R.id.camera)
@@ -76,8 +90,8 @@ class EditProfileFragment : Fragment() {
         val month = mcalendar.get(Calendar.MONTH)
 
         birthET.setOnFocusChangeListener { _, hasFocus -> run {
-            //if(hasFocus)
-                //openCalendarDialog(year, month, day)
+            if(hasFocus)
+                openCalendarDialog(year, month, day)
         } }
 
         imageTemp = context?.externalCacheDir.toString() + "/tmp.png"
@@ -87,6 +101,18 @@ class EditProfileFragment : Fragment() {
         //load photo and save status bitmap
         loadImage(photoIV, imagePath)
     }
+    //open Calendar Dialog for Birth Date and remove focus form the EditText
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun openCalendarDialog(year: Int, month: Int, day: Int){
+        birthET.inputType = InputType.TYPE_NULL
+        val listener = DatePickerDialog.OnDateSetListener { _, Year, monthOfYear, dayOfMonth -> birthET.setText("${dayOfMonth}/${monthOfYear + 1}/${Year}") }
+        val dpDialog = DatePickerDialog(activity as MainActivity, listener, year, month, day)
+        dpDialog.datePicker.maxDate = DateTime().minusYears(18).millis    //set the maximum date (at least 18 years old)
+        dpDialog.show()
+        birthET.clearFocus()
+    }
+
 
     //permits to create the floating context menu
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
@@ -99,16 +125,149 @@ class EditProfileFragment : Fragment() {
     override fun onContextItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.gallery -> {
-                //openGallery()
+                openGallery()
                 true
             }
             R.id.camera -> {
-                //dispatchTakePictureIntent()   //open camera
+                dispatchTakePictureIntent()   //open camera
                 true
             }
             else -> super.onContextItemSelected(item)
         }
 
+    }
+
+    //create an intent for the gallery activity
+    private fun openGallery() {
+        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        activity?.intent?.type = "image/*"
+        startActivityForResult(gallery, PICK_IMAGE)
+    }
+    //function to open the camera
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun dispatchTakePictureIntent() {
+        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        activity?.intent?.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+        val photoUri = FileProvider.getUriForFile(
+                activity as MainActivity,
+                "${activity?.packageName}.provider",
+                File(imageTemp)
+        )
+
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+        startActivityForResult(takePhotoIntent, REQUEST_IMAGE_CAPTURE)
+    }
+
+    //permits to receive the photo from the camera or gallery
+    @RequiresApi(Build.VERSION_CODES.P)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            //return from camera
+            REQUEST_IMAGE_CAPTURE -> {
+                if (resultCode == AppCompatActivity.RESULT_OK) {
+                    try {
+                        val file = File(imageTemp)
+                        if(file.exists()) {
+                            /*
+                            CropImage.activity(file.toUri())
+                                    .setAspectRatio(1,1)
+                                    .start(activity as MainActivity)   //activity instead of this
+                            */
+                            imageTempModified = true
+                            photoIV.setImageResource(R.drawable.user_image)
+                            photoIV.setImageURI(imageTemp.toUri())
+                        }
+                    } catch (e: TypeCastException) {
+                        Log.e("POLITOMAD", "Camera Exception")
+                    }
+                }
+            }
+            //return from gallery
+            PICK_IMAGE -> {
+                if (resultCode == AppCompatActivity.RESULT_OK) {
+                    try {
+                        val imageUri = data?.data
+                        /*
+                        CropImage.activity(imageUri)
+                                .setAspectRatio(1,1)
+                                .start(activity as MainActivity)
+                         */
+                        imageTempModified = true
+                        photoIV.setImageResource(R.drawable.user_image)
+                        photoIV.setImageURI(imageUri)
+                    } catch (e: TypeCastException) {
+                        Log.e("POLITOMAD", "Gallery Exception")
+                    }
+                }
+            }
+
+            CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
+                if (resultCode == AppCompatActivity.RESULT_OK) {
+                    try {
+                        File(CropImage.getActivityResult(data).uri.path!!).copyTo(
+                                File(imageTemp),
+                                overwrite = true
+                        )
+                        imageTempModified = true
+                        photoIV.setImageResource(R.drawable.user_image)
+                        photoIV.setImageURI(imageTemp.toUri())
+                    } catch (e: TypeCastException) {
+                        Log.e("POLITOMAD", "Crop Exception")
+                    }
+                }
+
+            }
+        }
+    }
+    //option menu for saving
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
+        inflater.inflate(R.menu.menu_option_save, menu)
+    }
+
+    //items of save option menu
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.save -> {
+                //saveContent()
+                val newProfile = Profile(
+                        fullNameET.text.toString(),
+                        nicknameET.text.toString(),
+                        locationET.text.toString(),
+                        emailET.text.toString(),
+                        birthET.text.toString(),
+                        imagePath)
+
+                viewModel.setProfile(newProfile)
+                findNavController().navigate(R.id.action_nav_edit_profile_to_show_profile_fragment)
+                true
+            }
+            R.id.clear -> {
+                clearFields()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+    //function to reset textEdit
+    private fun clearFields(){
+        fullNameET.setText("")
+        nicknameET.setText("")
+        emailET.setText("")
+        locationET.setText("")
+        birthET.setText("")
+
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        if (imageTempModified) {
+            Log.d("POLIMAD", "ONDestroy: $imagePath")
+            val tmpFile = File(imageTemp)
+            tmpFile.delete()
+        }
     }
 
     //retrieve data from intent of ShowActivityProfile

@@ -95,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:imeActionLabel="Email *"
-                    android:inputType="date" />
+                    android:inputType="textEmailAddress" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -124,7 +124,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:imeActionLabel="Date of Birth (18+) *" />
+                    android:imeActionLabel="Date of Birth (18+) *"
+                    android:inputType="date"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 

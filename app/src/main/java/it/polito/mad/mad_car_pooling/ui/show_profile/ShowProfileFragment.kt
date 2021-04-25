@@ -55,7 +55,7 @@ class ShowProfileFragment : Fragment() {
         email.setOnClickListener{ (it as TextView).maxLines = if(it.maxLines==10) 1 else 10 }
         location.setOnClickListener{ (it as TextView).maxLines = if(it.maxLines==10) 1 else 10 }
 
-        val sharedPref = requireActivity().getSharedPreferences("profile", Context.MODE_PRIVATE)
+        val sharedPref = requireActivity().getSharedPreferences("profile_pref", Context.MODE_PRIVATE)
 
         //jsonObject for default values
        /* var jsonObject = JSONObject()
@@ -87,13 +87,20 @@ class ShowProfileFragment : Fragment() {
 */
         viewModel.profile.observe(viewLifecycleOwner, Observer { profile ->
             // Update the selected filters UI
-            fullName.text = profile.fullName
-            nickName.text = profile.nickName
-            location.text = profile.location
-            birth.text = profile.birth
-            email.text = profile.email
-            imagePath = profile.imagePath
+            loadFields(profile)
         })
+        loadFields(viewModel.profile.value!!)
+    }
+
+    fun loadFields(profile: Profile) {
+        fullName.text = profile.fullName
+        nickName.text = profile.nickName
+        location.text = profile.location
+        birth.text = profile.birth
+        email.text = profile.email
+        imagePath = profile.imagePath
+
+        reloadImageView(photo, imagePath)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -126,5 +133,4 @@ class ShowProfileFragment : Fragment() {
             image.setImageResource(R.drawable.user_image)
         }
     }
-
 }

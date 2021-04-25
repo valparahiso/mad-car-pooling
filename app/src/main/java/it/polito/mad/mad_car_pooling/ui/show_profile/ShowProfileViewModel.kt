@@ -14,5 +14,4 @@ class ShowProfileViewModel : ViewModel() {
     fun setProfile(item: Profile) {
         profile_.value = item
     }
-
 }

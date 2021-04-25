@@ -180,6 +180,8 @@ class EditProfileFragment : Fragment() {
                             imageTempModified = true
                             photoIV.setImageResource(R.drawable.user_image)
                             photoIV.setImageURI(imageTemp.toUri())
+                            print(imageTemp)
+                            imagePath =imageTemp //aggiunto per far funzionare senza la crop
                         }
                     } catch (e: TypeCastException) {
                         Log.e("POLITOMAD", "Camera Exception")
@@ -199,6 +201,7 @@ class EditProfileFragment : Fragment() {
                         imageTempModified = true
                         photoIV.setImageResource(R.drawable.user_image)
                         photoIV.setImageURI(imageUri)
+                        imagePath =imageTemp   //aggiunto per far funzionare senza la crop
                     } catch (e: TypeCastException) {
                         Log.e("POLITOMAD", "Gallery Exception")
                     }
@@ -234,6 +237,7 @@ class EditProfileFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.save -> {
+
                 //saveContent()
                 val newProfile = Profile(
                         fullNameET.text.toString(),
@@ -245,6 +249,8 @@ class EditProfileFragment : Fragment() {
 
                 viewModel.setProfile(newProfile)
 
+                (requireActivity() as MainActivity).saveProfile(newProfile)
+                /*
                 val sharedPref = requireActivity().getSharedPreferences("profile_pref", Context.MODE_PRIVATE)
                 val jsonGlobal = JSONObject()
                 jsonGlobal.put("fullName", fullNameET.text.toString())
@@ -258,7 +264,7 @@ class EditProfileFragment : Fragment() {
                     putString("profile", jsonGlobal.toString())
                     apply()
                 }
-
+                */
                 findNavController().navigate(R.id.action_nav_edit_profile_to_show_profile_fragment)
                 true
             }
@@ -280,11 +286,11 @@ class EditProfileFragment : Fragment() {
     }
     override fun onDestroy() {
         super.onDestroy()
-        if (imageTempModified) {
+        /*if (imageTempModified) {
             Log.d("POLIMAD", "ONDestroy: $imagePath")
             val tmpFile = File(imageTemp)
             tmpFile.delete()
-        }
+        }*/
     }
 
     //retrieve data from intent of ShowActivityProfile

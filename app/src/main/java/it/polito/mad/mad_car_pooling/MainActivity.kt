@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Environment
-import android.preference.PreferenceManager
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -36,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         getTrips()
+        getProfile()
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -98,17 +98,23 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.initTrips(trips)
 
+
+    }
+
+    fun getProfile() {
         //jsonObject for default values (Profile)
-        var jsonObject = JSONObject()
-        jsonObject.put("fullName", "John Doe")
-        jsonObject.put("nickName", "Gionny")
-        jsonObject.put("email", "john.doe.90@polito.it")
-        jsonObject.put("location", "Turin")
-        jsonObject.put("birth", "01/01/1990")
-        jsonObject.put("photoPath", getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/profile.png")
+        var defaultJsonObject = JSONObject()
+        defaultJsonObject.put("fullName", "John Doe")
+        defaultJsonObject.put("nickName", "Gionny")
+        defaultJsonObject.put("email", "john.doe.90@polito.it")
+        defaultJsonObject.put("location", "Turin")
+        defaultJsonObject.put("birth", "01/01/1990")
+        defaultJsonObject.put("photoPath", getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/profile.png")
 
         sharedPrefProfile = this.getSharedPreferences("profile_pref", Context.MODE_PRIVATE)
-        val str: String? = sharedPref.getString("profile", jsonObject.toString())
+
+        val str: String? = sharedPrefProfile.getString("profile", defaultJsonObject.toString())
+
         val jsonGlobal = JSONObject(str!!)
         viewModelProfile.setProfile(Profile(
                 jsonGlobal.getString("fullName"),
@@ -118,5 +124,21 @@ class MainActivity : AppCompatActivity() {
                 jsonGlobal.getString("birth"),
                 jsonGlobal.getString("photoPath")
         ))
+    }
+
+    fun saveProfile(profile: Profile) {
+        sharedPrefProfile = this.getSharedPreferences("profile_pref", Context.MODE_PRIVATE)
+        val jsonGlobal = JSONObject()
+        jsonGlobal.put("fullName", profile.fullName)
+        jsonGlobal.put("nickName", profile.nickName)
+        jsonGlobal.put("email", profile.email)
+        jsonGlobal.put("location", profile.location)
+        jsonGlobal.put("birth", profile.birth)
+        jsonGlobal.put("photoPath", profile.imagePath)
+
+        with(sharedPrefProfile.edit()) {
+            putString("profile", jsonGlobal.toString())
+            apply()
+        }
     }
 }

@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         val iterator = trips_json!!.listIterator()
         for (item in iterator) {
             var item_json = JSONObject(item)
+
             Log.d("POLITOMAD_Trip", item_json.toString())
             trips.add(Trip(item_json.get("car_photo") as String,
                     item_json.get("departure_location") as String,

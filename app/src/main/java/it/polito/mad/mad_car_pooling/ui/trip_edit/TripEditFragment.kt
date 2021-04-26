@@ -117,6 +117,8 @@ class TripEditFragment : Fragment() {
         for (item in iterator) {
 
             var jsonObjectTrip = JSONObject()
+            var jsonObjectStopSet: MutableSet<String> = mutableSetOf()
+
             jsonObjectTrip.put("car_photo", item.carPhoto)
             jsonObjectTrip.put("departure_location", item.departureLocation)
             jsonObjectTrip.put("arrival_location", item.arrivalLocation)
@@ -125,6 +127,17 @@ class TripEditFragment : Fragment() {
             jsonObjectTrip.put("seats", item.seats)
             jsonObjectTrip.put("price", item.price)
             jsonObjectTrip.put("description", item.description)
+            val iteratorStops = item.stops?.listIterator()
+            for (stop in iteratorStops){
+                var jsonObjectStop = JSONObject()
+                jsonObjectStop.put("departure_stop", stop.locationName)
+                jsonObjectStop.put("date_time_stop", stop.stopDateTime)
+                jsonObjectStopSet.add(jsonObjectStop.toString())
+            }
+
+            jsonObjectTrip.put("stops", jsonObjectStopSet)
+
+
             jsonObjectTripSet.add(jsonObjectTrip.toString())
         }
 
@@ -133,3 +146,5 @@ class TripEditFragment : Fragment() {
     }
 
 }
+
+  

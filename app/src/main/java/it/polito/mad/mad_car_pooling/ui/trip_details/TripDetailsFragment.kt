@@ -1,13 +1,21 @@
 package it.polito.mad.mad_car_pooling.ui.trip_details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.view.View.*
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import it.polito.mad.mad_car_pooling.R
+import it.polito.mad.mad_car_pooling.StopAdapter
+import it.polito.mad.mad_car_pooling.TripAdapter
 import it.polito.mad.mad_car_pooling.ui.trip_list.TripListViewModel
 
 class TripDetailsFragment : Fragment() {
@@ -20,6 +28,8 @@ class TripDetailsFragment : Fragment() {
     private lateinit var price : TextView
     private lateinit var description : TextView
     private lateinit var departureDateTime : TextView
+    private lateinit var showStopsCard : CardView
+    private lateinit var showStopsLayout: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +50,16 @@ class TripDetailsFragment : Fragment() {
         price = view.findViewById(R.id.price)
         description = view.findViewById(R.id.description)
         departureDateTime = view.findViewById(R.id.departure_date_time)
+        showStopsLayout = view.findViewById(R.id.show_stops_text)
+        showStopsCard = view.findViewById(R.id.show_stops_card)
+
+        showStopsCard.setOnClickListener{
+            if(showStopsLayout.visibility == GONE) showStopsLayout.visibility = VISIBLE
+            else showStopsLayout.visibility = GONE
+        }
+
+        val recyclerView = view.findViewById<RecyclerView>(R.id.stops_details)
+        recyclerView.layoutManager = LinearLayoutManager(context)
 
         viewModel.trip_.observe(viewLifecycleOwner, Observer { trip ->
             // Update the selected filters UI
@@ -50,6 +70,9 @@ class TripDetailsFragment : Fragment() {
             price.text = trip.price
             description.text = trip.description
             departureDateTime.text = trip.departureDateTime
+            if(trip.stops.size == 0) showStopsCard.visibility = GONE //TODO verificare che funzioni e migliorare il design
+            else
+            recyclerView.adapter = StopAdapter(trip.stops, this)
         })
     }
 

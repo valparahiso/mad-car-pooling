@@ -37,6 +37,7 @@ class TripListViewModel: ViewModel() {
                     item.price = trip.price
                     item.description = trip.description
                     item.carPhoto = trip.carPhoto
+                    item.stops = trip.stops
 
                     setTrip(item)
                }

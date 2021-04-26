@@ -67,6 +67,7 @@ class TripEditFragment : Fragment() {
         //return super.onOptionsItemSelected(item)
         return when (item.itemId) {
             R.id.save -> {
+
                 val newTrip = Trip("",
                         departureLocation.text.toString(),
                         arrivalLocation.text.toString(),
@@ -76,7 +77,9 @@ class TripEditFragment : Fragment() {
                         price.text.toString(),
                         description.text.toString(),
                         mutableListOf()
-                )
+                )  
+
+                newTrip.addStop("Perugia", "10:26")
 
                 viewModel.editTrip(newTrip, index)
 

@@ -26,4 +26,8 @@ data class Trip(
         Log.d("POLITOMAD_Trip", "ID: $id_ Trip Created")
         id++
     }
+
+    fun addStop(stop_location: String, stop_datetime : String){
+        stops.add(Stop(stop_location, stop_datetime))
+    }
 }

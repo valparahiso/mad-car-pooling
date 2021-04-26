@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -25,6 +24,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import it.polito.mad.mad_car_pooling.ui.show_profile.ShowProfileViewModel
 import it.polito.mad.mad_car_pooling.ui.trip_list.TripListViewModel
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 
@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         trips.clear()
 
         //jsonObject for default values (Trip List)
-        var jsonObjectTrip = JSONObject()
+        val jsonObjectTrip = JSONObject()
         jsonObjectTrip.put("car_photo", "")
         jsonObjectTrip.put("departure_location", "Torino")
         jsonObjectTrip.put("arrival_location", "Milano")
@@ -83,26 +83,47 @@ class MainActivity : AppCompatActivity() {
         jsonObjectTrip.put("seats", "12")
         jsonObjectTrip.put("price", "12")
         jsonObjectTrip.put("description", "descr")
-        var jsonObjectTripSet: Set<String> = listOf(jsonObjectTrip.toString()).toSet()
+        val jsonObjectTripSet: Set<String> = listOf(jsonObjectTrip.toString()).toSet()
 
         sharedPref = this.getSharedPreferences("trip_list", Context.MODE_PRIVATE)
 
-        val trips_json = sharedPref.getStringSet("trips", jsonObjectTripSet)?.toList()
+        val tripListString = sharedPref.getStringSet("trips", jsonObjectTripSet)?.toList()
 
-        val iterator = trips_json!!.listIterator()
-        for (item in iterator) {
-            var item_json = JSONObject(item)
+        val tripListIt = tripListString!!.listIterator()
+        for (tripString in tripListIt) {
 
-            Log.d("POLITOMAD_Trip", item_json.toString())
-            trips.add(Trip(item_json.get("car_photo") as String,
-                    item_json.get("departure_location") as String,
-                    item_json.get("arrival_location") as String,
-                    item_json.get("departure_date_time") as String,
-                    item_json.get("duration") as String,
-                    item_json.get("seats") as String,
-                    item_json.get("price") as String,
-                    item_json.get("description") as String,
-                    mutableListOf()))
+
+            val tripJson = JSONObject(tripString)
+
+            val trip = Trip(tripJson.get("car_photo") as String,
+                tripJson.get("departure_location") as String,
+                tripJson.get("arrival_location") as String,
+                tripJson.get("departure_date_time") as String,
+                tripJson.get("duration") as String,
+                tripJson.get("seats") as String,
+                tripJson.get("price") as String,
+                tripJson.get("description") as String,
+                mutableListOf())
+
+            if(tripJson.has("stops")) {
+                val stopJSONArray = JSONArray(tripJson.get("stops") as String)
+
+                val stopListString = List(stopJSONArray.length()) {
+                    stopJSONArray.getString(it)
+                }
+
+                val stopListIt = stopListString.listIterator()
+                for (stopString in stopListIt) {
+                    val stopJson = JSONObject(stopString)
+                    trip.addStop(
+                        stopJson.get("departure_stop") as String,
+                        stopJson.get("date_time_stop") as String
+                    )
+                }
+            }
+
+            Log.d("POLITOMAD_Trip", tripJson.toString())
+            trips.add(trip);
         }
 
         viewModel.initTrips(trips)

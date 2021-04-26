@@ -71,8 +71,11 @@ class TripDetailsFragment : Fragment() {
             description.text = trip.description
             departureDateTime.text = trip.departureDateTime
             if(trip.stops.size == 0) showStopsCard.visibility = GONE //TODO verificare che funzioni e migliorare il design
-            else
-            recyclerView.adapter = StopAdapter(trip.stops, this)
+            else{
+                showStopsCard.visibility = VISIBLE
+                recyclerView.adapter = StopAdapter(trip.stops, this)
+            }
+
         })
     }
 

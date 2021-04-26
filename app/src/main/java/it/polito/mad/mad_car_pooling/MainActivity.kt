@@ -63,7 +63,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        Log.e("POLIMAD","OKOK")
         setHeader(findViewById<NavigationView>(R.id.nav_view).getHeaderView(0))
 
         val navController = findNavController(R.id.nav_host_fragment)

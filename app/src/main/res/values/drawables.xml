@@ -1,6 +1,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <item name="ic_menu_triplist" type="drawable">@android:drawable/ic_menu_always_landscape_portrait</item>
-    <item name="ic_menu_showprofile" type="drawable">@android:drawable/ic_menu_always_landscape_portrait</item>
+    <item name="ic_menu_triplist" type="drawable">@drawable/ic_car</item>
+    <item name="ic_menu_showprofile" type="drawable">@drawable/ic_profile</item>
     <item name="ic_menu_manage" type="drawable">@android:drawable/ic_menu_manage</item>
     <item name="ic_menu_share" type="drawable">@android:drawable/ic_menu_share</item>
     <item name="ic_menu_send" type="drawable">@android:drawable/ic_menu_send</item>

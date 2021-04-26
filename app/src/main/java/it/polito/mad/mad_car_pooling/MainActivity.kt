@@ -26,6 +26,7 @@ import com.google.android.material.snackbar.Snackbar
 import it.polito.mad.mad_car_pooling.ui.show_profile.ShowProfileViewModel
 import it.polito.mad.mad_car_pooling.ui.trip_list.TripListViewModel
 import org.json.JSONObject
+import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
@@ -159,8 +160,14 @@ class MainActivity : AppCompatActivity() {
             // Update the selected filters UI
             header_fullName.text = profile.fullName
             header_nickName.text = profile.nickName
-            header_photo.setImageResource(R.drawable.user_image)
-            header_photo.setImageURI(profile.imagePath.toUri())
+
+            var file = File(profile.imagePath)
+            if(file.exists()){
+                header_photo.setImageResource(R.drawable.user_image)
+                header_photo.setImageURI(file.toUri())
+            }else{
+                header_photo.setImageResource(R.drawable.user_image)
+            }
 
         })
 

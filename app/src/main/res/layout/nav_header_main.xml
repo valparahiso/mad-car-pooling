@@ -18,7 +18,7 @@
         android:layout_height="80dp"
         android:background="@color/white"
         android:contentDescription="@string/nav_header_desc"
-        app:srcCompat="@drawable/user_image" />
+        android:src="@drawable/user_image"/>
 
     <TextView
         android:id="@+id/header_fullnameView"

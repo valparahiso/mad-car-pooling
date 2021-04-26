@@ -5,10 +5,16 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -20,10 +26,10 @@ import com.google.android.material.snackbar.Snackbar
 import it.polito.mad.mad_car_pooling.ui.show_profile.ShowProfileViewModel
 import it.polito.mad.mad_car_pooling.ui.trip_list.TripListViewModel
 import org.json.JSONObject
+import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var sharedPref: SharedPreferences
     private lateinit var sharedPrefProfile: SharedPreferences
@@ -58,6 +64,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        setHeader(findViewById<NavigationView>(R.id.nav_view).getHeaderView(0))
+
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
@@ -141,5 +149,28 @@ class MainActivity : AppCompatActivity() {
             putString("profile", jsonGlobal.toString())
             apply()
         }
+    }
+
+    private fun setHeader(headerView : View) {
+        val header_fullName : TextView = headerView.findViewById(R.id.header_fullnameView)
+        val header_nickName : TextView = headerView.findViewById(R.id.header_nicknameView)
+        val header_photo : ImageView = headerView.findViewById(R.id.header_imageView)
+
+        viewModelProfile.profile.observe(this, Observer { profile ->
+
+            // Update the selected filters UI
+            header_fullName.text = profile.fullName
+            header_nickName.text = profile.nickName
+
+            var file = File(profile.imagePath)
+            if(file.exists()){
+                header_photo.setImageResource(R.drawable.user_image)
+                header_photo.setImageURI(file.toUri())
+            }else{
+                header_photo.setImageResource(R.drawable.user_image)
+            }
+
+        })
+
     }
 }

@@ -1,16 +1,12 @@
 package it.polito.mad.mad_car_pooling.ui.trip_edit
 
-import android.R.attr.data
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.cardview.widget.CardView
+import android.widget.*
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -20,11 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import it.polito.mad.mad_car_pooling.MainActivity
-import it.polito.mad.mad_car_pooling.R
-import it.polito.mad.mad_car_pooling.Stop
-import it.polito.mad.mad_car_pooling.StopAdapterEdit
-import it.polito.mad.mad_car_pooling.Trip
+import it.polito.mad.mad_car_pooling.*
 import it.polito.mad.mad_car_pooling.ui.trip_list.TripListViewModel
 import org.json.JSONObject
 import java.io.File
@@ -118,9 +110,9 @@ class TripEditFragment : Fragment() {
             loadImage(carImage, carPhoto)
 
 
-            trip.stops.forEach{ stop-> stop.deleted = false}
+            trip.stops.forEach { stop -> stop.deleted = false }
             editAdapter =
-                StopAdapterEdit(trip.stops.filter { stop -> stop.saved}.toMutableList(), this)
+                StopAdapterEdit(trip.stops.filter { stop -> stop.saved }.toMutableList(), this)
             recyclerView.adapter = editAdapter
 
 
@@ -130,25 +122,41 @@ class TripEditFragment : Fragment() {
 
         val fab: FloatingActionButton = view.findViewById(R.id.fab_delete)
         fab.setOnClickListener{
-            val sharedPref =
-                requireActivity().getSharedPreferences("trip_list", Context.MODE_PRIVATE)
-            viewModel.deleteTrip(index)
-            viewModel.trips.observe(viewLifecycleOwner, Observer { list ->
-                with(sharedPref.edit()) {
-                    putStringSet("trips", setTrips(list))
-                    apply()
+
+            val alertDialogBuilder = AlertDialog.Builder(activity)
+            alertDialogBuilder.setTitle("Confirm Delete")
+            alertDialogBuilder.setMessage("Are you sure,You want to delete this trip?")
+            alertDialogBuilder.setCancelable(false)
+            alertDialogBuilder.setPositiveButton(
+                "yes"
+            ) { arg0, arg1 -> run{
+                val sharedPref =
+                    requireActivity().getSharedPreferences("trip_list", Context.MODE_PRIVATE)
+                viewModel.deleteTrip(index)
+                viewModel.trips.observe(viewLifecycleOwner, Observer { list ->
+                    with(sharedPref.edit()) {
+                        putStringSet("trips", setTrips(list))
+                        apply()
+                    }
+                })
+                view?.let {
+                    Snackbar.make(it, "Trip deleted", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()
                 }
-            })
-            view?.let {
-                Snackbar.make(it, "Trip deleted", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-            }
-            findNavController().navigate(R.id.action_nav_edit_trip_details_to_nav_list)
+                findNavController().navigate(R.id.action_nav_edit_trip_details_to_nav_list)
+            } }
+            alertDialogBuilder.setNegativeButton(
+                "No"
+            ) { dialog, which ->  }
+
+            val alertDialog: AlertDialog = alertDialogBuilder.create()
+            alertDialog.show()
         }
+        
 
         viewModel.newTrip_.observe(viewLifecycleOwner, Observer { newTrip ->
             isNewTrip = newTrip
-            if(isNewTrip) {
+            if (isNewTrip) {
                 (activity as MainActivity).supportActionBar?.title = "Add new trip"
                 fab.hide()
             }
@@ -235,8 +243,7 @@ class TripEditFragment : Fragment() {
                             .setAction("Action", null).show()
                     }
                     findNavController().navigate(R.id.action_nav_edit_trip_details_to_nav_list)
-                }
-                else{
+                } else {
                     view?.let {
                         Snackbar.make(it, "Trip modified", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show()

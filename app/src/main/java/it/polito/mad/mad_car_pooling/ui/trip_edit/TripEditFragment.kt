@@ -18,6 +18,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import it.polito.mad.mad_car_pooling.MainActivity
 import it.polito.mad.mad_car_pooling.R
 import it.polito.mad.mad_car_pooling.Stop
@@ -202,10 +203,20 @@ class TripEditFragment : Fragment() {
                     }
                 })
 
-                if (isNewTrip)
+                if (isNewTrip) {
+                    view?.let {
+                        Snackbar.make(it, "Trip created", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                    }
                     findNavController().navigate(R.id.action_nav_edit_trip_details_to_nav_list)
-                else
+                }
+                else{
+                    view?.let {
+                        Snackbar.make(it, "Trip modified", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                    }
                     findNavController().navigate(R.id.action_nav_edit_trip_details_to_details_trip_fragment)
+                }
                 true
             }
             R.id.clear -> {

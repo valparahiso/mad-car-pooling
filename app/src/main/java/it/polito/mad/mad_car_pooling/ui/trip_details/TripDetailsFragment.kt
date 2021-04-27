@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -15,10 +16,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import it.polito.mad.mad_car_pooling.R
-import it.polito.mad.mad_car_pooling.StopAdapter
-import it.polito.mad.mad_car_pooling.TripAdapter
+import it.polito.mad.mad_car_pooling.*
 import it.polito.mad.mad_car_pooling.ui.trip_list.TripListViewModel
+import java.io.File
 
 class TripDetailsFragment : Fragment() {
 
@@ -33,6 +33,7 @@ class TripDetailsFragment : Fragment() {
     private lateinit var showStopsCard : LinearLayout
     private lateinit var showStopsLayout: LinearLayout
     private lateinit var arrowImage : ImageView
+    private lateinit var carImage : ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,6 +57,7 @@ class TripDetailsFragment : Fragment() {
         showStopsLayout = view.findViewById(R.id.show_stops_text)
         showStopsCard = view.findViewById(R.id.show_stops_card)
         arrowImage = view.findViewById(R.id.info_image)
+        carImage = view.findViewById(R.id.car_photo_details)
 
         showStopsCard.setOnClickListener{
             if(showStopsLayout.visibility == GONE) {
@@ -88,6 +90,12 @@ class TripDetailsFragment : Fragment() {
             }
 
         })
+
+        viewModel.trip_.observe(viewLifecycleOwner, Observer { trip ->
+            // Update the selected filters UI
+            loadFields(trip)
+        })
+        loadFields(viewModel.trip_.value!!)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -105,6 +113,29 @@ class TripDetailsFragment : Fragment() {
             else -> {
                 super.onOptionsItemSelected(item)
             }
+        }
+    }
+
+    fun loadFields(trip: Trip) {
+        departureLocation.text = trip.departureLocation
+        arrivalLocation.text = trip.arrivalLocation
+        duration.text = trip.duration
+        seats.text = trip.seats
+        price.text = trip.price
+        description.text = trip.description
+        departureDateTime.text = trip.departureDateTime
+
+        reloadImageView(carImage, trip.carPhoto)
+    }
+
+    //set image, if modified
+    private fun reloadImageView(image: ImageView, path: String){
+        var file = File(path)
+        if(file.exists()){
+            image.setImageResource(R.drawable.user_image)
+            image.setImageURI(file.toUri())
+        }else{
+            image.setImageResource(R.drawable.user_image)
         }
     }
 }

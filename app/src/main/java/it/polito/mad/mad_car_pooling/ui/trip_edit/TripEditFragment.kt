@@ -113,6 +113,9 @@ class TripEditFragment : Fragment() {
                     mutableListOf()
                 )
 
+                /*
+                ho commentato questo pezzo perchè dava un nullPointerException su itemNumber
+                 */
                 /*val itemNumber = recyclerView.adapter?.itemCount
                 for (i in 0 until itemNumber!!) {
                     var holder = recyclerView.findViewHolderForAdapterPosition(i)

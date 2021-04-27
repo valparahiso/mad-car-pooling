@@ -38,6 +38,7 @@ class TripEditFragment : Fragment() {
     private lateinit var editAdapter: StopAdapterEdit
     private lateinit var arrowImage: ImageView
     private lateinit var addButton: ImageView
+    private lateinit var deleteButton: ImageView
     private var isNewTrip: Boolean = false
 
     private var index = -1
@@ -92,12 +93,14 @@ class TripEditFragment : Fragment() {
             index = trip.index
             departureDateTime.text = trip.departureDateTime
 
+            editAdapter = StopAdapterEdit(trip.stops.filter { stop -> stop.saved }.toMutableList(), this)
+            recyclerView.adapter = editAdapter
+
             if (trip.stops.size == 0) showStopsCard.visibility =
-                View.GONE
+                View.VISIBLE
             else {
                 showStopsCard.visibility = View.VISIBLE
-                editAdapter = StopAdapterEdit(trip.stops.filter { stop -> stop.saved }.toMutableList(), this)
-                recyclerView.adapter = editAdapter
+                deleteButton = view.findViewById(R.id.add_stop_edit)
             }
         })
         viewModel.newTrip_.observe(viewLifecycleOwner, Observer { newTrip ->
@@ -113,6 +116,8 @@ class TripEditFragment : Fragment() {
             recyclerView.smoothScrollToPosition(0)
 
         }
+
+
 
     }
 

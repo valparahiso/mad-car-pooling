@@ -1,16 +1,24 @@
 package it.polito.mad.mad_car_pooling
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
+import android.view.ContextMenu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -19,9 +27,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
+import com.theartofdev.edmodo.cropper.CropImage
 import it.polito.mad.mad_car_pooling.ui.show_profile.ShowProfileViewModel
 import it.polito.mad.mad_car_pooling.ui.trip_list.TripListViewModel
 import org.json.JSONArray
@@ -188,5 +195,134 @@ class MainActivity : AppCompatActivity() {
 
         })
 
+    }
+
+    //code of request (camera or gallery)
+    val REQUEST_IMAGE_CAPTURE = 1       //camera
+    val REQUEST_IMAGE_GALLERY = 2       //gallery
+    val REQUEST_IMAGE_CROP = 3          //crop
+
+    private lateinit var imageTemp: String
+    public lateinit var attentionIV: ImageView
+
+    var takePhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        manageActivityResult(result.resultCode, result.data, REQUEST_IMAGE_CAPTURE)
+    }
+    var takeGalleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        manageActivityResult(result.resultCode, result.data, REQUEST_IMAGE_GALLERY)
+    }
+    var takeCropLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        manageActivityResult(result.resultCode, result.data, REQUEST_IMAGE_CROP)
+    }
+
+    //permits to create the floating context menu
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+        imageTemp = externalCacheDir.toString() + "/tmp.png"
+        //val inflater: MenuInflater = menuInflater
+        menuInflater?.inflate(R.menu.menu_context_photo, menu)
+    }
+
+    //behaviour of item in the floating context menu
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.gallery -> {
+                openGallery()
+                true
+            }
+            R.id.camera -> {
+                dispatchTakePictureIntent()   //open camera
+                true
+            }
+            else -> super.onContextItemSelected(item)
+        }
+
+    }
+
+    //create an intent for the gallery activity
+    private fun openGallery() {
+        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        intent?.type = "image/*"
+        takeGalleryLauncher.launch(gallery)
+
+    }
+    //function to open the camera
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun dispatchTakePictureIntent() {
+        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        intent?.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+        val photoUri = FileProvider.getUriForFile(
+            this,
+            "${packageName}.provider",
+            File(imageTemp)
+        )
+
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+        takePhotoLauncher.launch(takePhotoIntent)
+
+    }
+
+    //permits to receive the photo from the camera or gallery
+    fun manageActivityResult(resultCode: Int, data: Intent?, requestCode: Int) {
+
+        if (resultCode == AppCompatActivity.RESULT_OK) {
+
+            when (requestCode) {
+                //return from camera
+                REQUEST_IMAGE_CAPTURE -> {
+
+                    try {
+                        val file = File(imageTemp)
+                        if (file.exists()) {
+
+                            takeCropLauncher.launch(
+                                CropImage.activity(file.toUri())
+                                    .setAspectRatio(1, 1)
+                                    .getIntent(this)
+
+                            )
+                        }
+                    } catch (e: TypeCastException) {
+                        Log.e("POLITOMAD", "Camera Exception")
+                    }
+
+                }
+                //return from gallery
+                REQUEST_IMAGE_GALLERY -> {
+
+                    try {
+                        val imageUri = data?.data
+                        takeCropLauncher.launch(
+                            CropImage.activity(imageUri)
+                                .setAspectRatio(1, 1)
+                                .getIntent(this)
+                        )
+                    } catch (e: TypeCastException) {
+                        Log.e("POLITOMAD", "Gallery Exception")
+                    }
+
+                }
+
+
+                REQUEST_IMAGE_CROP -> {
+                    try {
+
+                        File(CropImage.getActivityResult(data).uri.path!!).copyTo(
+                            File(imageTemp),
+                            overwrite = true
+                        )
+
+                        attentionIV.setImageResource(R.drawable.user_image)
+                        attentionIV.setImageURI(imageTemp.toUri())
+
+                    } catch (e: TypeCastException) {
+                        Log.e("POLITOMAD", "Crop Exception")
+                    }
+                }
+
+
+            }
+        }
     }
 }

@@ -16,6 +16,7 @@
     android:layout_marginTop="10dp"
     android:layout_marginEnd="10dp"
     android:foreground="?selectableItemBackground"
+    app:cardBackgroundColor="?android:attr/colorBackground"
     tools:ignore="ContentDescription">
 
     <LinearLayout

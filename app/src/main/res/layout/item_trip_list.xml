@@ -37,6 +37,7 @@
             android:id="@+id/departure"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?android:attr/colorForeground"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
         <TextView
@@ -49,6 +50,7 @@
             android:id="@+id/destination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?android:attr/colorForeground"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
         <TextView
@@ -61,6 +63,7 @@
             android:id="@+id/departure_time"
             android:layout_width="353dp"
             android:layout_height="wrap_content"
+            android:textColor="?android:attr/colorForeground"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
 
@@ -74,6 +77,7 @@
             android:id="@+id/duration"
             android:layout_width="353dp"
             android:layout_height="wrap_content"
+            android:textColor="?android:attr/colorForeground"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     </LinearLayout>

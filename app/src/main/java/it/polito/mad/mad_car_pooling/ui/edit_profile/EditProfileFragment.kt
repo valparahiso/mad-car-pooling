@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import it.polito.mad.mad_car_pooling.MainActivity
 import it.polito.mad.mad_car_pooling.Profile
 import it.polito.mad.mad_car_pooling.R
@@ -145,6 +146,10 @@ class EditProfileFragment : Fragment() {
                 viewModel.setProfile(newProfile)
 
                 (requireActivity() as MainActivity).saveProfile(newProfile)
+                view?.let {
+                    Snackbar.make(it, "Profile updated", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()
+                }
                 findNavController().navigate(R.id.action_nav_edit_profile_to_show_profile_fragment)
                 true
             }

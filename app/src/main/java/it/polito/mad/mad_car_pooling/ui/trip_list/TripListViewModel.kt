@@ -56,7 +56,16 @@ class TripListViewModel: ViewModel() {
           Log.d("POLITOMAD_Trip", trip.index.toString() + " EDITED")
      }
 
-
+     fun deleteTrip(index: Int){
+          val mutableListTrips = mutableListOf<Trip>()
+          val iterator = trips.value!!.listIterator()
+          for (item in iterator) {
+               if(item.index != index){
+                    mutableListTrips.add(item)
+               }
+          }
+          initTrips(mutableListTrips)
+     }
 
 
 

@@ -18,6 +18,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import it.polito.mad.mad_car_pooling.MainActivity
 import it.polito.mad.mad_car_pooling.R
 import it.polito.mad.mad_car_pooling.Stop
@@ -125,8 +127,31 @@ class TripEditFragment : Fragment() {
             showStopsCard.visibility = View.VISIBLE
 
         })
+
+        val fab: FloatingActionButton = view.findViewById(R.id.fab_delete)
+        fab.setOnClickListener{
+            val sharedPref =
+                requireActivity().getSharedPreferences("trip_list", Context.MODE_PRIVATE)
+            viewModel.deleteTrip(index)
+            viewModel.trips.observe(viewLifecycleOwner, Observer { list ->
+                with(sharedPref.edit()) {
+                    putStringSet("trips", setTrips(list))
+                    apply()
+                }
+            })
+            view?.let {
+                Snackbar.make(it, "Trip deleted", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+            }
+            findNavController().navigate(R.id.action_nav_edit_trip_details_to_nav_list)
+        }
+
         viewModel.newTrip_.observe(viewLifecycleOwner, Observer { newTrip ->
             isNewTrip = newTrip
+            if(isNewTrip) {
+                (activity as MainActivity).supportActionBar?.title = "Add new trip"
+                fab.hide()
+            }
         })
 
 
@@ -204,10 +229,20 @@ class TripEditFragment : Fragment() {
                     }
                 })
 
-                if (isNewTrip)
+                if (isNewTrip) {
+                    view?.let {
+                        Snackbar.make(it, "Trip created", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                    }
                     findNavController().navigate(R.id.action_nav_edit_trip_details_to_nav_list)
-                else
+                }
+                else{
+                    view?.let {
+                        Snackbar.make(it, "Trip modified", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                    }
                     findNavController().navigate(R.id.action_nav_edit_trip_details_to_details_trip_fragment)
+                }
                 true
             }
             R.id.clear -> {

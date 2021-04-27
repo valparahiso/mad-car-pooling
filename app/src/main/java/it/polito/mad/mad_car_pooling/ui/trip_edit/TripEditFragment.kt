@@ -2,24 +2,30 @@ package it.polito.mad.mad_car_pooling.ui.trip_edit
 
 import android.R.attr.data
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import it.polito.mad.mad_car_pooling.MainActivity
 import it.polito.mad.mad_car_pooling.R
 import it.polito.mad.mad_car_pooling.Stop
 import it.polito.mad.mad_car_pooling.StopAdapterEdit
 import it.polito.mad.mad_car_pooling.Trip
 import it.polito.mad.mad_car_pooling.ui.trip_list.TripListViewModel
 import org.json.JSONObject
+import java.io.File
 
 
 class TripEditFragment : Fragment() {
@@ -32,6 +38,7 @@ class TripEditFragment : Fragment() {
     private lateinit var seats: TextView
     private lateinit var price: TextView
     private lateinit var description: TextView
+    private lateinit var carImage: ImageView
     private lateinit var showStopsCard: LinearLayout
     private lateinit var showStopsLayout: LinearLayout
     private lateinit var recyclerView: RecyclerView
@@ -40,8 +47,11 @@ class TripEditFragment : Fragment() {
     private lateinit var addButton: ImageView
     private lateinit var deleteButton: ImageView
     private var isNewTrip: Boolean = false
+    private lateinit var carPhoto: String
 
     private var index = -1
+
+    private lateinit var imageTemp: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,6 +72,7 @@ class TripEditFragment : Fragment() {
         price = view.findViewById(R.id.price_edit)
         description = view.findViewById(R.id.description_edit)
         departureDateTime = view.findViewById(R.id.departure_date_time_edit)
+        carImage = view.findViewById(R.id.car_photo_edit)
 
         showStopsLayout = view.findViewById(R.id.show_stops_text_edit)
         showStopsCard = view.findViewById(R.id.show_stops_card_edit)
@@ -78,6 +89,16 @@ class TripEditFragment : Fragment() {
             }
         }
 
+        imageTemp = context?.externalCacheDir.toString() + "/tmp.png"
+
+        val imageButton = view.findViewById<ImageButton>(R.id.camera_car)
+        registerForContextMenu(imageButton)
+        imageButton.setOnClickListener {
+            (activity as MainActivity).attentionIV = carImage
+            activity?.openContextMenu(it)
+        }
+        imageButton.setOnLongClickListener { true }
+
         recyclerView = view.findViewById(R.id.stops_details_edit)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -92,6 +113,10 @@ class TripEditFragment : Fragment() {
             description.text = trip.description
             index = trip.index
             departureDateTime.text = trip.departureDateTime
+            carPhoto = trip.carPhoto
+            //Log.e("POLITOMAD", carPhoto)
+            //load photo and save status bitmap
+            loadImage(carImage, carPhoto)
 
             editAdapter = StopAdapterEdit(trip.stops.filter { stop -> stop.saved }.toMutableList(), this)
             recyclerView.adapter = editAdapter
@@ -131,8 +156,15 @@ class TripEditFragment : Fragment() {
         return when (item.itemId) {
             R.id.save -> {
 
+                val tmpFile = File(imageTemp)
+                if (tmpFile.exists()) {
+                    Log.d("POLIMAD", "New photo saved in: $carPhoto")
+                    tmpFile.copyTo(File(carPhoto), overwrite = true)
+                    tmpFile.delete()
+                }
+
                 val newTrip = Trip(
-                    "",
+                    carPhoto,
                     departureLocation.text.toString(),
                     arrivalLocation.text.toString(),
                     departureDateTime.text.toString(),
@@ -227,6 +259,22 @@ class TripEditFragment : Fragment() {
 
         return jsonObjectTripSet.toSet()
 
+    }
+
+    //function to load the picture if exist (icon default)
+    private fun loadImage(image: ImageView, path: String){
+        val file = File(path)
+        if(file.exists()) {
+            image.setImageResource(R.drawable.user_image)
+            image.setImageURI(path.toUri())
+        }else{
+            // probabilmente righe inutili (da ricontrollare)
+            val options = BitmapFactory.Options()
+            options.inScaled = false
+            //
+
+            image.setImageResource(R.drawable.user_image)
+        }
     }
 
 }

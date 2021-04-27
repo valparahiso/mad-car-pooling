@@ -7,7 +7,7 @@
     tools:context=".ui.trip_edit.TripEditFragment">
 
     <ImageView
-        android:id="@+id/car_photo"
+        android:id="@+id/car_photo_edit"
         android:layout_width="0dp"
         android:layout_height="0dp"
 
@@ -38,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/car_photo"
+        app:layout_constraintTop_toBottomOf="@+id/car_photo_edit"
         app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
@@ -213,10 +213,10 @@
     </ScrollView>
 
     <ImageButton
-        android:id="@+id/camera"
+        android:id="@+id/camera_car"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_menu_camera"
-        app:layout_constraintEnd_toEndOf="@+id/car_photo"
-        app:layout_constraintTop_toTopOf="@+id/car_photo" />
+        app:layout_constraintEnd_toEndOf="@+id/car_photo_edit"
+        app:layout_constraintTop_toTopOf="@+id/car_photo_edit" />
 </androidx.constraintlayout.widget.ConstraintLayout>

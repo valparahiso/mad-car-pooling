@@ -2,32 +2,21 @@ package it.polito.mad.mad_car_pooling.ui.edit_profile
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.content.Context
-import android.content.Intent
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.InputType
 import android.util.Log
 import android.view.*
-import android.view.ContextMenu.ContextMenuInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.theartofdev.edmodo.cropper.CropImage
 import it.polito.mad.mad_car_pooling.MainActivity
 import it.polito.mad.mad_car_pooling.Profile
 import it.polito.mad.mad_car_pooling.R
@@ -40,10 +29,7 @@ import java.util.*
 class EditProfileFragment : Fragment() {
 
     private val viewModel: ShowProfileViewModel by activityViewModels()
-    //code of request (camera or gallery)
-    val REQUEST_IMAGE_CAPTURE = 1       //camera
-    val REQUEST_IMAGE_GALLERY = 2       //gallery
-    val REQUEST_IMAGE_CROP = 3          //crop
+
 
     private lateinit var fullNameET: EditText
     private lateinit var nicknameET: EditText
@@ -59,15 +45,7 @@ class EditProfileFragment : Fragment() {
     private lateinit var prof: Profile
 
 
-    var takePhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        manageActivityResult(result.resultCode, result.data, REQUEST_IMAGE_CAPTURE)
-    }
-    var takeGalleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        manageActivityResult(result.resultCode, result.data, REQUEST_IMAGE_GALLERY)
-    }
-    var takeCropLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        manageActivityResult(result.resultCode, result.data, REQUEST_IMAGE_CROP)
-    }
+
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -83,10 +61,11 @@ class EditProfileFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val imageButton = view.findViewById<ImageButton>(R.id.camera)
+        val imageButton = view.findViewById<ImageButton>(R.id.camera_profile)
         registerForContextMenu(imageButton)
 
         imageButton.setOnClickListener {
+            (activity as MainActivity).attentionIV = photoIV
             activity?.openContextMenu(it)
         }
         imageButton.setOnLongClickListener { true }
@@ -129,115 +108,7 @@ class EditProfileFragment : Fragment() {
     }
 
 
-    //permits to create the floating context menu
-    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
-        //val inflater: MenuInflater = menuInflater
-        activity?.menuInflater?.inflate(R.menu.menu_context_photo, menu)
-    }
 
-    //behaviour of item in the floating context menu
-    @RequiresApi(Build.VERSION_CODES.N)
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.gallery -> {
-                openGallery()
-                true
-            }
-            R.id.camera -> {
-                dispatchTakePictureIntent()   //open camera
-                true
-            }
-            else -> super.onContextItemSelected(item)
-        }
-
-    }
-
-    //create an intent for the gallery activity
-    private fun openGallery() {
-        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-        activity?.intent?.type = "image/*"
-        takeGalleryLauncher.launch(gallery)
-
-    }
-    //function to open the camera
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun dispatchTakePictureIntent() {
-        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        activity?.intent?.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
-        val photoUri = FileProvider.getUriForFile(
-                activity as MainActivity,
-                "${activity?.packageName}.provider",
-                File(imageTemp)
-        )
-
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-        takePhotoLauncher.launch(takePhotoIntent)
-
-    }
-
-    //permits to receive the photo from the camera or gallery
-    fun manageActivityResult(resultCode: Int, data: Intent?, requestCode: Int) {
-
-        if (resultCode == AppCompatActivity.RESULT_OK) {
-
-            when (requestCode) {
-                //return from camera
-                REQUEST_IMAGE_CAPTURE -> {
-
-                    try {
-                        val file = File(imageTemp)
-                        if (file.exists()) {
-
-                            takeCropLauncher.launch(
-                                CropImage.activity(file.toUri())
-                                    .setAspectRatio(1, 1)
-                                        .getIntent(this@EditProfileFragment.requireContext())
-
-                            )
-                        }
-                    } catch (e: TypeCastException) {
-                        Log.e("POLITOMAD", "Camera Exception")
-                    }
-
-                }
-                //return from gallery
-                REQUEST_IMAGE_GALLERY -> {
-
-                    try {
-                        val imageUri = data?.data
-                        takeCropLauncher.launch(
-                                CropImage.activity(imageUri)
-                                        .setAspectRatio(1, 1)
-                                        .getIntent(this@EditProfileFragment.requireContext())
-                        )
-                    } catch (e: TypeCastException) {
-                        Log.e("POLITOMAD", "Gallery Exception")
-                    }
-
-                }
-
-
-                REQUEST_IMAGE_CROP -> {
-                    try {
-
-                        File(CropImage.getActivityResult(data).uri.path!!).copyTo(
-                                File(imageTemp),
-                                overwrite = true
-                        )
-                        imageTempModified = true
-                        photoIV.setImageResource(R.drawable.user_image)
-                        photoIV.setImageURI(imageTemp.toUri())
-
-                    } catch (e: TypeCastException) {
-                        Log.e("POLITOMAD", "Crop Exception")
-                    }
-                }
-
-
-            }
-        }
-    }
 
 
 
@@ -256,9 +127,9 @@ class EditProfileFragment : Fragment() {
                 //saveContent()
 
                 //check if photo is changed -> save photo and delete tmp cached file
-                if (imageTempModified) {
+                val tmpFile = File(imageTemp)
+                if (tmpFile.exists()) {
                     Log.d("POLIMAD", "New photo saved in: $imagePath")
-                    val tmpFile = File(imageTemp)
                     tmpFile.copyTo(File(imagePath), overwrite = true)
                     tmpFile.delete()
                 }
@@ -295,9 +166,9 @@ class EditProfileFragment : Fragment() {
     }
     override fun onDestroy() {
         super.onDestroy()
-        if (imageTempModified) {
-            Log.d("POLIMAD", "ONDestroy: $imagePath")
-            val tmpFile = File(imageTemp)
+        val tmpFile = File(imageTemp)
+        if (tmpFile.exists()) {
+            //Log.d("POLIMAD", "ONDestroy: $imagePath")
             tmpFile.delete()
         }
     }

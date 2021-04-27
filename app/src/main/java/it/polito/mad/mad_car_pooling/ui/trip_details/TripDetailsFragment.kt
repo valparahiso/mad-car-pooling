@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import it.polito.mad.mad_car_pooling.R
 import it.polito.mad.mad_car_pooling.StopAdapter
 import it.polito.mad.mad_car_pooling.TripAdapter

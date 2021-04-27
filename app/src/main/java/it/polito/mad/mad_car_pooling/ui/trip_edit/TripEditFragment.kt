@@ -32,6 +32,7 @@ class TripEditFragment : Fragment() {
     private lateinit var showStopsLayout: LinearLayout
     private lateinit var recyclerView: RecyclerView
     private lateinit var editAdapter: StopAdapterEdit
+    private var isNewTrip: Boolean = false
 
     private var index = -1
 
@@ -85,8 +86,9 @@ class TripEditFragment : Fragment() {
                 recyclerView.adapter = editAdapter
             }
         })
-
-
+        viewModel.newTrip_.observe(viewLifecycleOwner, Observer { newTrip ->
+            isNewTrip = newTrip
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -111,7 +113,7 @@ class TripEditFragment : Fragment() {
                     mutableListOf()
                 )
 
-                val itemNumber = recyclerView.adapter?.itemCount
+                /*val itemNumber = recyclerView.adapter?.itemCount
                 for (i in 0 until itemNumber!!) {
                     var holder = recyclerView.findViewHolderForAdapterPosition(i)
                     if (holder == null) {
@@ -119,7 +121,7 @@ class TripEditFragment : Fragment() {
                     }
 
                     newTrip.addStop(holder!!.itemView.findViewById<TextView>(R.id.departure_stop_edit).text.toString(), holder.itemView.findViewById<TextView>(R.id.date_time_stop_edit).text.toString())
-                }
+                }*/
 
 
                 viewModel.editTrip(newTrip, index)
@@ -134,7 +136,10 @@ class TripEditFragment : Fragment() {
                     }
                 })
 
-                findNavController().navigate(R.id.action_nav_edit_trip_details_to_details_trip_fragment)
+                if(isNewTrip)
+                    findNavController().navigate(R.id.action_nav_edit_trip_details_to_nav_list)
+                else
+                    findNavController().navigate(R.id.action_nav_edit_trip_details_to_details_trip_fragment)
                 true
             }
             R.id.clear -> {

@@ -72,6 +72,7 @@ class TripDetailsFragment : Fragment() {
         }
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.stops_details)
+
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         viewModel.trip_.observe(viewLifecycleOwner, Observer { trip ->
@@ -86,7 +87,7 @@ class TripDetailsFragment : Fragment() {
             if(trip.stops.size == 0) showStopsCard.visibility = GONE //TODO verificare che funzioni e migliorare il design
             else{
                 showStopsCard.visibility = VISIBLE
-                recyclerView.adapter = StopAdapter(trip.stops, this)
+                recyclerView.adapter = StopAdapter(trip.stops.filter { stop -> stop.saved }, this)
             }
 
         })

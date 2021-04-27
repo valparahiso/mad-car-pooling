@@ -61,7 +61,7 @@ class EditProfileFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val imageButton = view.findViewById<ImageButton>(R.id.camera)
+        val imageButton = view.findViewById<ImageButton>(R.id.camera_profile)
         registerForContextMenu(imageButton)
 
         imageButton.setOnClickListener {

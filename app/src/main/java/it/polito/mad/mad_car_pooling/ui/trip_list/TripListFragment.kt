@@ -2,6 +2,7 @@ package it.polito.mad.mad_car_pooling.ui.trip_list
 
 
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,6 +54,7 @@ class TripListFragment : Fragment() {
                 "",
                 mutableListOf()
             )
+            newTrip.carPhoto = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/trip"+newTrip.index+".png"
             viewModel.setTrip(newTrip, true)
             findNavController().navigate(R.id.nav_edit_trip_details)
             /*view ->

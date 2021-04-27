@@ -4,7 +4,7 @@
     <item android:id="@+id/gallery"
         android:title="Gallery"/>
 
-    <item android:id="@+id/camera"
+    <item android:id="@+id/camera_profile"
         android:title="Camera"/>
 
 </menu>

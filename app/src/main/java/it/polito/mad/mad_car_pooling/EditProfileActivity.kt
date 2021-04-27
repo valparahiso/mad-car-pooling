@@ -46,7 +46,7 @@ class EditProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
 
-        val imageButton = findViewById<ImageButton>(R.id.camera)
+        val imageButton = findViewById<ImageButton>(R.id.camera_profile)
         registerForContextMenu(imageButton)
 
         imageButton.setOnClickListener {
@@ -131,7 +131,7 @@ class EditProfileActivity : AppCompatActivity() {
                 openGallery()
                 true
             }
-            R.id.camera -> {
+            R.id.camera_profile -> {
                 dispatchTakePictureIntent()   //open camera
                 true
             }

@@ -107,6 +107,10 @@ class MainActivity : AppCompatActivity() {
                 tripJson.get("description") as String,
                 mutableListOf())
 
+            if(tripListString == jsonObjectTripSet?.toList()){
+                trip.carPhoto = getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/trip"+trip.index+".png"
+            }
+
             if(tripJson.has("stops")) {
                 val stopJSONArray = JSONArray(tripJson.get("stops") as String)
 
@@ -230,7 +234,7 @@ class MainActivity : AppCompatActivity() {
                 openGallery()
                 true
             }
-            R.id.camera -> {
+            R.id.camera_profile -> {
                 dispatchTakePictureIntent()   //open camera
                 true
             }

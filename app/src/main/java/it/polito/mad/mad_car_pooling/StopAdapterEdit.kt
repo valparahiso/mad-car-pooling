@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import it.polito.mad.mad_car_pooling.ui.trip_edit.TripEditFragment
 
 
-class StopAdapterEdit(private val data: List<Stop>, private val fragment_: TripEditFragment) :
+class StopAdapterEdit(var data: MutableList<Stop>, private val fragment_: TripEditFragment) :
     RecyclerView.Adapter<StopAdapterEdit.StopEditViewHolder>() {
     var holderHashMap: HashMap<Int, RecyclerView.ViewHolder> = HashMap()
 
@@ -51,6 +51,5 @@ class StopAdapterEdit(private val data: List<Stop>, private val fragment_: TripE
         val u = data[position]
         holder.bind(u)
     }
-
 
 }

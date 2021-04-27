@@ -28,6 +28,6 @@ data class Trip(
     }
 
     fun addStop(stop_location: String, stop_datetime : String){
-        stops.add(Stop(stop_location, stop_datetime))
+        stops.add(Stop(stop_location, stop_datetime, true))
     }
 }

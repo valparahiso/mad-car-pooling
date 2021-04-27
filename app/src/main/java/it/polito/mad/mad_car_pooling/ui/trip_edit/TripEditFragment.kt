@@ -1,12 +1,13 @@
 package it.polito.mad.mad_car_pooling.ui.trip_edit
 
+import android.R.attr.data
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -14,10 +15,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import it.polito.mad.mad_car_pooling.R
+import it.polito.mad.mad_car_pooling.Stop
 import it.polito.mad.mad_car_pooling.StopAdapterEdit
 import it.polito.mad.mad_car_pooling.Trip
 import it.polito.mad.mad_car_pooling.ui.trip_list.TripListViewModel
 import org.json.JSONObject
+
 
 class TripEditFragment : Fragment() {
 
@@ -34,6 +37,7 @@ class TripEditFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var editAdapter: StopAdapterEdit
     private lateinit var arrowImage: ImageView
+    private lateinit var addButton: ImageView
     private var isNewTrip: Boolean = false
 
     private var index = -1
@@ -61,19 +65,20 @@ class TripEditFragment : Fragment() {
         showStopsLayout = view.findViewById(R.id.show_stops_text_edit)
         showStopsCard = view.findViewById(R.id.show_stops_card_edit)
         arrowImage = view.findViewById(R.id.info_image_edit)
+        addButton = view.findViewById(R.id.add_stop_edit)
 
         showStopsCard.setOnClickListener {
-            if(showStopsLayout.visibility == View.GONE) {
+            if (showStopsLayout.visibility == View.GONE) {
                 showStopsLayout.visibility = View.VISIBLE
                 arrowImage.setImageResource(android.R.drawable.arrow_up_float)
-            }
-            else {
+            } else {
                 showStopsLayout.visibility = View.GONE
                 arrowImage.setImageResource(android.R.drawable.arrow_down_float)
             }
         }
 
         recyclerView = view.findViewById(R.id.stops_details_edit)
+
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         viewModel.trip_.observe(viewLifecycleOwner, Observer { trip ->
@@ -88,16 +93,27 @@ class TripEditFragment : Fragment() {
             departureDateTime.text = trip.departureDateTime
 
             if (trip.stops.size == 0) showStopsCard.visibility =
-                View.GONE //TODO verificare che funzioni e migliorare il design
+                View.GONE
             else {
                 showStopsCard.visibility = View.VISIBLE
-                editAdapter = StopAdapterEdit(trip.stops, this)
+                editAdapter = StopAdapterEdit(trip.stops.filter { stop -> stop.saved }.toMutableList(), this)
                 recyclerView.adapter = editAdapter
             }
         })
         viewModel.newTrip_.observe(viewLifecycleOwner, Observer { newTrip ->
             isNewTrip = newTrip
         })
+
+
+        addButton.setOnClickListener{
+            showStopsLayout.visibility = View.VISIBLE
+            arrowImage.setImageResource(android.R.drawable.arrow_up_float)
+            editAdapter.data.add(0, Stop("", "", false))
+            editAdapter.notifyItemInserted(0)
+            recyclerView.smoothScrollToPosition(0)
+
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -123,15 +139,18 @@ class TripEditFragment : Fragment() {
                 )
 
                 val itemNumber = recyclerView.adapter?.itemCount
-                if(itemNumber != null)
-                for (i in 0 until itemNumber) {
-                    var holder = recyclerView.findViewHolderForAdapterPosition(i)
-                    if (holder == null) {
-                        holder = editAdapter.holderHashMap[i]
-                    }
+                if (itemNumber != null)
+                    for (i in 0 until itemNumber) {
+                        var holder = recyclerView.findViewHolderForAdapterPosition(i)
+                        if (holder == null) {
+                            holder = editAdapter.holderHashMap[i]
+                        }
 
-                    newTrip.addStop(holder!!.itemView.findViewById<TextView>(R.id.departure_stop_edit).text.toString(), holder.itemView.findViewById<TextView>(R.id.date_time_stop_edit).text.toString())
-                }
+                        newTrip.addStop(
+                            holder!!.itemView.findViewById<TextView>(R.id.departure_stop_edit).text.toString(),
+                            holder.itemView.findViewById<TextView>(R.id.date_time_stop_edit).text.toString()
+                        )
+                    }
 
 
                 viewModel.editTrip(newTrip, index)
@@ -146,7 +165,7 @@ class TripEditFragment : Fragment() {
                     }
                 })
 
-                if(isNewTrip)
+                if (isNewTrip)
                     findNavController().navigate(R.id.action_nav_edit_trip_details_to_nav_list)
                 else
                     findNavController().navigate(R.id.action_nav_edit_trip_details_to_details_trip_fragment)

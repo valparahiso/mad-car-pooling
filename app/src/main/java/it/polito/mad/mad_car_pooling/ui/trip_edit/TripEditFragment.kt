@@ -123,13 +123,12 @@ class TripEditFragment : Fragment() {
         val fab: FloatingActionButton = view.findViewById(R.id.fab_delete)
         fab.setOnClickListener{
 
+            //alert per confermare l'eliminazione di un trip
             val alertDialogBuilder = AlertDialog.Builder(activity)
             alertDialogBuilder.setTitle("Confirm Delete")
             alertDialogBuilder.setMessage("Are you sure,You want to delete this trip?")
             alertDialogBuilder.setCancelable(false)
-            alertDialogBuilder.setPositiveButton(
-                "yes"
-            ) { arg0, arg1 -> run{
+            alertDialogBuilder.setPositiveButton("yes") { arg0, arg1 -> run{
                 val sharedPref =
                     requireActivity().getSharedPreferences("trip_list", Context.MODE_PRIVATE)
                 viewModel.deleteTrip(index)
@@ -139,20 +138,19 @@ class TripEditFragment : Fragment() {
                         apply()
                     }
                 })
-                view?.let {
+                view.let {
                     Snackbar.make(it, "Trip deleted", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show()
                 }
                 findNavController().navigate(R.id.action_nav_edit_trip_details_to_nav_list)
             } }
-            alertDialogBuilder.setNegativeButton(
-                "No"
-            ) { dialog, which ->  }
+            alertDialogBuilder.setNegativeButton("No") { dialog, which ->  }
 
+            //creazione dell'alert
             val alertDialog: AlertDialog = alertDialogBuilder.create()
             alertDialog.show()
         }
-        
+
 
         viewModel.newTrip_.observe(viewLifecycleOwner, Observer { newTrip ->
             isNewTrip = newTrip

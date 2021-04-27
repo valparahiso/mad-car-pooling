@@ -40,7 +40,7 @@ class TripListViewModel: ViewModel() {
                     item.price = trip.price
                     item.description = trip.description
                     item.carPhoto = trip.carPhoto
-                    item.stops = trip.stops.filter { stop -> stop.saved }.toMutableList()
+                    item.stops = trip.stops.filter { stop -> stop.saved && !stop.deleted}.toMutableList()
 
                     setTrip(item, false)
                }

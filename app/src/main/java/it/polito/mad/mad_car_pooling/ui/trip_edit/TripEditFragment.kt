@@ -45,7 +45,6 @@ class TripEditFragment : Fragment() {
     private lateinit var editAdapter: StopAdapterEdit
     private lateinit var arrowImage: ImageView
     private lateinit var addButton: ImageView
-    private lateinit var deleteButton: ImageView
     private var isNewTrip: Boolean = false
     private lateinit var carPhoto: String
 
@@ -114,35 +113,31 @@ class TripEditFragment : Fragment() {
             index = trip.index
             departureDateTime.text = trip.departureDateTime
             carPhoto = trip.carPhoto
-            //Log.e("POLITOMAD", carPhoto)
-            //load photo and save status bitmap
             loadImage(carImage, carPhoto)
 
-            editAdapter = StopAdapterEdit(trip.stops.filter { stop -> stop.saved }.toMutableList(), this)
+
+            trip.stops.forEach{ stop-> stop.deleted = false}
+            editAdapter =
+                StopAdapterEdit(trip.stops.filter { stop -> stop.saved}.toMutableList(), this)
             recyclerView.adapter = editAdapter
 
-            if (trip.stops.size == 0) showStopsCard.visibility =
-                View.VISIBLE
-            else {
-                showStopsCard.visibility = View.VISIBLE
-                deleteButton = view.findViewById(R.id.add_stop_edit)
-            }
+
+            showStopsCard.visibility = View.VISIBLE
+
         })
         viewModel.newTrip_.observe(viewLifecycleOwner, Observer { newTrip ->
             isNewTrip = newTrip
         })
 
 
-        addButton.setOnClickListener{
+        addButton.setOnClickListener {
             showStopsLayout.visibility = View.VISIBLE
             arrowImage.setImageResource(android.R.drawable.arrow_up_float)
-            editAdapter.data.add(0, Stop("", "", false))
+            editAdapter.data.add(0, Stop("", "", saved = false, deleted = false))
             editAdapter.notifyItemInserted(0)
             recyclerView.smoothScrollToPosition(0)
 
         }
-
-
 
     }
 
@@ -178,15 +173,22 @@ class TripEditFragment : Fragment() {
                 val itemNumber = recyclerView.adapter?.itemCount
                 if (itemNumber != null)
                     for (i in 0 until itemNumber) {
+
                         var holder = recyclerView.findViewHolderForAdapterPosition(i)
                         if (holder == null) {
                             holder = editAdapter.holderHashMap[i]
                         }
 
-                        newTrip.addStop(
-                            holder!!.itemView.findViewById<TextView>(R.id.departure_stop_edit).text.toString(),
-                            holder.itemView.findViewById<TextView>(R.id.date_time_stop_edit).text.toString()
-                        )
+                        if (holder != null && !editAdapter.data[i].deleted)
+                            newTrip.addStop(
+                                holder.itemView.findViewById<TextView>(R.id.departure_stop_edit).text.toString(),
+                                holder.itemView.findViewById<TextView>(R.id.date_time_stop_edit).text.toString()
+                            )
+                        else if (!editAdapter.data[i].deleted)
+                            newTrip.addStop(
+                                editAdapter.data[i].locationName,
+                                editAdapter.data[i].stopDateTime
+                            )
                     }
 
 
@@ -262,12 +264,12 @@ class TripEditFragment : Fragment() {
     }
 
     //function to load the picture if exist (icon default)
-    private fun loadImage(image: ImageView, path: String){
+    private fun loadImage(image: ImageView, path: String) {
         val file = File(path)
-        if(file.exists()) {
+        if (file.exists()) {
             image.setImageResource(R.drawable.user_image)
             image.setImageURI(path.toUri())
-        }else{
+        } else {
             // probabilmente righe inutili (da ricontrollare)
             val options = BitmapFactory.Options()
             options.inScaled = false

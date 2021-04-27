@@ -5,7 +5,8 @@ import android.util.Log
 data class Stop(
         var locationName: String,
         var stopDateTime: String,
-        var saved: Boolean
+        var saved: Boolean,
+        var deleted: Boolean
 ){
         init {
             Log.d("POLITOMAD_Stop", "Location Name: " + this.locationName)

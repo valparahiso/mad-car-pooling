@@ -3,6 +3,7 @@ package it.polito.mad.mad_car_pooling
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import it.polito.mad.mad_car_pooling.ui.trip_edit.TripEditFragment
@@ -18,6 +19,11 @@ class StopAdapterEdit(var data: MutableList<Stop>, private val fragment_: TripEd
 
         //passare poi un oggetto Trip
         fun bind(u: Stop) {
+
+            val params: ViewGroup.LayoutParams = this.itemView.layoutParams
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            this.itemView.layoutParams = params
+
             location.text = u.locationName
             dateTime.text = u.stopDateTime
 
@@ -31,6 +37,15 @@ class StopAdapterEdit(var data: MutableList<Stop>, private val fragment_: TripEd
 
     override fun onViewAttachedToWindow(holder: StopEditViewHolder) {
         holderHashMap.remove(holder.adapterPosition)
+        holder.itemView.findViewById<ImageView>(R.id.delete_stop_edit).setOnClickListener {
+
+            data[holder.adapterPosition].deleted = true
+
+            val params: ViewGroup.LayoutParams = holder.itemView.layoutParams
+            params.height = 0
+            holder.itemView.layoutParams = params
+
+        }
         super.onViewAttachedToWindow(holder)
     }
 

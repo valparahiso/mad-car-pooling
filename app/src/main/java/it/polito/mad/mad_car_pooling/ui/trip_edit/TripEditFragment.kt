@@ -131,6 +131,8 @@ class TripEditFragment : Fragment() {
         })
         viewModel.newTrip_.observe(viewLifecycleOwner, Observer { newTrip ->
             isNewTrip = newTrip
+            if(isNewTrip)
+                (activity as MainActivity).supportActionBar?.title = "Add new trip"
         })
 
 

@@ -45,8 +45,8 @@
             android:id="@+id/linearLayout0"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:paddingRight="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingRight="10dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -64,48 +64,47 @@
 
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:animateLayoutChanges="true">
+                android:id="@+id/show_stops_card_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingTop="5dp"
+                android:layout_marginBottom="8dp"
+                android:paddingBottom="5dp">
 
-                <!-- A CardView that contains a TextView -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/show_stops_card_edit"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/info_text_edit"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    app:cardBackgroundColor="@color/lightgrey"
-                    app:cardCornerRadius="4dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/info_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="Intermediate Stops "
-                            android:layout_gravity="center_horizontal"/>
-
-                        <LinearLayout
-                            android:id="@+id/show_stops_text_edit"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:visibility="gone" >
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/stops_details_edit"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"/>
-
-                        </LinearLayout>
-                    </LinearLayout>
+                    android:paddingRight="5dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Intermediate Stops"
+                    android:textSize="16sp" />
 
 
-                </androidx.cardview.widget.CardView>
+                <ImageView
+                    android:id="@+id/info_image_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@android:drawable/arrow_down_float" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/show_stops_text_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/stops_details_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
             </LinearLayout>
 
 
@@ -134,7 +133,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:imeActionLabel="Departure Date"
-                    android:inputType="date" />
+                    android:inputType="date"
+
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
 

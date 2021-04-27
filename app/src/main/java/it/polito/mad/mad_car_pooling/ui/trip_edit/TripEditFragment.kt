@@ -3,6 +3,7 @@ package it.polito.mad.mad_car_pooling.ui.trip_edit
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -28,10 +29,11 @@ class TripEditFragment : Fragment() {
     private lateinit var seats: TextView
     private lateinit var price: TextView
     private lateinit var description: TextView
-    private lateinit var showStopsCard: CardView
+    private lateinit var showStopsCard: LinearLayout
     private lateinit var showStopsLayout: LinearLayout
     private lateinit var recyclerView: RecyclerView
     private lateinit var editAdapter: StopAdapterEdit
+    private lateinit var arrowImage: ImageView
     private var isNewTrip: Boolean = false
 
     private var index = -1
@@ -58,10 +60,17 @@ class TripEditFragment : Fragment() {
 
         showStopsLayout = view.findViewById(R.id.show_stops_text_edit)
         showStopsCard = view.findViewById(R.id.show_stops_card_edit)
+        arrowImage = view.findViewById(R.id.info_image_edit)
 
         showStopsCard.setOnClickListener {
-            if (showStopsLayout.visibility == View.GONE) showStopsLayout.visibility = View.VISIBLE
-            else showStopsLayout.visibility = View.GONE
+            if(showStopsLayout.visibility == View.GONE) {
+                showStopsLayout.visibility = View.VISIBLE
+                arrowImage.setImageResource(android.R.drawable.arrow_up_float)
+            }
+            else {
+                showStopsLayout.visibility = View.GONE
+                arrowImage.setImageResource(android.R.drawable.arrow_down_float)
+            }
         }
 
         recyclerView = view.findViewById(R.id.stops_details_edit)
@@ -113,18 +122,16 @@ class TripEditFragment : Fragment() {
                     mutableListOf()
                 )
 
-                /*
-                ho commentato questo pezzo perchè dava un nullPointerException su itemNumber
-                 */
-                /*val itemNumber = recyclerView.adapter?.itemCount
-                for (i in 0 until itemNumber!!) {
+                val itemNumber = recyclerView.adapter?.itemCount
+                if(itemNumber != null)
+                for (i in 0 until itemNumber) {
                     var holder = recyclerView.findViewHolderForAdapterPosition(i)
                     if (holder == null) {
                         holder = editAdapter.holderHashMap[i]
                     }
 
                     newTrip.addStop(holder!!.itemView.findViewById<TextView>(R.id.departure_stop_edit).text.toString(), holder.itemView.findViewById<TextView>(R.id.date_time_stop_edit).text.toString())
-                }*/
+                }
 
 
                 viewModel.editTrip(newTrip, index)

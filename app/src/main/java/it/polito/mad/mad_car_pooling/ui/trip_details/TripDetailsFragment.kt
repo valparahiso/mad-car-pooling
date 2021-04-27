@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.View.*
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -29,8 +30,9 @@ class TripDetailsFragment : Fragment() {
     private lateinit var price : TextView
     private lateinit var description : TextView
     private lateinit var departureDateTime : TextView
-    private lateinit var showStopsCard : CardView
+    private lateinit var showStopsCard : LinearLayout
     private lateinit var showStopsLayout: LinearLayout
+    private lateinit var arrowImage : ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,10 +55,18 @@ class TripDetailsFragment : Fragment() {
         departureDateTime = view.findViewById(R.id.departure_date_time)
         showStopsLayout = view.findViewById(R.id.show_stops_text)
         showStopsCard = view.findViewById(R.id.show_stops_card)
+        arrowImage = view.findViewById(R.id.info_image)
 
         showStopsCard.setOnClickListener{
-            if(showStopsLayout.visibility == GONE) showStopsLayout.visibility = VISIBLE
-            else showStopsLayout.visibility = GONE
+            if(showStopsLayout.visibility == GONE) {
+                showStopsLayout.visibility = VISIBLE
+                arrowImage.setImageResource(android.R.drawable.arrow_up_float)
+            }
+            else {
+                showStopsLayout.visibility = GONE
+                arrowImage.setImageResource(android.R.drawable.arrow_down_float)
+            }
+
         }
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.stops_details)

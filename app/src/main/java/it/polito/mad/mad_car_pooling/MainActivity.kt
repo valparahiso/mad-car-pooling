@@ -112,11 +112,12 @@ class MainActivity : AppCompatActivity() {
                         tripJson.get("seats") as String,
                         tripJson.get("price") as String,
                         tripJson.get("description") as String,
-                        mutableListOf()
+                        mutableListOf(),
+                        tripJson.get("index") as Int
                     )
-                    trip.increment()
+                    trip.setCounter()
 
-                    Log.e("POLITOMAD_trip", trip.carPhoto)
+                    Log.e("POLITOMAD_trip", trip.index.toString())
 
                     /*if (tripListString == jsonObjectTripSet?.toList()) {
                         trip.carPhoto =

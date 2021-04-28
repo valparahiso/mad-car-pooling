@@ -138,10 +138,10 @@ class TripDetailsFragment : Fragment() {
     private fun reloadImageView(image: ImageView, path: String){
         var file = File(path)
         if(file.exists()){
-            image.setImageResource(R.drawable.user_image)
+            image.setImageResource(R.drawable.default_car_image)
             image.setImageURI(file.toUri())
         }else{
-            image.setImageResource(R.drawable.user_image)
+            image.setImageResource(R.drawable.default_car_image)
         }
     }
 }

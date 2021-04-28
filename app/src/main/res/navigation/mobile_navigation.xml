@@ -36,7 +36,8 @@
             app:popUpTo="@id/nav_list" />
         <action
             android:id="@+id/action_nav_edit_trip_details_to_nav_list"
-            app:destination="@id/nav_list" />
+            app:destination="@id/nav_list"
+            app:popUpTo="@id/nav_list" />
     </fragment>
 
     <fragment

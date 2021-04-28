@@ -13,10 +13,24 @@ data class Trip(
         var seats: String,
         var price: String,
         var description: String,
-        var stops : MutableList<Stop>
+        var stops : MutableList<Stop>,
+        var index: Int
 ){
-    private var id_: Int = id
-    val index : Int get() = id_
+
+    constructor(
+        carPhoto: String,
+        departureLocation: String,
+        arrivalLocation: String,
+        departureDateTime: String,
+        duration: String,
+        seats: String,
+        price: String,
+        description: String,
+        stops : MutableList<Stop>) : this(carPhoto,departureLocation, arrivalLocation, departureDateTime, duration, seats, price, description, stops, 0){
+            this.index = id+1
+            id++
+        Log.e("POLITOMAD_trip", this.index.toString())
+    }
 
     companion object {
         @JvmStatic  private var id: Int = 0
@@ -27,12 +41,13 @@ data class Trip(
         id++
     }*/
 
-    fun increment(){
-        id++
+    fun setCounter(){
+        if(id < this.index)
+            id = this.index
     }
-    fun decrement(){
+    /*fun decrement(){
         id++
-    }
+    }*/
 
     fun addStop(stop_location: String, stop_datetime : String){
         stops.add(Stop(stop_location, stop_datetime, true, deleted = false))

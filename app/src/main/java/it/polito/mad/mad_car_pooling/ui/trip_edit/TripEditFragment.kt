@@ -259,9 +259,10 @@ class TripEditFragment : Fragment() {
                         seats.text.toString(),
                         price.text.toString(),
                         description.text.toString(),
-                        mutableListOf()
+                        mutableListOf(),
+                        index
                     )
-                    newTrip.increment()
+                    //newTrip.increment()
 
                     val itemNumber = recyclerView.adapter?.itemCount
                     if (itemNumber != null)
@@ -348,6 +349,7 @@ class TripEditFragment : Fragment() {
             jsonObjectTrip.put("seats", item.seats)
             jsonObjectTrip.put("price", item.price)
             jsonObjectTrip.put("description", item.description)
+            jsonObjectTrip.put("index", item.index)
             val iteratorStops = item.stops?.listIterator()
             for (stop in iteratorStops) {
                 var jsonObjectStop = JSONObject()
@@ -380,7 +382,7 @@ class TripEditFragment : Fragment() {
     private fun loadImage(image: ImageView, path: String) {
         val file = File(path)
         if (file.exists()) {
-            image.setImageResource(R.drawable.user_image)
+            image.setImageResource(R.drawable.default_car_image)
             image.setImageURI(path.toUri())
         } else {
             // probabilmente righe inutili (da ricontrollare)
@@ -388,7 +390,7 @@ class TripEditFragment : Fragment() {
             options.inScaled = false
             //
 
-            image.setImageResource(R.drawable.user_image)
+            image.setImageResource(R.drawable.default_car_image)
         }
     }
 

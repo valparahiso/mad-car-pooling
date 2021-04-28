@@ -127,8 +127,6 @@ class TripEditFragment : Fragment() {
 
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        //askfgaskdjfgsdjfsgajfhvkjsg
-
         val fab: FloatingActionButton = view.findViewById(R.id.fab_delete)
         fab.setOnClickListener{
 
@@ -160,7 +158,6 @@ class TripEditFragment : Fragment() {
             alertDialog.show()
         }
 
-
         viewModel.newTrip_.observe(viewLifecycleOwner, Observer { newTrip ->
             isNewTrip = newTrip
             if (isNewTrip) {
@@ -168,7 +165,6 @@ class TripEditFragment : Fragment() {
                 fab.hide()
             }
         })
-
 
         addButton.setOnClickListener {
             showStopsLayout.visibility = View.VISIBLE
@@ -298,7 +294,8 @@ class TripEditFragment : Fragment() {
                 seats.text = ""
                 price.text = ""
                 description.text = ""
-
+                editAdapter.data.clear()
+                recyclerView.adapter = editAdapter
                 true
             }
             else -> {

@@ -49,6 +49,20 @@ class MainActivity : AppCompatActivity() {
     private var trips: MutableList<Trip> = mutableListOf()
     private lateinit var imageTemp: String
 
+    //code of request (camera or gallery)
+    val REQUEST_IMAGE_CAPTURE = 1       //camera
+    val REQUEST_IMAGE_GALLERY = 2       //gallery
+    val REQUEST_IMAGE_CROP = 3          //crop
+    lateinit var attentionIV: ImageView
+    var takePhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        manageActivityResult(result.resultCode, result.data, REQUEST_IMAGE_CAPTURE)
+    }
+    var takeGalleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        manageActivityResult(result.resultCode, result.data, REQUEST_IMAGE_GALLERY)
+    }
+    var takeCropLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        manageActivityResult(result.resultCode, result.data, REQUEST_IMAGE_CROP)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,22 +97,8 @@ class MainActivity : AppCompatActivity() {
     private fun getTrips() {
         trips.clear()
 
-        //jsonObject for default values (Trip List)
-        /*val jsonObjectTrip = JSONObject()
-        jsonObjectTrip.put("car_photo", "prova")
-        jsonObjectTrip.put("departure_location", "")
-        jsonObjectTrip.put("arrival_location", "")
-        jsonObjectTrip.put("departure_date_time", "")
-        jsonObjectTrip.put("duration", "")
-        jsonObjectTrip.put("seats", "")
-        jsonObjectTrip.put("price", "")
-        jsonObjectTrip.put("description", "")
-        val jsonObjectTripSet: Set<String> = listOf(jsonObjectTrip.toString()).toSet()*/
-
         sharedPref = this.getSharedPreferences("trip_list", Context.MODE_PRIVATE)
         val tripListString = sharedPref.getStringSet("trips", null)?.toList()
-
-        //Log.e("POLIMA_TRIP", tripListString.toString())
 
         if (tripListString != null) {
             if (tripListString.isNotEmpty()) {
@@ -121,13 +121,6 @@ class MainActivity : AppCompatActivity() {
                     )
                     trip.setCounter()
 
-                    Log.e("POLITOMAD_trip", trip.index.toString())
-
-                    /*if (tripListString == jsonObjectTripSet?.toList()) {
-                        trip.carPhoto =
-                            getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/trip" + trip.index + ".png"
-                    }*/
-
                     if (tripJson.has("stops")) {
                         val stopJSONArray = JSONArray(tripJson.get("stops") as String)
 
@@ -144,19 +137,12 @@ class MainActivity : AppCompatActivity() {
                             )
                         }
                     }
-
-                    Log.d("POLITOMAD_Trip", tripJson.toString())
-
-                    //if(tripJson.get("departure_location") as String != "")
                     trips.add(trip);
 
                 }
             }
         }
-
         viewModel.initTrips(trips)
-
-
     }
 
     //open Calendar Dialog for Birth Date and remove focus form the EditText
@@ -243,23 +229,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //code of request (camera or gallery)
-    val REQUEST_IMAGE_CAPTURE = 1       //camera
-    val REQUEST_IMAGE_GALLERY = 2       //gallery
-    val REQUEST_IMAGE_CROP = 3          //crop
-
-    public lateinit var attentionIV: ImageView
-
-    var takePhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        manageActivityResult(result.resultCode, result.data, REQUEST_IMAGE_CAPTURE)
-    }
-    var takeGalleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        manageActivityResult(result.resultCode, result.data, REQUEST_IMAGE_GALLERY)
-    }
-    var takeCropLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        manageActivityResult(result.resultCode, result.data, REQUEST_IMAGE_CROP)
-    }
-
     //permits to create the floating context menu
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
         //val inflater: MenuInflater = menuInflater
@@ -311,30 +280,24 @@ class MainActivity : AppCompatActivity() {
     fun manageActivityResult(resultCode: Int, data: Intent?, requestCode: Int) {
 
         if (resultCode == AppCompatActivity.RESULT_OK) {
-
             when (requestCode) {
                 //return from camera
                 REQUEST_IMAGE_CAPTURE -> {
-
                     try {
                         val file = File(imageTemp)
                         if (file.exists()) {
-
                             takeCropLauncher.launch(
                                 CropImage.activity(file.toUri())
                                     .setAspectRatio(1, 1)
                                     .getIntent(this)
-
                             )
                         }
                     } catch (e: TypeCastException) {
                         Log.e("POLITOMAD", "Camera Exception")
                     }
-
                 }
                 //return from gallery
                 REQUEST_IMAGE_GALLERY -> {
-
                     try {
                         val imageUri = data?.data
                         takeCropLauncher.launch(
@@ -345,9 +308,7 @@ class MainActivity : AppCompatActivity() {
                     } catch (e: TypeCastException) {
                         Log.e("POLITOMAD", "Gallery Exception")
                     }
-
                 }
-
 
                 REQUEST_IMAGE_CROP -> {
                     try {
@@ -364,8 +325,6 @@ class MainActivity : AppCompatActivity() {
                         Log.e("POLITOMAD", "Crop Exception")
                     }
                 }
-
-
             }
         }
     }

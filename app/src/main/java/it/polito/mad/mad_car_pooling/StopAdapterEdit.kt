@@ -1,12 +1,16 @@
 package it.polito.mad.mad_car_pooling
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import it.polito.mad.mad_car_pooling.ui.trip_edit.TripEditFragment
+import java.util.*
+import kotlin.collections.HashMap
 
 
 class StopAdapterEdit(var data: MutableList<Stop>, private val fragment_: TripEditFragment) :
@@ -17,7 +21,10 @@ class StopAdapterEdit(var data: MutableList<Stop>, private val fragment_: TripEd
         private val location: TextView = v.findViewById(R.id.departure_stop_edit)
         private val dateTime: TextView = v.findViewById(R.id.date_time_stop_edit)
 
+        val fragment = fragment_
+
         //passare poi un oggetto Trip
+        @RequiresApi(Build.VERSION_CODES.O)
         fun bind(u: Stop) {
 
             val params: ViewGroup.LayoutParams = this.itemView.layoutParams
@@ -26,6 +33,18 @@ class StopAdapterEdit(var data: MutableList<Stop>, private val fragment_: TripEd
 
             location.text = u.locationName
             dateTime.text = u.stopDateTime
+            val mcalendar: Calendar = Calendar.getInstance()
+
+            val myday = mcalendar.get(Calendar.DAY_OF_MONTH)
+            val myyear = mcalendar.get(Calendar.YEAR)
+            val mymonth = mcalendar.get(Calendar.MONTH)
+            val hour = mcalendar.get(Calendar.HOUR)
+            val minute = mcalendar.get(Calendar.MINUTE)
+
+            dateTime.setOnFocusChangeListener { _, hasFocus -> run {
+                if(hasFocus)
+                    (fragment.activity as MainActivity).openCalendarDialog(dateTime, myyear, mymonth, myday, hour, minute)
+            } }
             
         }
     }

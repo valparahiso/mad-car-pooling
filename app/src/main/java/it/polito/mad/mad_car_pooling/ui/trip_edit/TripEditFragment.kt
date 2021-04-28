@@ -3,12 +3,14 @@ package it.polito.mad.mad_car_pooling.ui.trip_edit
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.text.TextUtils
+import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -23,10 +25,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import it.polito.mad.mad_car_pooling.*
+import it.polito.mad.mad_car_pooling.MainActivity
 import it.polito.mad.mad_car_pooling.ui.trip_list.TripListViewModel
-import org.joda.time.DateTime
+import org.joda.time.format.ISODateTimeFormat.hour
 import org.json.JSONObject
 import java.io.File
+import java.text.DateFormat
 import java.util.*
 
 
@@ -84,13 +88,15 @@ class TripEditFragment : Fragment() {
 
         val mcalendar: Calendar = Calendar.getInstance()
 
-        val day = mcalendar.get(Calendar.DAY_OF_MONTH)
-        val year = mcalendar.get(Calendar.YEAR)
-        val month = mcalendar.get(Calendar.MONTH)
+        val myday = mcalendar.get(Calendar.DAY_OF_MONTH)
+        val myyear = mcalendar.get(Calendar.YEAR)
+        val mymonth = mcalendar.get(Calendar.MONTH)
+        val hour = mcalendar.get(Calendar.HOUR)
+        val minute = mcalendar.get(Calendar.MINUTE)
 
         departureDateTime.setOnFocusChangeListener { _, hasFocus -> run {
             if(hasFocus)
-                openCalendarDialog(year, month, day)
+                (activity as MainActivity).openCalendarDialog(departureDateTime, myyear, mymonth, myday, hour, minute)
         } }
 
         showStopsCard.setOnClickListener {
@@ -193,18 +199,6 @@ class TripEditFragment : Fragment() {
 
     }
 
-    //open Calendar Dialog for Birth Date and remove focus form the EditText
-    @SuppressLint("SetTextI18n")
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun openCalendarDialog(year: Int, month: Int, day: Int){
-        departureDateTime.inputType = InputType.TYPE_NULL
-        val listener = DatePickerDialog.OnDateSetListener { _, Year, monthOfYear, dayOfMonth -> departureDateTime.setText("${dayOfMonth}/${monthOfYear + 1}/${Year}") }
-        val dpDialog = DatePickerDialog(activity as MainActivity, listener, year, month, day)
-        //dpDialog.datePicker.maxDate = DateTime().minusYears(18).millis    //set the maximum date (at least 18 years old)
-        dpDialog.show()
-        departureDateTime.clearFocus()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
         inflater.inflate(R.menu.menu_option_save, menu)
@@ -224,32 +218,32 @@ class TripEditFragment : Fragment() {
                     tmpFile.delete()
                 }
                 var flagPresentValue = true
-                if(TextUtils.isEmpty(departureLocation.text.toString())) {
+                if (TextUtils.isEmpty(departureLocation.text.toString())) {
                     departureLocation.error = "Departure Location is required!"
                     flagPresentValue = false
                 }
-                if(TextUtils.isEmpty(arrivalLocation.text.toString())) {
+                if (TextUtils.isEmpty(arrivalLocation.text.toString())) {
                     arrivalLocation.error = "Arrival Location is required!"
                     flagPresentValue = false
                 }
-                if(TextUtils.isEmpty(departureDateTime.text.toString())) {
+                if (TextUtils.isEmpty(departureDateTime.text.toString())) {
                     departureDateTime.error = "Departure DateTime is required!"
                     flagPresentValue = false
                 }
-                if(TextUtils.isEmpty(duration.text.toString())) {
+                if (TextUtils.isEmpty(duration.text.toString())) {
                     duration.error = "Duration is required!"
                     flagPresentValue = false
                 }
-                if(TextUtils.isEmpty(seats.text.toString())) {
+                if (TextUtils.isEmpty(seats.text.toString())) {
                     seats.error = "Number of seats is required!"
                     flagPresentValue = false
                 }
-                if(TextUtils.isEmpty(price.text.toString())) {
+                if (TextUtils.isEmpty(price.text.toString())) {
                     price.error = "Price is required!"
                     flagPresentValue = false
                 }
 
-                if(flagPresentValue) {
+                if (flagPresentValue) {
                     val newTrip = Trip(
                         carPhoto,
                         departureLocation.text.toString(),
@@ -312,7 +306,7 @@ class TripEditFragment : Fragment() {
                         findNavController().navigate(R.id.action_nav_edit_trip_details_to_details_trip_fragment)
                     }
                 }
-                    true
+                true
             }
             R.id.clear -> {
                 departureLocation.text = ""

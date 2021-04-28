@@ -1,5 +1,8 @@
 package it.polito.mad.mad_car_pooling
 
+import android.annotation.SuppressLint
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -7,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.text.InputType
 import android.util.Log
 import android.view.ContextMenu
 import android.view.MenuItem
@@ -153,6 +157,26 @@ class MainActivity : AppCompatActivity() {
         viewModel.initTrips(trips)
 
 
+    }
+
+    //open Calendar Dialog for Birth Date and remove focus form the EditText
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun openCalendarDialog(departureDateTime: TextView, year: Int, month: Int, day: Int, hour: Int, minute: Int){
+        departureDateTime.inputType = InputType.TYPE_NULL
+        val listener = DatePickerDialog.OnDateSetListener { _, Year, monthOfYear, dayOfMonth ->
+            val listener_time = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                departureDateTime.setText(
+                    "${dayOfMonth}/${monthOfYear + 1}/${Year} ${hourOfDay}:${minute}"
+                )
+            }
+            val tDialog = TimePickerDialog(this, listener_time, hour, minute, true)
+            tDialog.show()
+        }
+        val dpDialog = DatePickerDialog(this, listener, year, month, day)
+        //dpDialog.datePicker.maxDate = DateTime().minusYears(18).millis    //set the maximum date (at least 18 years old)
+        dpDialog.show()
+        departureDateTime.clearFocus()
     }
 
     fun getProfile() {

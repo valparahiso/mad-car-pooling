@@ -5,6 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import it.polito.mad.mad_car_pooling.Trip
+import java.io.File
 
 class TripListViewModel: ViewModel() {
 
@@ -62,6 +63,11 @@ class TripListViewModel: ViewModel() {
           for (item in iterator) {
                if(item.index != index){
                     mutableListTrips.add(item)
+               }
+               else{
+                    val photo = File(item.carPhoto)
+                    if(photo.exists())
+                         photo.delete()
                }
           }
           initTrips(mutableListTrips)

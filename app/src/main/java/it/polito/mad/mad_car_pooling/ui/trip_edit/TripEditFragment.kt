@@ -1,12 +1,16 @@
 package it.polito.mad.mad_car_pooling.ui.trip_edit
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -18,6 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import it.polito.mad.mad_car_pooling.*
 import it.polito.mad.mad_car_pooling.ui.trip_list.TripListViewModel
+import org.joda.time.DateTime
 import org.json.JSONObject
 import java.io.File
 
@@ -321,4 +326,3 @@ class TripEditFragment : Fragment() {
 
 }
 
-  

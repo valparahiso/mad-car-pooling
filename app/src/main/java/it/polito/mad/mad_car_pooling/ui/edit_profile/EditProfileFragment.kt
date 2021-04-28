@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.text.InputType
+import android.text.TextUtils
 import android.util.Log
 import android.view.*
 import android.widget.EditText
@@ -135,22 +136,50 @@ class EditProfileFragment : Fragment() {
                     tmpFile.delete()
                 }
 
-                val newProfile = Profile(
+                var flagPresentValue = true
+
+                if(TextUtils.isEmpty(fullNameET.text.toString())) {
+                    fullNameET.error = "Full name is required!"
+                    flagPresentValue = false
+                }
+                if (TextUtils.isEmpty(nicknameET.text.toString())) {
+                    nicknameET.error = "Nick name is required!"
+                    flagPresentValue = false
+                }
+                if (TextUtils.isEmpty(emailET.text.toString())) {
+                    emailET.error = "Email is required!"
+                    flagPresentValue = false
+                }
+                if (TextUtils.isEmpty(locationET.text.toString())) {
+                    locationET.error = "Location is required!"
+                    flagPresentValue = false
+                }
+
+                if (TextUtils.isEmpty(birthET.text.toString())) {
+                    birthET.error = "Date of birth is required!"
+                    flagPresentValue = false
+                }
+
+                if(flagPresentValue) {
+
+                    val newProfile = Profile(
                         fullNameET.text.toString(),
                         nicknameET.text.toString(),
                         locationET.text.toString(),
                         emailET.text.toString(),
                         birthET.text.toString(),
-                        imagePath)
+                        imagePath
+                    )
 
-                viewModel.setProfile(newProfile)
+                    viewModel.setProfile(newProfile)
 
-                (requireActivity() as MainActivity).saveProfile(newProfile)
-                view?.let {
-                    Snackbar.make(it, "Profile updated", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show()
+                    (requireActivity() as MainActivity).saveProfile(newProfile)
+                    view?.let {
+                        Snackbar.make(it, "Profile updated", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                    }
+                    findNavController().navigate(R.id.action_nav_edit_profile_to_show_profile_fragment)
                 }
-                findNavController().navigate(R.id.action_nav_edit_profile_to_show_profile_fragment)
                 true
             }
             R.id.clear -> {

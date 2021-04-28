@@ -127,28 +127,7 @@ class TripEditFragment : Fragment() {
 
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        viewModel.trip_.observe(viewLifecycleOwner, Observer { trip ->
-            // Update the selected filters UI
-            departureLocation.text = trip.departureLocation
-            arrivalLocation.text = trip.arrivalLocation
-            duration.text = trip.duration
-            seats.text = trip.seats
-            price.text = trip.price
-            description.text = trip.description
-            index = trip.index
-            departureDateTime.text = trip.departureDateTime
-            carPhoto = trip.carPhoto
-            loadImage(carImage, carPhoto)
-
-
-            trip.stops.forEach { stop -> stop.deleted = false }
-            editAdapter =
-                StopAdapterEdit(trip.stops.filter { stop -> stop.saved }.toMutableList(), this)
-            recyclerView.adapter = editAdapter
-
-            showStopsCard.visibility = View.VISIBLE
-
-        })
+        //askfgaskdjfgsdjfsgajfhvkjsg
 
         val fab: FloatingActionButton = view.findViewById(R.id.fab_delete)
         fab.setOnClickListener{
@@ -326,6 +305,63 @@ class TripEditFragment : Fragment() {
                 super.onOptionsItemSelected(item)
             }
         }
+    }
+
+    //save state of the activity
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("departureLocation", departureLocation.text.toString())
+        outState.putString("arrivalLocation",arrivalLocation.text.toString())
+        outState.putString("duration", duration.text.toString())
+        outState.putString("seats", seats.text.toString())
+        outState.putString("price", price.text.toString())
+        outState.putString("description", description.text.toString())
+        outState.putString("index", index.toString())
+        outState.putString("departureDateTime", departureDateTime.toString())
+        outState.putString("carPhoto", carPhoto)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState != null) {
+            departureLocation.setText(savedInstanceState.getString("departureLocation"))
+            arrivalLocation.setText(savedInstanceState.getString("arrivalLocation"))
+            duration.setText(savedInstanceState.getString("duration"))
+            seats.setText(savedInstanceState.getString("seats"))
+            price.setText(savedInstanceState.getString("price"))
+            description.setText(savedInstanceState.getString("description"))
+            index = savedInstanceState.getString("index")?.toInt()!!
+            departureDateTime.setText(savedInstanceState.getString("departureDateTime"))
+            carPhoto=(savedInstanceState.getString("carPhoto"))!!
+            loadImage(carImage, carPhoto)
+        }
+        else
+            setEditTextTrip()
+    }
+
+    private fun  setEditTextTrip() {
+        viewModel.trip_.observe(viewLifecycleOwner, Observer { trip ->
+            // Update the selected filters UI
+            departureLocation.text = trip.departureLocation
+            arrivalLocation.text = trip.arrivalLocation
+            duration.text = trip.duration
+            seats.text = trip.seats
+            price.text = trip.price
+            description.text = trip.description
+            index = trip.index
+            departureDateTime.text = trip.departureDateTime
+            carPhoto = trip.carPhoto
+            loadImage(carImage, carPhoto)
+
+
+            trip.stops.forEach { stop -> stop.deleted = false }
+            editAdapter =
+                StopAdapterEdit(trip.stops.filter { stop -> stop.saved }.toMutableList(), this)
+            recyclerView.adapter = editAdapter
+
+            showStopsCard.visibility = View.VISIBLE
+
+        })
     }
 
     private fun setTrips(trips: MutableList<Trip>): Set<String> {

@@ -50,7 +50,6 @@ class ShowProfileFragment : Fragment() {
         photo = view.findViewById(R.id.show_photo)
         birth = view.findViewById(R.id.birthDate)
 
-
         fullName.setOnClickListener{ (it as TextView).maxLines = if(it.maxLines==10) 1 else 10 }
         nickName.setOnClickListener{ (it as TextView).maxLines = if(it.maxLines==10) 1 else 10 }
         email.setOnClickListener{ (it as TextView).maxLines = if(it.maxLines==10) 1 else 10 }

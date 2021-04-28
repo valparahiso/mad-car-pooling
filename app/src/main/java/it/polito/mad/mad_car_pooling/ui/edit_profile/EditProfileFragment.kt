@@ -50,9 +50,9 @@ class EditProfileFragment : Fragment() {
 
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         setHasOptionsMenu(true)
@@ -92,17 +92,53 @@ class EditProfileFragment : Fragment() {
 
         imageTemp = context?.externalCacheDir.toString() + "/tmp.png"
         imagePath = arguments?.getString("imagePath").toString();
-        setEditText()
+
+        //setEditText()
 
         //load photo and save status bitmap
         loadImage(photoIV, imagePath)
     }
+
+    //save state of the activity
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("fullname", fullNameET.text.toString())
+        outState.putString("nickname", nicknameET.text.toString())
+        outState.putString("email", emailET.text.toString())
+        outState.putString("location", locationET.text.toString())
+        outState.putString("birth", birthET.text.toString())
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState != null) {
+            fullNameET.setText(savedInstanceState.getString("fullname"))
+            nicknameET.setText(savedInstanceState.getString("nickname"))
+            emailET.setText(savedInstanceState.getString("email"))
+            locationET.setText(savedInstanceState.getString("location"))
+            birthET.setText(savedInstanceState.getString("birth"))
+        }
+        else
+            setEditText()
+    }
+    //restore state of the activity
+    /*override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        fullName.text = savedInstanceState?.getString("fullname")
+        nickName.text = savedInstanceState?.getString("nickname")
+        email.text = savedInstanceState?.getString("email")
+        location.text = savedInstanceState?.getString("location")
+        birth.text = savedInstanceState?.getString("birth")
+    }*/
+
     //open Calendar Dialog for Birth Date and remove focus form the EditText
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun openCalendarDialog(year: Int, month: Int, day: Int){
         birthET.inputType = InputType.TYPE_NULL
-        val listener = DatePickerDialog.OnDateSetListener { _, Year, monthOfYear, dayOfMonth -> birthET.setText("${dayOfMonth}/${monthOfYear + 1}/${Year}") }
+        val listener = DatePickerDialog.OnDateSetListener { _, Year, monthOfYear, dayOfMonth -> birthET.setText(
+            "${dayOfMonth}/${monthOfYear + 1}/${Year}"
+        ) }
         val dpDialog = DatePickerDialog(activity as MainActivity, listener, year, month, day)
         dpDialog.datePicker.maxDate = DateTime().minusYears(18).millis    //set the maximum date (at least 18 years old)
         dpDialog.show()
@@ -138,7 +174,7 @@ class EditProfileFragment : Fragment() {
 
                 var flagPresentValue = true
 
-                if(TextUtils.isEmpty(fullNameET.text.toString())) {
+                if (TextUtils.isEmpty(fullNameET.text.toString())) {
                     fullNameET.error = "Full name is required!"
                     flagPresentValue = false
                 }
@@ -160,7 +196,7 @@ class EditProfileFragment : Fragment() {
                     flagPresentValue = false
                 }
 
-                if(flagPresentValue) {
+                if (flagPresentValue) {
 
                     val newProfile = Profile(
                         fullNameET.text.toString(),

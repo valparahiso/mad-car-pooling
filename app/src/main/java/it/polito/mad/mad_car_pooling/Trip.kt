@@ -45,10 +45,6 @@ data class Trip(
         if(id < this.index)
             id = this.index
     }
-    /*fun decrement(){
-        id++
-    }*/
-
     fun addStop(stop_location: String, stop_datetime : String){
         stops.add(Stop(stop_location, stop_datetime, true, deleted = false))
     }

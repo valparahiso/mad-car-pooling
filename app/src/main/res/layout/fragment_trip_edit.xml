@@ -166,7 +166,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:imeActionLabel="Estimate trip duration" />
+                    android:imeActionLabel="Estimate trip duration"
+                    android:inputType="numberDecimal"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -180,7 +181,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:imeActionLabel="Available Seats" />
+                    android:imeActionLabel="Available Seats"
+                    android:inputType="numberDecimal"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -194,7 +196,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:imeActionLabel="Price" />
+                    android:imeActionLabel="Price"
+                    android:inputType="numberDecimal"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 

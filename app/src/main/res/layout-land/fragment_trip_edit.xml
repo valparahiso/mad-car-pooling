@@ -9,14 +9,12 @@
     <ImageView
         android:id="@+id/car_photo_edit"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
 
         android:layout_alignParentTop="true"
 
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
         android:padding="16dp"
         android:src="@drawable/default_car_image"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -165,7 +163,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:imeActionLabel="Estimate trip duration" />
+                    android:imeActionLabel="Estimate trip duration"
+                    android:inputType="numberDecimal"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -179,7 +178,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:imeActionLabel="Available Seats" />
+                    android:imeActionLabel="Available Seats"
+                    android:inputType="numberDecimal"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -193,7 +193,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:imeActionLabel="Price" />
+                    android:imeActionLabel="Price"
+                    android:inputType="numberDecimal"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 

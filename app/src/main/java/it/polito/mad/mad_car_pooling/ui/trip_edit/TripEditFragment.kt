@@ -259,9 +259,10 @@ class TripEditFragment : Fragment() {
                         seats.text.toString(),
                         price.text.toString(),
                         description.text.toString(),
-                        mutableListOf()
+                        mutableListOf(),
+                        index
                     )
-                    newTrip.increment()
+                    //newTrip.increment()
 
                     val itemNumber = recyclerView.adapter?.itemCount
                     if (itemNumber != null)
@@ -348,6 +349,7 @@ class TripEditFragment : Fragment() {
             jsonObjectTrip.put("seats", item.seats)
             jsonObjectTrip.put("price", item.price)
             jsonObjectTrip.put("description", item.description)
+            jsonObjectTrip.put("index", item.index)
             val iteratorStops = item.stops?.listIterator()
             for (stop in iteratorStops) {
                 var jsonObjectStop = JSONObject()

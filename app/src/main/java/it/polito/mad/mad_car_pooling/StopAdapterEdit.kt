@@ -27,25 +27,31 @@ class StopAdapterEdit(var data: MutableList<Stop>, private val fragment_: TripEd
         @RequiresApi(Build.VERSION_CODES.O)
         fun bind(u: Stop) {
 
-            val params: ViewGroup.LayoutParams = this.itemView.layoutParams
-            params.height = ViewGroup.LayoutParams.WRAP_CONTENT
-            this.itemView.layoutParams = params
+            if(!u.deleted) {
+                val params: ViewGroup.LayoutParams = this.itemView.layoutParams
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                this.itemView.layoutParams = params
 
-            location.text = u.locationName
-            dateTime.text = u.stopDateTime
-            val mcalendar: Calendar = Calendar.getInstance()
+                location.text = u.locationName
+                dateTime.text = u.stopDateTime
+                val mcalendar: Calendar = Calendar.getInstance()
 
-            val myday = mcalendar.get(Calendar.DAY_OF_MONTH)
-            val myyear = mcalendar.get(Calendar.YEAR)
-            val mymonth = mcalendar.get(Calendar.MONTH)
-            val hour = mcalendar.get(Calendar.HOUR)
-            val minute = mcalendar.get(Calendar.MINUTE)
+                val myday = mcalendar.get(Calendar.DAY_OF_MONTH)
+                val myyear = mcalendar.get(Calendar.YEAR)
+                val mymonth = mcalendar.get(Calendar.MONTH)
+                val hour = mcalendar.get(Calendar.HOUR)
+                val minute = mcalendar.get(Calendar.MINUTE)
 
-            dateTime.setOnFocusChangeListener { _, hasFocus -> run {
-                if(hasFocus)
-                    (fragment.activity as MainActivity).openCalendarDialog(dateTime, myyear, mymonth, myday, hour, minute)
-            } }
-            
+                dateTime.setOnFocusChangeListener { _, hasFocus -> run {
+                    if(hasFocus)
+                        (fragment.activity as MainActivity).openCalendarDialog(dateTime, myyear, mymonth, myday, hour, minute)
+                } }
+            }
+            else{
+                val params: ViewGroup.LayoutParams = this.itemView.layoutParams
+                params.height = 0
+                this.itemView.layoutParams = params
+            }
         }
     }
 
@@ -81,6 +87,7 @@ class StopAdapterEdit(var data: MutableList<Stop>, private val fragment_: TripEd
         return StopEditViewHolder(v, fragment_)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: StopEditViewHolder, position: Int) {
         val u = data[position]
         holder.bind(u)

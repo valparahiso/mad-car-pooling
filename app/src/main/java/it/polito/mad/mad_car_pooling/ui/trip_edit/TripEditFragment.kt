@@ -53,6 +53,7 @@ class TripEditFragment : Fragment() {
     private lateinit var addButton: ImageView
     private var isNewTrip: Boolean = false
     private lateinit var carPhoto: String
+    private lateinit var infoStops: TextView
 
     private var index = -1
     private var saveFlag = false
@@ -81,6 +82,7 @@ class TripEditFragment : Fragment() {
         departureDateTime = view.findViewById(R.id.departure_date_time_edit)
         carImage = view.findViewById(R.id.car_photo_edit)
 
+        infoStops = view.findViewById(R.id.info_text_edit)
         showStopsLayout = view.findViewById(R.id.show_stops_text_edit)
         showStopsCard = view.findViewById(R.id.show_stops_card_edit)
         arrowImage = view.findViewById(R.id.info_image_edit)
@@ -103,6 +105,8 @@ class TripEditFragment : Fragment() {
             if (showStopsLayout.visibility == View.GONE) {
                 showStopsLayout.visibility = View.VISIBLE
                 arrowImage.setImageResource(android.R.drawable.arrow_up_float)
+                val toast = Toast.makeText(activity, "All fields of stops are required to be saved", Toast.LENGTH_LONG)
+                toast.show()
             } else {
                 showStopsLayout.visibility = View.GONE
                 arrowImage.setImageResource(android.R.drawable.arrow_down_float)
@@ -141,7 +145,6 @@ class TripEditFragment : Fragment() {
             editAdapter =
                 StopAdapterEdit(trip.stops.filter { stop -> stop.saved }.toMutableList(), this)
             recyclerView.adapter = editAdapter
-
 
             showStopsCard.visibility = View.VISIBLE
 

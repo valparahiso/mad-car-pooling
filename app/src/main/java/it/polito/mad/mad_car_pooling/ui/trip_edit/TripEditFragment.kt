@@ -8,6 +8,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.InputType
 import android.text.TextUtils
 import android.text.format.DateFormat.is24HourFormat
@@ -32,6 +33,7 @@ import org.json.JSONObject
 import java.io.File
 import java.text.DateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class TripEditFragment : Fragment() {
@@ -257,9 +259,7 @@ class TripEditFragment : Fragment() {
                                 )
                         }
 
-
                     viewModel.editTrip(newTrip, index)
-
 
                     val sharedPref =
                         requireActivity().getSharedPreferences("trip_list", Context.MODE_PRIVATE)
@@ -316,6 +316,32 @@ class TripEditFragment : Fragment() {
         outState.putString("index", index.toString())
         outState.putString("departureDateTime", departureDateTime.text.toString())
         outState.putString("carPhoto", carPhoto)
+        val newTrip = mutableListOf<Stop>()
+        val itemNumber = recyclerView.adapter?.itemCount
+        if (itemNumber != null)
+            for (i in 0 until itemNumber) {
+
+                var holder = recyclerView.findViewHolderForAdapterPosition(i)
+                if (holder == null) {
+                    holder = editAdapter.holderHashMap[i]
+                }
+
+                if (holder != null && !editAdapter.data[i].deleted)
+                    newTrip.add(i, Stop(
+                        holder.itemView.findViewById<TextView>(R.id.departure_stop_edit).text.toString(),
+                        holder.itemView.findViewById<TextView>(R.id.date_time_stop_edit).text.toString(),
+                        editAdapter.data[i].saved,
+                        editAdapter.data[i].deleted
+                    ))
+                else if (!editAdapter.data[i].deleted)
+                    newTrip.add(i, Stop(
+                        editAdapter.data[i].locationName,
+                        editAdapter.data[i].stopDateTime,
+                        editAdapter.data[i].saved,
+                        editAdapter.data[i].deleted
+                    ))
+            }
+        outState.putParcelableArrayList("dataStop", ArrayList(newTrip))
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -331,6 +357,9 @@ class TripEditFragment : Fragment() {
             departureDateTime.setText(savedInstanceState.getString("departureDateTime"))
             carPhoto=(savedInstanceState.getString("carPhoto"))!!
             loadImage(carImage, carPhoto)
+            editAdapter = StopAdapterEdit(savedInstanceState.getParcelableArrayList<Stop>("dataStop")?.toMutableList()!!, this)
+            recyclerView.adapter = editAdapter
+            //editAdapter.data = savedInstanceState.getParcelableArrayList<Stop>("data")?.toMutableList()!!
         }
         else
             setEditTextTrip()

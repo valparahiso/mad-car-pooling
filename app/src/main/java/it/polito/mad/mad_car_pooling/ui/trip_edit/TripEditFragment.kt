@@ -196,27 +196,27 @@ class TripEditFragment : Fragment() {
                 }
                 var flagPresentValue = true
                 if(TextUtils.isEmpty(departureLocation.text.toString())) {
-                    departureLocation.error = "Full name is required!"
+                    departureLocation.error = "Departure Location is required!"
                     flagPresentValue = false
                 }
                 if(TextUtils.isEmpty(arrivalLocation.text.toString())) {
-                    arrivalLocation.error = "Full name is required!"
+                    arrivalLocation.error = "Arrival Location is required!"
                     flagPresentValue = false
                 }
                 if(TextUtils.isEmpty(departureDateTime.text.toString())) {
-                    departureDateTime.error = "Full name is required!"
+                    departureDateTime.error = "Departure DateTime is required!"
                     flagPresentValue = false
                 }
                 if(TextUtils.isEmpty(duration.text.toString())) {
-                    duration.error = "Full name is required!"
+                    duration.error = "Duration is required!"
                     flagPresentValue = false
                 }
                 if(TextUtils.isEmpty(seats.text.toString())) {
-                    seats.error = "Full name is required!"
+                    seats.error = "Number of seats is required!"
                     flagPresentValue = false
                 }
                 if(TextUtils.isEmpty(price.text.toString())) {
-                    price.error = "Full name is required!"
+                    price.error = "Price is required!"
                     flagPresentValue = false
                 }
 

@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="@color/lightblue"
+        android:textColor="?android:attr/colorForeground"
         android:text="Trip list is empty!"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"

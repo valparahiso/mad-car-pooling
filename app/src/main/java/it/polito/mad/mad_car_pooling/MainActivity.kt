@@ -78,13 +78,13 @@ class MainActivity : AppCompatActivity() {
         //jsonObject for default values (Trip List)
         val jsonObjectTrip = JSONObject()
         jsonObjectTrip.put("car_photo", "")
-        jsonObjectTrip.put("departure_location", "Torino")
-        jsonObjectTrip.put("arrival_location", "Milano")
-        jsonObjectTrip.put("departure_date_time", "20/02/2012 15:20")
-        jsonObjectTrip.put("duration", "10")
-        jsonObjectTrip.put("seats", "12")
-        jsonObjectTrip.put("price", "12")
-        jsonObjectTrip.put("description", "descr")
+        jsonObjectTrip.put("departure_location", "")
+        jsonObjectTrip.put("arrival_location", "")
+        jsonObjectTrip.put("departure_date_time", "")
+        jsonObjectTrip.put("duration", "")
+        jsonObjectTrip.put("seats", "")
+        jsonObjectTrip.put("price", "")
+        jsonObjectTrip.put("description", "")
         val jsonObjectTripSet: Set<String> = listOf(jsonObjectTrip.toString()).toSet()
 
         sharedPref = this.getSharedPreferences("trip_list", Context.MODE_PRIVATE)
@@ -129,7 +129,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             Log.d("POLITOMAD_Trip", tripJson.toString())
-            trips.add(trip);
+            if(tripJson.get("departure_location") as String != "")
+                trips.add(trip);
         }
 
         viewModel.initTrips(trips)

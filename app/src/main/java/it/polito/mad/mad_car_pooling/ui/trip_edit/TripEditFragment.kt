@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.text.InputType
+import android.text.TextUtils
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -193,67 +194,97 @@ class TripEditFragment : Fragment() {
                     tmpFile.copyTo(File(carPhoto), overwrite = true)
                     tmpFile.delete()
                 }
+                var flagPresentValue = true
+                if(TextUtils.isEmpty(departureLocation.text.toString())) {
+                    departureLocation.error = "Full name is required!"
+                    flagPresentValue = false
+                }
+                if(TextUtils.isEmpty(arrivalLocation.text.toString())) {
+                    arrivalLocation.error = "Full name is required!"
+                    flagPresentValue = false
+                }
+                if(TextUtils.isEmpty(departureDateTime.text.toString())) {
+                    departureDateTime.error = "Full name is required!"
+                    flagPresentValue = false
+                }
+                if(TextUtils.isEmpty(duration.text.toString())) {
+                    duration.error = "Full name is required!"
+                    flagPresentValue = false
+                }
+                if(TextUtils.isEmpty(seats.text.toString())) {
+                    seats.error = "Full name is required!"
+                    flagPresentValue = false
+                }
+                if(TextUtils.isEmpty(price.text.toString())) {
+                    price.error = "Full name is required!"
+                    flagPresentValue = false
+                }
+                if(TextUtils.isEmpty(description.text.toString())) {
+                    description.error = "Full name is required!"
+                    flagPresentValue = false
+                }
+                if(flagPresentValue) {
+                    val newTrip = Trip(
+                        carPhoto,
+                        departureLocation.text.toString(),
+                        arrivalLocation.text.toString(),
+                        departureDateTime.text.toString(),
+                        duration.text.toString(),
+                        seats.text.toString(),
+                        price.text.toString(),
+                        description.text.toString(),
+                        mutableListOf()
+                    )
 
-                val newTrip = Trip(
-                    carPhoto,
-                    departureLocation.text.toString(),
-                    arrivalLocation.text.toString(),
-                    departureDateTime.text.toString(),
-                    duration.text.toString(),
-                    seats.text.toString(),
-                    price.text.toString(),
-                    description.text.toString(),
-                    mutableListOf()
-                )
+                    val itemNumber = recyclerView.adapter?.itemCount
+                    if (itemNumber != null)
+                        for (i in 0 until itemNumber) {
 
-                val itemNumber = recyclerView.adapter?.itemCount
-                if (itemNumber != null)
-                    for (i in 0 until itemNumber) {
+                            var holder = recyclerView.findViewHolderForAdapterPosition(i)
+                            if (holder == null) {
+                                holder = editAdapter.holderHashMap[i]
+                            }
 
-                        var holder = recyclerView.findViewHolderForAdapterPosition(i)
-                        if (holder == null) {
-                            holder = editAdapter.holderHashMap[i]
+                            if (holder != null && !editAdapter.data[i].deleted)
+                                newTrip.addStop(
+                                    holder.itemView.findViewById<TextView>(R.id.departure_stop_edit).text.toString(),
+                                    holder.itemView.findViewById<TextView>(R.id.date_time_stop_edit).text.toString()
+                                )
+                            else if (!editAdapter.data[i].deleted)
+                                newTrip.addStop(
+                                    editAdapter.data[i].locationName,
+                                    editAdapter.data[i].stopDateTime
+                                )
                         }
 
-                        if (holder != null && !editAdapter.data[i].deleted)
-                            newTrip.addStop(
-                                holder.itemView.findViewById<TextView>(R.id.departure_stop_edit).text.toString(),
-                                holder.itemView.findViewById<TextView>(R.id.date_time_stop_edit).text.toString()
-                            )
-                        else if (!editAdapter.data[i].deleted)
-                            newTrip.addStop(
-                                editAdapter.data[i].locationName,
-                                editAdapter.data[i].stopDateTime
-                            )
+
+                    viewModel.editTrip(newTrip, index)
+
+
+                    val sharedPref =
+                        requireActivity().getSharedPreferences("trip_list", Context.MODE_PRIVATE)
+                    viewModel.trips.observe(viewLifecycleOwner, Observer { list ->
+                        with(sharedPref.edit()) {
+                            putStringSet("trips", setTrips(list))
+                            apply()
+                        }
+                    })
+
+                    if (isNewTrip) {
+                        view?.let {
+                            Snackbar.make(it, "Trip created", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show()
+                        }
+                        findNavController().navigate(R.id.action_nav_edit_trip_details_to_nav_list)
+                    } else {
+                        view?.let {
+                            Snackbar.make(it, "Trip modified", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show()
+                        }
+                        findNavController().navigate(R.id.action_nav_edit_trip_details_to_details_trip_fragment)
                     }
-
-
-                viewModel.editTrip(newTrip, index)
-
-
-                val sharedPref =
-                    requireActivity().getSharedPreferences("trip_list", Context.MODE_PRIVATE)
-                viewModel.trips.observe(viewLifecycleOwner, Observer { list ->
-                    with(sharedPref.edit()) {
-                        putStringSet("trips", setTrips(list))
-                        apply()
-                    }
-                })
-
-                if (isNewTrip) {
-                    view?.let {
-                        Snackbar.make(it, "Trip created", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show()
-                    }
-                    findNavController().navigate(R.id.action_nav_edit_trip_details_to_nav_list)
-                } else {
-                    view?.let {
-                        Snackbar.make(it, "Trip modified", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show()
-                    }
-                    findNavController().navigate(R.id.action_nav_edit_trip_details_to_details_trip_fragment)
                 }
-                true
+                    true
             }
             R.id.clear -> {
                 departureLocation.text = ""

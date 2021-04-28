@@ -85,6 +85,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        setHeader(findViewById<NavigationView>(R.id.nav_view).getHeaderView(0))
     }
 
     override fun onSupportNavigateUp(): Boolean {

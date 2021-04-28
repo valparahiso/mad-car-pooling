@@ -174,7 +174,6 @@ class TripEditFragment : Fragment() {
             editAdapter.data.add(0, Stop("", "", saved = false, deleted = false))
             editAdapter.notifyItemInserted(0)
             recyclerView.smoothScrollToPosition(0)
-
         }
 
     }
@@ -358,6 +357,7 @@ class TripEditFragment : Fragment() {
             carPhoto=(savedInstanceState.getString("carPhoto"))!!
             loadImage(carImage, carPhoto)
             editAdapter = StopAdapterEdit(savedInstanceState.getParcelableArrayList<Stop>("dataStop")?.toMutableList()!!, this)
+            editAdapter.data.sortBy { it.stopDateTime }
             recyclerView.adapter = editAdapter
             //editAdapter.data = savedInstanceState.getParcelableArrayList<Stop>("data")?.toMutableList()!!
         }
@@ -383,6 +383,7 @@ class TripEditFragment : Fragment() {
             trip.stops.forEach { stop -> stop.deleted = false }
             editAdapter =
                 StopAdapterEdit(trip.stops.filter { stop -> stop.saved }.toMutableList(), this)
+            editAdapter.data.sortBy { it.stopDateTime }
             recyclerView.adapter = editAdapter
 
             showStopsCard.visibility = View.VISIBLE
@@ -418,7 +419,6 @@ class TripEditFragment : Fragment() {
             }
 
             jsonObjectTrip.put("stops", jsonObjectStopSet)
-
 
             jsonObjectTripSet.add(jsonObjectTrip.toString())
         }

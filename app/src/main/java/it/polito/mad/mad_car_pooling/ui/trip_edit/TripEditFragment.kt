@@ -49,6 +49,7 @@ class TripEditFragment : Fragment() {
     private lateinit var carPhoto: String
 
     private var index = -1
+    private var saveFlag = false
 
     private lateinit var imageTemp: String
 
@@ -188,6 +189,8 @@ class TripEditFragment : Fragment() {
         return when (item.itemId) {
             R.id.save -> {
 
+                saveFlag = true
+
                 val tmpFile = File(imageTemp)
                 if (tmpFile.exists()) {
                     Log.d("POLIMAD", "New photo saved in: $carPhoto")
@@ -232,6 +235,7 @@ class TripEditFragment : Fragment() {
                         description.text.toString(),
                         mutableListOf()
                     )
+                    newTrip.increment()
 
                     val itemNumber = recyclerView.adapter?.itemCount
                     if (itemNumber != null)
@@ -334,6 +338,16 @@ class TripEditFragment : Fragment() {
 
         return jsonObjectTripSet.toSet()
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val tmpFile = File(imageTemp)
+        if (tmpFile.exists()) {
+            tmpFile.delete()
+        }
+
+        
     }
 
     //function to load the picture if exist (icon default)

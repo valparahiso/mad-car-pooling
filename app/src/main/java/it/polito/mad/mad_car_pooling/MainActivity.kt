@@ -80,8 +80,8 @@ class MainActivity : AppCompatActivity() {
         trips.clear()
 
         //jsonObject for default values (Trip List)
-        val jsonObjectTrip = JSONObject()
-        jsonObjectTrip.put("car_photo", "")
+        /*val jsonObjectTrip = JSONObject()
+        jsonObjectTrip.put("car_photo", "prova")
         jsonObjectTrip.put("departure_location", "")
         jsonObjectTrip.put("arrival_location", "")
         jsonObjectTrip.put("departure_date_time", "")
@@ -89,52 +89,64 @@ class MainActivity : AppCompatActivity() {
         jsonObjectTrip.put("seats", "")
         jsonObjectTrip.put("price", "")
         jsonObjectTrip.put("description", "")
-        val jsonObjectTripSet: Set<String> = listOf(jsonObjectTrip.toString()).toSet()
+        val jsonObjectTripSet: Set<String> = listOf(jsonObjectTrip.toString()).toSet()*/
 
         sharedPref = this.getSharedPreferences("trip_list", Context.MODE_PRIVATE)
+        val tripListString = sharedPref.getStringSet("trips", null)?.toList()
 
-        val tripListString = sharedPref.getStringSet("trips", jsonObjectTripSet)?.toList()
+        //Log.e("POLIMA_TRIP", tripListString.toString())
 
-        val tripListIt = tripListString!!.listIterator()
-        for (tripString in tripListIt) {
+        if (tripListString != null) {
+            if (tripListString.isNotEmpty()) {
+                val tripListIt = tripListString!!.listIterator()
+                for (tripString in tripListIt) {
 
+                    val tripJson = JSONObject(tripString)
 
-            val tripJson = JSONObject(tripString)
-
-            val trip = Trip(tripJson.get("car_photo") as String,
-                tripJson.get("departure_location") as String,
-                tripJson.get("arrival_location") as String,
-                tripJson.get("departure_date_time") as String,
-                tripJson.get("duration") as String,
-                tripJson.get("seats") as String,
-                tripJson.get("price") as String,
-                tripJson.get("description") as String,
-                mutableListOf())
-
-            if(tripListString == jsonObjectTripSet?.toList()){
-                trip.carPhoto = getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/trip"+trip.index+".png"
-            }
-
-            if(tripJson.has("stops")) {
-                val stopJSONArray = JSONArray(tripJson.get("stops") as String)
-
-                val stopListString = List(stopJSONArray.length()) {
-                    stopJSONArray.getString(it)
-                }
-
-                val stopListIt = stopListString.listIterator()
-                for (stopString in stopListIt) {
-                    val stopJson = JSONObject(stopString)
-                    trip.addStop(
-                        stopJson.get("departure_stop") as String,
-                        stopJson.get("date_time_stop") as String
+                    val trip = Trip(
+                        tripJson.get("car_photo") as String,
+                        tripJson.get("departure_location") as String,
+                        tripJson.get("arrival_location") as String,
+                        tripJson.get("departure_date_time") as String,
+                        tripJson.get("duration") as String,
+                        tripJson.get("seats") as String,
+                        tripJson.get("price") as String,
+                        tripJson.get("description") as String,
+                        mutableListOf()
                     )
+                    trip.increment()
+
+                    Log.e("POLITOMAD_trip", trip.carPhoto)
+
+                    /*if (tripListString == jsonObjectTripSet?.toList()) {
+                        trip.carPhoto =
+                            getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/trip" + trip.index + ".png"
+                    }*/
+
+                    if (tripJson.has("stops")) {
+                        val stopJSONArray = JSONArray(tripJson.get("stops") as String)
+
+                        val stopListString = List(stopJSONArray.length()) {
+                            stopJSONArray.getString(it)
+                        }
+
+                        val stopListIt = stopListString.listIterator()
+                        for (stopString in stopListIt) {
+                            val stopJson = JSONObject(stopString)
+                            trip.addStop(
+                                stopJson.get("departure_stop") as String,
+                                stopJson.get("date_time_stop") as String
+                            )
+                        }
+                    }
+
+                    Log.d("POLITOMAD_Trip", tripJson.toString())
+
+                    //if(tripJson.get("departure_location") as String != "")
+                    trips.add(trip);
+
                 }
             }
-
-            Log.d("POLITOMAD_Trip", tripJson.toString())
-            if(tripJson.get("departure_location") as String != "")
-                trips.add(trip);
         }
 
         viewModel.initTrips(trips)

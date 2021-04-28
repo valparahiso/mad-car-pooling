@@ -19,6 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import it.polito.mad.mad_car_pooling.R
 import it.polito.mad.mad_car_pooling.Trip
 import it.polito.mad.mad_car_pooling.TripAdapter
+import java.io.File
 
 class TripListFragment : Fragment() {
 
@@ -45,12 +46,10 @@ class TripListFragment : Fragment() {
 
         if(viewModel.trips.value.isNullOrEmpty())
         {
-            Log.d("POLITOMAD_EMPTY", "empty")
-            emptyList.visibility == View.VISIBLE
+            emptyList.visibility = View.VISIBLE
+        } else {
+            emptyList.visibility = View.GONE
         }
-        else
-            emptyList.visibility == View.GONE
-
 
         viewModel.trips.observe(viewLifecycleOwner, Observer {
             list-> recyclerView.adapter = TripAdapter(list,this)
@@ -68,6 +67,10 @@ class TripListFragment : Fragment() {
                 "",
                 mutableListOf()
             )
+
+            Log.e("POLIMA_INDEX", newTrip.index.toString())
+            Log.e("POLIMA_INDEX", "[ ${newTrip.departureLocation} ]")
+
             newTrip.carPhoto = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/trip"+newTrip.index+".png"
             viewModel.setTrip(newTrip, true)
             findNavController().navigate(R.id.nav_edit_trip_details)

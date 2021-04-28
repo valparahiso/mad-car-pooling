@@ -1,5 +1,6 @@
 package it.polito.mad.mad_car_pooling.ui.trip_edit
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
@@ -26,6 +27,7 @@ import it.polito.mad.mad_car_pooling.ui.trip_list.TripListViewModel
 import org.joda.time.DateTime
 import org.json.JSONObject
 import java.io.File
+import java.util.*
 
 
 class TripEditFragment : Fragment() {
@@ -64,6 +66,7 @@ class TripEditFragment : Fragment() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         departureLocation = view.findViewById(R.id.departure_edit)
         arrivalLocation = view.findViewById(R.id.arrival_edit)
@@ -78,6 +81,17 @@ class TripEditFragment : Fragment() {
         showStopsCard = view.findViewById(R.id.show_stops_card_edit)
         arrowImage = view.findViewById(R.id.info_image_edit)
         addButton = view.findViewById(R.id.add_stop_edit)
+
+        val mcalendar: Calendar = Calendar.getInstance()
+
+        val day = mcalendar.get(Calendar.DAY_OF_MONTH)
+        val year = mcalendar.get(Calendar.YEAR)
+        val month = mcalendar.get(Calendar.MONTH)
+
+        departureDateTime.setOnFocusChangeListener { _, hasFocus -> run {
+            if(hasFocus)
+                openCalendarDialog(year, month, day)
+        } }
 
         showStopsCard.setOnClickListener {
             if (showStopsLayout.visibility == View.GONE) {
@@ -177,6 +191,18 @@ class TripEditFragment : Fragment() {
 
         }
 
+    }
+
+    //open Calendar Dialog for Birth Date and remove focus form the EditText
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun openCalendarDialog(year: Int, month: Int, day: Int){
+        departureDateTime.inputType = InputType.TYPE_NULL
+        val listener = DatePickerDialog.OnDateSetListener { _, Year, monthOfYear, dayOfMonth -> departureDateTime.setText("${dayOfMonth}/${monthOfYear + 1}/${Year}") }
+        val dpDialog = DatePickerDialog(activity as MainActivity, listener, year, month, day)
+        //dpDialog.datePicker.maxDate = DateTime().minusYears(18).millis    //set the maximum date (at least 18 years old)
+        dpDialog.show()
+        departureDateTime.clearFocus()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

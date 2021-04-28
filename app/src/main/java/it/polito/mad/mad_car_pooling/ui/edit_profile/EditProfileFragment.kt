@@ -45,9 +45,7 @@ class EditProfileFragment : Fragment() {
     private var imagePath: String = String()
 
     private lateinit var prof: Profile
-
-
-
+    private var savedFlag = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -145,11 +143,6 @@ class EditProfileFragment : Fragment() {
         birthET.clearFocus()
     }
 
-
-
-
-
-
     //option menu for saving
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
@@ -163,6 +156,7 @@ class EditProfileFragment : Fragment() {
             R.id.save -> {
 
                 //saveContent()
+                savedFlag = true
 
                 //check if photo is changed -> save photo and delete tmp cached file
                 val tmpFile = File(imageTemp)
@@ -236,10 +230,12 @@ class EditProfileFragment : Fragment() {
     }
     override fun onDestroy() {
         super.onDestroy()
-        val tmpFile = File(imageTemp)
-        if (tmpFile.exists()) {
-            //Log.d("POLIMAD", "ONDestroy: $imagePath")
-            tmpFile.delete()
+        if(savedFlag) {
+            val tmpFile = File(imageTemp)
+            if (tmpFile.exists()) {
+                //Log.d("POLIMAD", "ONDestroy: $imagePath")
+                tmpFile.delete()
+            }
         }
     }
 
@@ -266,12 +262,19 @@ class EditProfileFragment : Fragment() {
             image.setImageResource(R.drawable.user_image)
             image.setImageURI(path.toUri())
         }else{
-            // probabilmente righe inutili (da ricontrollare)
-            val options = BitmapFactory.Options()
-            options.inScaled = false
-            //
+            val fileTmp = File(imageTemp)
+            if(fileTmp.exists()){
+                image.setImageResource(R.drawable.user_image)
+                image.setImageURI(imageTemp.toUri())
+            }
+            else {
+                // probabilmente righe inutili (da ricontrollare)
+                val options = BitmapFactory.Options()
+                options.inScaled = false
+                //
 
-            image.setImageResource(R.drawable.user_image)
+                image.setImageResource(R.drawable.user_image)
+            }
         }
     }
 

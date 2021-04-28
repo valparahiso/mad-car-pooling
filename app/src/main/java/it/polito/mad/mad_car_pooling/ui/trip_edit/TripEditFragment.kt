@@ -317,7 +317,7 @@ class TripEditFragment : Fragment() {
         outState.putString("price", price.text.toString())
         outState.putString("description", description.text.toString())
         outState.putString("index", index.toString())
-        outState.putString("departureDateTime", departureDateTime.toString())
+        outState.putString("departureDateTime", departureDateTime.text.toString())
         outState.putString("carPhoto", carPhoto)
     }
 
@@ -403,12 +403,12 @@ class TripEditFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        val tmpFile = File(imageTemp)
-        if (tmpFile.exists()) {
-            tmpFile.delete()
+        if(saveFlag) {
+            val tmpFile = File(imageTemp)
+            if (tmpFile.exists()) {
+                tmpFile.delete()
+            }
         }
-
-        
     }
 
     //function to load the picture if exist (icon default)
@@ -418,12 +418,20 @@ class TripEditFragment : Fragment() {
             image.setImageResource(R.drawable.default_car_image)
             image.setImageURI(path.toUri())
         } else {
-            // probabilmente righe inutili (da ricontrollare)
-            val options = BitmapFactory.Options()
-            options.inScaled = false
-            //
+            val fileTmp = File(imageTemp)
+            if(fileTmp.exists()) {
+                Log.e("POLITOMAD_trip", "esiste file tmp")
+                image.setImageResource(R.drawable.default_car_image)
+                image.setImageURI(imageTemp.toUri())
+            }
+            else{
+                // probabilmente righe inutili (da ricontrollare)
+                val options = BitmapFactory.Options()
+                options.inScaled = false
+                //
 
-            image.setImageResource(R.drawable.default_car_image)
+                image.setImageResource(R.drawable.default_car_image)
+            }
         }
     }
 

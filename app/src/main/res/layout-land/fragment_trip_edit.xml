@@ -9,12 +9,14 @@
     <ImageView
         android:id="@+id/car_photo_edit"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
 
         android:layout_alignParentTop="true"
 
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:padding="16dp"
         android:src="@drawable/default_car_image"
         app:layout_constraintBottom_toBottomOf="parent"

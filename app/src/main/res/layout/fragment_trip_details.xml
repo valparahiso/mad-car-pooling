@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:tag="TripDetailsFragment"
-    tools:context=".ShowProfileActivity">
+    tools:context=".ui.trip_details.TripDetailsFragment">
 
     <ImageView
         android:id="@+id/car_photo_details"

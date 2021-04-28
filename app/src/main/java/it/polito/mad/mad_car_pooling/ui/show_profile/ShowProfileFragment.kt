@@ -29,15 +29,12 @@ class ShowProfileFragment : Fragment() {
     private lateinit var birth: TextView
 
     private var imagePath: String =""
-    private lateinit var sharedPref: SharedPreferences
-    private lateinit var jsonGlobal: JSONObject
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_show_profile, container, false)
     }
@@ -50,41 +47,13 @@ class ShowProfileFragment : Fragment() {
         photo = view.findViewById(R.id.show_photo)
         birth = view.findViewById(R.id.birthDate)
 
+        //listeners to show if the value are too long for one line
         fullName.setOnClickListener{ (it as TextView).maxLines = if(it.maxLines==10) 1 else 10 }
         nickName.setOnClickListener{ (it as TextView).maxLines = if(it.maxLines==10) 1 else 10 }
         email.setOnClickListener{ (it as TextView).maxLines = if(it.maxLines==10) 1 else 10 }
         location.setOnClickListener{ (it as TextView).maxLines = if(it.maxLines==10) 1 else 10 }
 
-        val sharedPref = requireActivity().getSharedPreferences("profile_pref", Context.MODE_PRIVATE)
-
-        //jsonObject for default values
-       /* var jsonObject = JSONObject()
-        jsonObject.put("fullName", "John Doe")
-        jsonObject.put("nickName", "Gionny")
-        jsonObject.put("email", "john.doe.90@polito.it")
-        jsonObject.put("location", "Turin")
-        jsonObject.put("birth", "01/01/1990")
-        jsonObject.put("photoPath", context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/profile.png")
-
-        //retriving data from the file (if present)
-        val str: String? = sharedPref.getString("profile", jsonObject.toString())
-        jsonGlobal = JSONObject(str!!)
-        fullName.text =  jsonGlobal.getString("fullName")
-        nickName.text =  jsonGlobal.getString("nickName")
-        email.text = jsonGlobal.getString("email")
-        location.text =  jsonGlobal.getString("location")
-        birth.text = jsonGlobal.getString("birth")
-        imagePath = jsonGlobal.getString("photoPath")
-        reloadImageView(photo, imagePath)
-
-        viewModel.setProfile(   Profile(fullName.text.toString(),
-                                        nickName.text.toString(),
-                                        email.text.toString(),
-                                        location.text.toString(),
-                                        birth.text.toString(),
-                                        imagePath)
-        )
-*/
+        //receives values from viewModel
         viewModel.profile.observe(viewLifecycleOwner, Observer { profile ->
             // Update the selected filters UI
             loadFields(profile)
@@ -92,6 +61,7 @@ class ShowProfileFragment : Fragment() {
         loadFields(viewModel.profile.value!!)
     }
 
+    //fills textView with viewModel values
     fun loadFields(profile: Profile) {
         fullName.text = profile.fullName
         nickName.text = profile.nickName
@@ -109,7 +79,6 @@ class ShowProfileFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        //return super.onOptionsItemSelected(item)
         return when(item.itemId){
             R.id.edit -> {
                 val bundle = Bundle()
@@ -123,9 +92,9 @@ class ShowProfileFragment : Fragment() {
         }
     }
 
-    //set image, if modified
+    //set final user image, if modified
     private fun reloadImageView(image: ImageView, path: String){
-        var file = File(path)
+        val file = File(path)
         if(file.exists()){
             image.setImageResource(R.drawable.user_image)
             image.setImageURI(file.toUri())

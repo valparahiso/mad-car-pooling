@@ -31,10 +31,8 @@ class TripListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_trip_list, container, false)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,7 +41,7 @@ class TripListFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         emptyList = view.findViewById(R.id.empty_List)
 
-
+        //msg if the list is empty
         if(viewModel.trips.value.isNullOrEmpty())
         {
             emptyList.visibility = View.VISIBLE
@@ -54,6 +52,8 @@ class TripListFragment : Fragment() {
         viewModel.trips.observe(viewLifecycleOwner, Observer {
             list-> recyclerView.adapter = TripAdapter(list,this)
         })
+
+        //fab for new Trip
         val fab: FloatingActionButton = view.findViewById(R.id.fab)
         fab.setOnClickListener {
             val newTrip = Trip(
@@ -67,23 +67,16 @@ class TripListFragment : Fragment() {
                 "",
                 mutableListOf()
             )
-
-            Log.e("POLIMA_INDEX", newTrip.index.toString())
-            Log.e("POLIMA_INDEX", "[ ${newTrip.departureLocation} ]")
-
             newTrip.carPhoto = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/trip"+newTrip.index+".png"
             viewModel.setTrip(newTrip, true)
-            findNavController().navigate(R.id.nav_edit_trip_details)
-            /*view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()*/
+            findNavController().navigate(R.id.action_nav_list_to_nav_edit_trip_details)
         }
     }
 
 
+    //setting the trip in viewModel
     fun updateTrip(trip :Trip){
         viewModel.setTrip(trip, false)
     }
-
 
 }

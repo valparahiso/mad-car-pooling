@@ -94,6 +94,8 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
+
+    //loading shared preferences Trip list
     private fun getTrips() {
         trips.clear()
 
@@ -102,7 +104,7 @@ class MainActivity : AppCompatActivity() {
 
         if (tripListString != null) {
             if (tripListString.isNotEmpty()) {
-                val tripListIt = tripListString!!.listIterator()
+                val tripListIt = tripListString.listIterator()
                 for (tripString in tripListIt) {
 
                     val tripJson = JSONObject(tripString)
@@ -137,11 +139,12 @@ class MainActivity : AppCompatActivity() {
                             )
                         }
                     }
-                    trips.add(trip);
+                    trips.add(trip); //adding to the list
 
                 }
             }
         }
+        //Setting Trip List for the observers
         viewModel.initTrips(trips)
     }
 
@@ -160,13 +163,12 @@ class MainActivity : AppCompatActivity() {
             tDialog.show()
         }
         val dpDialog = DatePickerDialog(this, listener, year, month, day)
-        //dpDialog.datePicker.maxDate = DateTime().minusYears(18).millis    //set the maximum date (at least 18 years old)
         dpDialog.show()
         departureDateTime.clearFocus()
     }
 
+    //loading shared preferences User Profile
     fun getProfile() {
-        //jsonObject for default values (Profile)
         var defaultJsonObject = JSONObject()
         defaultJsonObject.put("fullName", "John Doe")
         defaultJsonObject.put("nickName", "Gionny")
@@ -190,6 +192,7 @@ class MainActivity : AppCompatActivity() {
         ))
     }
 
+    //saving shared preferences
     fun saveProfile(profile: Profile) {
         sharedPrefProfile = this.getSharedPreferences("profile_pref", Context.MODE_PRIVATE)
         val jsonGlobal = JSONObject()
@@ -206,6 +209,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //setting user img in sidebar
     private fun setHeader(headerView : View) {
         val header_fullName : TextView = headerView.findViewById(R.id.header_fullnameView)
         val header_nickName : TextView = headerView.findViewById(R.id.header_nicknameView)
@@ -229,10 +233,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //managing img picker
     //permits to create the floating context menu
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
-        //val inflater: MenuInflater = menuInflater
-        menuInflater?.inflate(R.menu.menu_context_photo, menu)
+        menuInflater.inflate(R.menu.menu_context_photo, menu)
     }
 
     //behaviour of item in the floating context menu
@@ -244,7 +248,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.camera_profile -> {
-                dispatchTakePictureIntent()   //open camera
+                dispatchTakePictureIntent()
                 true
             }
             else -> super.onContextItemSelected(item)
@@ -309,7 +313,7 @@ class MainActivity : AppCompatActivity() {
                         Log.e("POLITOMAD", "Gallery Exception")
                     }
                 }
-
+                //return from cropping img
                 REQUEST_IMAGE_CROP -> {
                     try {
 
@@ -317,7 +321,7 @@ class MainActivity : AppCompatActivity() {
                             File(imageTemp),
                             overwrite = true
                         )
-
+                        //attentionIV=imgView to set
                         attentionIV.setImageResource(R.drawable.user_image)
                         attentionIV.setImageURI(imageTemp.toUri())
 

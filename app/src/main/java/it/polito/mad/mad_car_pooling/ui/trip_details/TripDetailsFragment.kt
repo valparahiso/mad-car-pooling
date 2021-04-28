@@ -41,9 +41,7 @@ class TripDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         setHasOptionsMenu(true)
-
         return inflater.inflate(R.layout.fragment_trip_details, container, false)
     }
 
@@ -60,8 +58,10 @@ class TripDetailsFragment : Fragment() {
         arrowImage = view.findViewById(R.id.info_image)
         carImage = view.findViewById(R.id.car_photo_details)
 
+        //listeners to show if the value is too long for one line
         description.setOnClickListener{ (it as TextView).maxLines = if(it.maxLines==10) 1 else 10 }
 
+        //used to show the Stop List
         showStopsCard.setOnClickListener{
             if(showStopsLayout.visibility == GONE) {
                 showStopsLayout.visibility = VISIBLE
@@ -75,6 +75,7 @@ class TripDetailsFragment : Fragment() {
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.stops_details)
 
+        //used to show the recyclerView that contains Stops
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         viewModel.trip_.observe(viewLifecycleOwner, Observer { trip ->
@@ -86,7 +87,9 @@ class TripDetailsFragment : Fragment() {
             price.text = trip.price
             description.text = trip.description
             departureDateTime.text = trip.departureDateTime
-            if(trip.stops.size == 0) showStopsCard.visibility = GONE //TODO verificare che funzioni e migliorare il design
+
+            //stopList shown only if size is not 0
+            if(trip.stops.size == 0) showStopsCard.visibility = GONE
             else{
                 showStopsCard.visibility = VISIBLE
                 recyclerView.adapter = StopAdapter(trip.stops.filter { stop -> stop.saved }.sortedBy { it.stopDateTime }, this)
@@ -94,6 +97,7 @@ class TripDetailsFragment : Fragment() {
 
         })
 
+        //observer to load the fields in trip
         viewModel.trip_.observe(viewLifecycleOwner, Observer { trip ->
             // Update the selected filters UI
             loadFields(trip)
@@ -108,7 +112,6 @@ class TripDetailsFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        //return super.onOptionsItemSelected(item)
         return when(item.itemId){
             R.id.edit -> {
                 findNavController().navigate(R.id.action_details_trip_fragment_to_nav_edit_trip_details)
@@ -120,6 +123,7 @@ class TripDetailsFragment : Fragment() {
         }
     }
 
+    //loads values for views
     fun loadFields(trip: Trip) {
         departureLocation.text = trip.departureLocation
         arrivalLocation.text = trip.arrivalLocation
@@ -128,11 +132,10 @@ class TripDetailsFragment : Fragment() {
         price.text = trip.price
         description.text = trip.description
         departureDateTime.text = trip.departureDateTime
-
         reloadImageView(carImage, trip.carPhoto)
     }
 
-    //set image, if modified
+    //set final car image, if modified
     private fun reloadImageView(image: ImageView, path: String){
         var file = File(path)
         if(file.exists()){

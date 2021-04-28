@@ -31,21 +31,16 @@ import java.util.*
 class EditProfileFragment : Fragment() {
 
     private val viewModel: ShowProfileViewModel by activityViewModels()
-
-
     private lateinit var fullNameET: EditText
     private lateinit var nicknameET: EditText
     private lateinit var emailET: EditText
     private lateinit var locationET: EditText
     private lateinit var photoIV: ImageView
     private lateinit var birthET: EditText
-
-    private var imageTempModified: Boolean = false
     private lateinit var imageTemp: String
     private var imagePath: String = String()
-
-    private lateinit var prof: Profile
     private var savedFlag = false
+    private var rotate: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,10 +59,13 @@ class EditProfileFragment : Fragment() {
         val imageButton = view.findViewById<ImageButton>(R.id.camera_profile)
         registerForContextMenu(imageButton)
 
+        //open context menu for camera or gallery
         imageButton.setOnClickListener {
             (activity as MainActivity).attentionIV = photoIV
             activity?.openContextMenu(it)
         }
+
+        //disabling longClick
         imageButton.setOnLongClickListener { true }
 
         fullNameET = view.findViewById(R.id.edit_fullname)
@@ -78,11 +76,11 @@ class EditProfileFragment : Fragment() {
         birthET = view.findViewById(R.id.edit_birthDate)
 
         val mcalendar: Calendar = Calendar.getInstance()
-
         val day = mcalendar.get(Calendar.DAY_OF_MONTH)
         val year = mcalendar.get(Calendar.YEAR)
         val month = mcalendar.get(Calendar.MONTH)
 
+        //listener for picking date
         birthET.setOnFocusChangeListener { _, hasFocus -> run {
             if(hasFocus)
                 openCalendarDialog(year, month, day)
@@ -91,15 +89,13 @@ class EditProfileFragment : Fragment() {
         imageTemp = context?.externalCacheDir.toString() + "/tmp.png"
         imagePath = arguments?.getString("imagePath").toString();
 
-        //setEditText()
-
-        //load photo and save status bitmap
         loadImage(photoIV, imagePath)
     }
 
-    //save state of the activity
+    //save state of the fragment
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        rotate = true
         outState.putString("fullname", fullNameET.text.toString())
         outState.putString("nickname", nicknameET.text.toString())
         outState.putString("email", emailET.text.toString())
@@ -107,8 +103,10 @@ class EditProfileFragment : Fragment() {
         outState.putString("birth", birthET.text.toString())
     }
 
+    //restore state of the fragment
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
+        rotate = false
         if (savedInstanceState != null) {
             fullNameET.setText(savedInstanceState.getString("fullname"))
             nicknameET.setText(savedInstanceState.getString("nickname"))
@@ -119,15 +117,6 @@ class EditProfileFragment : Fragment() {
         else
             setEditText()
     }
-    //restore state of the activity
-    /*override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        fullName.text = savedInstanceState?.getString("fullname")
-        nickName.text = savedInstanceState?.getString("nickname")
-        email.text = savedInstanceState?.getString("email")
-        location.text = savedInstanceState?.getString("location")
-        birth.text = savedInstanceState?.getString("birth")
-    }*/
 
     //open Calendar Dialog for Birth Date and remove focus form the EditText
     @SuppressLint("SetTextI18n")
@@ -154,8 +143,6 @@ class EditProfileFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.save -> {
-
-                //saveContent()
                 savedFlag = true
 
                 //check if photo is changed -> save photo and delete tmp cached file
@@ -166,6 +153,7 @@ class EditProfileFragment : Fragment() {
                     tmpFile.delete()
                 }
 
+                //flag to require fields
                 var flagPresentValue = true
 
                 if (TextUtils.isEmpty(fullNameET.text.toString())) {
@@ -190,6 +178,7 @@ class EditProfileFragment : Fragment() {
                     flagPresentValue = false
                 }
 
+                //check if the field are filled
                 if (flagPresentValue) {
 
                     val newProfile = Profile(
@@ -201,9 +190,11 @@ class EditProfileFragment : Fragment() {
                         imagePath
                     )
 
+                    //setting for observers
                     viewModel.setProfile(newProfile)
 
-                    (requireActivity() as MainActivity).saveProfile(newProfile)
+                    //saving shared preferences
+                    (activity as MainActivity).saveProfile(newProfile)
                     view?.let {
                         Snackbar.make(it, "Profile updated", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show()
@@ -212,6 +203,7 @@ class EditProfileFragment : Fragment() {
                 }
                 true
             }
+            //function to clear fields
             R.id.clear -> {
                 clearFields()
                 true
@@ -230,18 +222,16 @@ class EditProfileFragment : Fragment() {
     }
     override fun onDestroy() {
         super.onDestroy()
-        if(savedFlag) {
+        //tmp img is deleted only if the profile is saved
+        if(savedFlag || rotate == false) {
             val tmpFile = File(imageTemp)
             if (tmpFile.exists()) {
-                //Log.d("POLIMAD", "ONDestroy: $imagePath")
                 tmpFile.delete()
             }
         }
     }
-
-    //retrieve data from intent of ShowActivityProfile
+    //the observer loads the view values from viewModel
     private fun setEditText() {
-
         viewModel.profile.observe(viewLifecycleOwner, Observer { profile ->
 
             // Update the selected filters UI
@@ -268,11 +258,6 @@ class EditProfileFragment : Fragment() {
                 image.setImageURI(imageTemp.toUri())
             }
             else {
-                // probabilmente righe inutili (da ricontrollare)
-                val options = BitmapFactory.Options()
-                options.inScaled = false
-                //
-
                 image.setImageResource(R.drawable.user_image)
             }
         }

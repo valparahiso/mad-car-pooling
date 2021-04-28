@@ -16,8 +16,6 @@ class StopAdapter(private val data: List<Stop>, private val fragment_: TripDetai
         private val location: TextView = v.findViewById(R.id.departure_stop)
         private val dateTime: TextView = v.findViewById(R.id.date_time_stop)
 
-        private val fragment = fragment_
-
         //passare poi un oggetto Trip
         fun bind(u: Stop){
             location.text = u.locationName

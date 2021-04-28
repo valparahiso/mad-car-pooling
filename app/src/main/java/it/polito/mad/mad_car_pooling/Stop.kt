@@ -9,7 +9,7 @@ data class Stop(
         var stopDateTime: String,
         var saved: Boolean,
         var deleted: Boolean
-) : Parcelable{
+) : Parcelable{ //inherited for saving the state in the fragment
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
@@ -18,7 +18,7 @@ data class Stop(
     )
     init {
             Log.d("POLITOMAD_Stop", "Location Name: " + this.locationName)
-                Log.d("POLITOMAD_Stop", "Date Time: " + this.stopDateTime)
+            Log.d("POLITOMAD_Stop", "Date Time: " + this.stopDateTime)
         }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

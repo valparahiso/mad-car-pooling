@@ -36,10 +36,6 @@ data class Trip(
         @JvmStatic  private var id: Int = 0
     }
 
-    /*init {
-        Log.e("POLITOMAD_Trip", "ID: $id_ Trip Created")
-        id++
-    }*/
 
     fun setCounter(){
         if(id < this.index)

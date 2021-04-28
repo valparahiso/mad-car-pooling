@@ -22,8 +22,15 @@ data class Trip(
         @JvmStatic  private var id: Int = 0
     }
 
-    init {
-        Log.d("POLITOMAD_Trip", "ID: $id_ Trip Created")
+    /*init {
+        Log.e("POLITOMAD_Trip", "ID: $id_ Trip Created")
+        id++
+    }*/
+
+    fun increment(){
+        id++
+    }
+    fun decrement(){
         id++
     }
 

@@ -60,9 +60,7 @@ class TripDetailsFragment : Fragment() {
         arrowImage = view.findViewById(R.id.info_image)
         carImage = view.findViewById(R.id.car_photo_details)
 
-
         description.setOnClickListener{ (it as TextView).maxLines = if(it.maxLines==10) 1 else 10 }
-
 
         showStopsCard.setOnClickListener{
             if(showStopsLayout.visibility == GONE) {
@@ -91,7 +89,7 @@ class TripDetailsFragment : Fragment() {
             if(trip.stops.size == 0) showStopsCard.visibility = GONE //TODO verificare che funzioni e migliorare il design
             else{
                 showStopsCard.visibility = VISIBLE
-                recyclerView.adapter = StopAdapter(trip.stops.filter { stop -> stop.saved }, this)
+                recyclerView.adapter = StopAdapter(trip.stops.filter { stop -> stop.saved }.sortedBy { it.stopDateTime }, this)
             }
 
         })

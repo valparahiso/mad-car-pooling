@@ -43,9 +43,13 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: TripListViewModel by viewModels()
     private val viewModelProfile: ShowProfileViewModel by viewModels()
     private var trips: MutableList<Trip> = mutableListOf()
+    private lateinit var imageTemp: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        imageTemp = externalCacheDir.toString() + "/tmp.png"
 
         getTrips()
         getProfile()
@@ -207,7 +211,6 @@ class MainActivity : AppCompatActivity() {
     val REQUEST_IMAGE_GALLERY = 2       //gallery
     val REQUEST_IMAGE_CROP = 3          //crop
 
-    private lateinit var imageTemp: String
     public lateinit var attentionIV: ImageView
 
     var takePhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -222,7 +225,6 @@ class MainActivity : AppCompatActivity() {
 
     //permits to create the floating context menu
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
-        imageTemp = externalCacheDir.toString() + "/tmp.png"
         //val inflater: MenuInflater = menuInflater
         menuInflater?.inflate(R.menu.menu_context_photo, menu)
     }

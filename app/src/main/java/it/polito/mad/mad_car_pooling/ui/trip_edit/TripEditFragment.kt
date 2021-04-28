@@ -219,10 +219,7 @@ class TripEditFragment : Fragment() {
                     price.error = "Full name is required!"
                     flagPresentValue = false
                 }
-                if(TextUtils.isEmpty(description.text.toString())) {
-                    description.error = "Full name is required!"
-                    flagPresentValue = false
-                }
+
                 if(flagPresentValue) {
                     val newTrip = Trip(
                         carPhoto,

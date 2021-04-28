@@ -35,7 +35,6 @@ class TripDetailsFragment : Fragment() {
     private lateinit var arrowImage : ImageView
     private lateinit var carImage : ImageView
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

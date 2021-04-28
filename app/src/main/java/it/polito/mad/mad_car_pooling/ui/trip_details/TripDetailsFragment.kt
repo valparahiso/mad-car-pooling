@@ -35,6 +35,7 @@ class TripDetailsFragment : Fragment() {
     private lateinit var arrowImage : ImageView
     private lateinit var carImage : ImageView
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,6 +60,10 @@ class TripDetailsFragment : Fragment() {
         arrowImage = view.findViewById(R.id.info_image)
         carImage = view.findViewById(R.id.car_photo_details)
 
+
+        description.setOnClickListener{ (it as TextView).maxLines = if(it.maxLines==10) 1 else 10 }
+
+
         showStopsCard.setOnClickListener{
             if(showStopsLayout.visibility == GONE) {
                 showStopsLayout.visibility = VISIBLE
@@ -68,7 +73,6 @@ class TripDetailsFragment : Fragment() {
                 showStopsLayout.visibility = GONE
                 arrowImage.setImageResource(android.R.drawable.arrow_down_float)
             }
-
         }
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.stops_details)
@@ -98,6 +102,7 @@ class TripDetailsFragment : Fragment() {
         })
         loadFields(viewModel.trip_.value!!)
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()

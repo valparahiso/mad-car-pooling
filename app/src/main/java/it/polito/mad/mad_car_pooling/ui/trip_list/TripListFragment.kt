@@ -3,9 +3,11 @@ package it.polito.mad.mad_car_pooling.ui.trip_list
 
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -21,6 +23,7 @@ import it.polito.mad.mad_car_pooling.TripAdapter
 class TripListFragment : Fragment() {
 
     private val viewModel : TripListViewModel by activityViewModels()
+    private lateinit var emptyList: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +40,17 @@ class TripListFragment : Fragment() {
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.tripListRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
+        emptyList = view.findViewById(R.id.empty_List)
+
+
+        if(viewModel.trips.value.isNullOrEmpty())
+        {
+            Log.d("POLITOMAD_EMPTY", "empty")
+            emptyList.visibility == View.VISIBLE
+        }
+        else
+            emptyList.visibility == View.GONE
+
 
         viewModel.trips.observe(viewLifecycleOwner, Observer {
             list-> recyclerView.adapter = TripAdapter(list,this)

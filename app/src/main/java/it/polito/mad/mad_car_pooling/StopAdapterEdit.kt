@@ -26,7 +26,7 @@ class StopAdapterEdit(var data: MutableList<Stop>, private val fragment_: TripEd
 
             location.text = u.locationName
             dateTime.text = u.stopDateTime
-
+            
         }
     }
 

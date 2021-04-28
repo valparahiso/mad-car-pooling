@@ -18,21 +18,23 @@
 
         <TextView
             android:id="@+id/departure_stop"
-            android:layout_width="wrap_content"
+            android:layout_width="158dp"
             android:layout_height="wrap_content"
-            android:paddingRight="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:text="Location"
-            android:textSize="20dp"
-            android:textColor="?android:attr/colorForeground"/>
+            android:textColor="?android:attr/colorForeground"
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/date_time_stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Date and Time"
-            android:textSize="20dp"
-            android:textColor="?android:attr/colorForeground"/>
+            android:textColor="?android:attr/colorForeground"
+            android:textSize="20dp" />
 
 
     </LinearLayout>

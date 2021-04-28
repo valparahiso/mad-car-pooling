@@ -8,6 +8,19 @@
     android:tag="TripListFragment"
     tools:context=".ui.trip_list.TripListFragment">
 
+    <TextView
+        android:id="@+id/empty_List"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/lightblue"
+        android:text="Trip list is empty!"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tripListRecyclerView"
         android:layout_width="match_parent"
